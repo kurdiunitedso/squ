@@ -1,0 +1,57 @@
+<?php
+
+return [
+    'unavailable_audits' => 'No Patients Audits available',
+    'unavailable_attachments_audits' => 'No Patients Attachments Audits available',
+
+    'updated'            => [
+        'metadata' => 'On :audit_created_at, :user_name [:audit_ip_address] updated this record via :audit_url',
+        'modified' => [
+            'status'   => 'The status has been modified from <strong>:old</strong> to <strong>:new</strong>',
+            'name' => 'The Arabic Name has been modified from <strong>:old</strong> to <strong>:new</strong>',
+            'name_en' => 'The English Name has been modified from <strong>:old</strong> to <strong>:new</strong>',
+            'name_he' => 'The Hebrew Name has been modified from <strong>:old</strong> to <strong>:new</strong>',
+            'idcard_no' => 'The ID Card No has been modified from <strong>:old</strong> to <strong>:new</strong>',
+            'id_type' => 'The ID Card Type has been modified from <strong>:old</strong> to <strong>:new</strong>',
+            'id_type_name' => 'The ID Card Type has been modified from <strong>:old</strong> to <strong>:new</strong>',
+            'register' => 'The Register has been modified from <strong>:old</strong> to <strong>:new</strong>',
+            'register_date' => 'The Register Date has been modified from <strong>:old</strong> to <strong>:new</strong>',
+            'gender' => 'The Gender has been modified from <strong>:old</strong> to <strong>:new</strong>',
+            'marital_status_id' => 'The Marital Status has been modified from <strong>:old</strong> to <strong>:new</strong>',
+            'marital_status_name' => 'The Marital Status has been modified from <strong>:old</strong> to <strong>:new</strong>',
+            'branch_id' => 'The Alhayat Branch has been modified from <strong>:old</strong> to <strong>:new</strong>',
+            'branch_name' => 'The Alhayat Branch has been modified from <strong>:old</strong> to <strong>:new</strong>',
+            'birth_date' => 'The Birth Date has been modified from <strong>:old</strong> to <strong>:new</strong>',
+            'blood_type' => 'The Blood Type has been modified from <strong>:old</strong> to <strong>:new</strong>',
+            'city_id' => 'The City has been modified from <strong>:old</strong> to <strong>:new</strong>',
+            'city_name' => 'The City has been modified from <strong>:old</strong> to <strong>:new</strong>',
+            'address' => 'The Address has been modified from <strong>:old</strong> to <strong>:new</strong>',
+            'mobile' => 'The Mobile has been modified from <strong>:old</strong> to <strong>:new</strong>',
+            'tel1' => 'The Telephone 1 has been modified from <strong>:old</strong> to <strong>:new</strong>',
+            'tel2' => 'The Telephone 2 has been modified from <strong>:old</strong> to <strong>:new</strong>',
+            'pobox' => 'The Pobox has been modified from <strong>:old</strong> to <strong>:new</strong>',
+            'email' => 'The Email has been modified from <strong>:old</strong> to <strong>:new</strong>',
+            'clinical_history' => 'The Clinical history has been modified from <strong>:old</strong> to <strong>:new</strong>',
+            'membership_type' => 'The Membership Type has been modified from <strong>:old</strong> to <strong>:new</strong>',
+            'membership_type_name' => 'The Membership Type has been modified from <strong>:old</strong> to <strong>:new</strong>',
+            'membership_subtype' => 'The Membership SubType has been modified from <strong>:old</strong> to <strong>:new</strong>',
+            'membership_subtype_name' => 'The Membership SubType has been modified from <strong>:old</strong> to <strong>:new</strong>',
+            'parent_id' => 'The parent_id has been modified from <strong>:old</strong> to <strong>:new</strong>',
+            'parent_id' => 'The parent_id has been modified from <strong>:old</strong> to <strong>:new</strong>',
+            'relative_type_id' => 'The Relative Type has been modified from <strong>:old</strong> to <strong>:new</strong>',
+            'relative_type_name' => 'The Relative Type has been modified from <strong>:old</strong> to <strong>:new</strong>',
+            'sick_fund_id' => 'The Sick fund has been modified from <strong>:old</strong> to <strong>:new</strong>',
+            'sick_fund_name' => 'The Sick fund has been modified from <strong>:old</strong> to <strong>:new</strong>',
+            'is_parent' => 'The Is parent status has been modified from <strong>:old</strong> to <strong>:new</strong>',
+            'living_status' => 'The Is living status has been modified from <strong>:old</strong> to <strong>:new</strong>',
+            'independence_status' => 'The Is independence status has been modified from <strong>:old</strong> to <strong>:new</strong>',
+        ],
+    ],
+
+    'created'            => [
+        'metadata' => 'On :audit_created_at, :user_name [:audit_ip_address] created this record',
+    ],
+    'deleted'            => [
+        'metadata' => 'On :audit_created_at, :user_name [:audit_ip_address] deleted this record',
+    ],
+];
