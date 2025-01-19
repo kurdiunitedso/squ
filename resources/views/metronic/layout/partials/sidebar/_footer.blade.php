@@ -3,9 +3,9 @@
     <a href="https://opts.expert/"
         class="btn btn-flex flex-center btn-custom btn-primary overflow-hidden text-nowrap px-0 h-40px w-100"
         data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-dismiss-="click"
-        title="Smart Delivery">
+        title="Making Medical and Financial Consultations look easy">
         <span class="btn-label">
-           {{ Env('App_Name') }}
+            Opts.Expert
         </span>
         <!--begin::Svg Icon | path: icons/duotune/general/gen005.svg-->
         <span class="svg-icon btn-icon svg-icon-2 m-0"><svg width="24" height="24" viewBox="0 0 24 24"

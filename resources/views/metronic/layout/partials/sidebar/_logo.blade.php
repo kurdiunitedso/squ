@@ -1,11 +1,9 @@
-
-
 <!--begin::Logo-->
 <div class="app-sidebar-logo px-6" id="kt_app_sidebar_logo">
     <!--begin::Logo image-->
     <a href="{{ route('home') }}">
-        <img alt="Logo" src="{{ asset('media/logos/logo.png') }}" class="h-80px app-sidebar-logo-default" />
-        <img alt="Logo" src="{{ asset('media/logos/logo.png') }}" class="h-80px app-sidebar-logo-minimize" />
+        <img alt="Logo" src="{{ asset('media/logos/logo-opts.svg') }}" class="h-40px app-sidebar-logo-default" />
+        <img alt="Logo" src="{{ asset('media/logos/logo-opts-mini.svg') }}" class="h-20px app-sidebar-logo-minimize" />
     </a>
     <!--end::Logo image-->
     <div id="kt_app_sidebar_toggle"

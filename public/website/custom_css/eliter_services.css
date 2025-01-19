@@ -1,0 +1,231 @@
+/* Base Section Styles */
+.facilities-section {
+    position: relative;
+    width: 100vw;
+    padding-top: 120px;
+    margin: 0 auto;
+    overflow: hidden;
+    left: 50%;
+    right: 50%;
+    margin-left: -50vw;
+    margin-right: -50vw;
+}
+
+/* RTL/LTR Handling */
+.facilities-section.rtl {
+    direction: rtl;
+}
+.facilities-section.ltr {
+    direction: ltr;
+}
+
+/* Container Styles */
+.carousel-container {
+    width: 100%;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Title Overlay */
+.title-overlay {
+    position: absolute;
+    width: 100%;
+    height: 187px;
+    top: 211px;
+    left: 0;
+    background: rgba(30, 30, 30, 0.8);
+    opacity: 0.9;
+    z-index: 10;
+}
+
+.title-overlay h2 {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    top: -18px;
+    color: white;
+    font-size: 55px;
+    font-family: "Cairo", sans-serif;
+    font-weight: 700;
+    line-height: 120px;
+    text-align: center;
+    white-space: nowrap;
+}
+
+.title-overlay h3 {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    top: 71px;
+    color: white;
+    font-size: 30px;
+    font-family: "Cairo", sans-serif;
+    font-weight: 400;
+    line-height: 120px;
+    text-align: center;
+    white-space: nowrap;
+}
+
+/* Facility Item Styles */
+.facility-item {
+    position: relative;
+    width: calc((100vw - 80px) / 4) !important;
+    max-width: 466px;
+    height: 1020px;
+    overflow: hidden;
+    margin: 0;
+}
+
+.facility-image {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.card-carousel-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.gradient-overlay {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    left: 0;
+    top: 0;
+    background: linear-gradient(360deg, black 0%, rgba(102, 102, 102, 0) 100%);
+}
+
+/* Description Styles */
+.facility-description {
+    position: absolute;
+    width: 90%;
+    max-width: 378px;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: 50px;
+    color: white;
+    font-size: 25px;
+    font-family: "Cairo", sans-serif;
+    font-weight: 400;
+    line-height: 1.6;
+    text-align: center;
+    word-wrap: break-word;
+    padding: 0 15px;
+}
+
+/* RTL/LTR Description Adjustments */
+.ltr .facility-description {
+    direction: ltr;
+    text-align: center;
+}
+
+.rtl .facility-description {
+    direction: rtl;
+    text-align: center;
+}
+
+/* Owl Carousel Styles */
+.owl-carousel {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+.owl-carousel .owl-stage-outer {
+    overflow: hidden;
+}
+
+.owl-carousel .owl-stage {
+    display: flex;
+    gap: 0;
+}
+
+.owl-carousel .owl-item {
+    padding: 0 10px;
+    margin: 0;
+}
+
+/* Responsive Breakpoints */
+@media screen and (min-width: 1441px) {
+    .facility-description {
+        bottom: 50px;
+        font-size: 25px;
+        line-height: 50px;
+    }
+
+    .facility-item {
+        height: 1020px;
+    }
+}
+
+@media screen and (min-width: 1024px) and (max-width: 1440px) {
+    .facility-description {
+        bottom: 30px;
+        font-size: 20px;
+        line-height: 1.4;
+    }
+
+    .facility-item {
+        height: 900px;
+        width: calc((100vw - 60px) / 4) !important;
+    }
+}
+
+@media screen and (max-width: 1200px) {
+    .facility-item {
+        width: calc((100vw - 45px) / 3) !important;
+        height: 800px;
+    }
+
+    .title-overlay h2 {
+        font-size: 45px;
+    }
+    .title-overlay h3 {
+        font-size: 25px;
+    }
+
+    .facility-description {
+        font-size: 20px;
+        width: 90%;
+    }
+}
+
+@media screen and (max-width: 992px) {
+    .facility-item {
+        width: calc((100vw - 30px) / 2) !important;
+        height: 700px;
+    }
+
+    .facility-description {
+        bottom: 20px;
+        font-size: 18px;
+        line-height: 1.3;
+    }
+}
+
+@media screen and (max-width: 576px) {
+    .facility-item {
+        width: 100% !important;
+        height: 600px;
+    }
+
+    .owl-carousel .owl-item {
+        padding: 0;
+    }
+
+    .title-overlay h2 {
+        font-size: 35px;
+    }
+    .title-overlay h3 {
+        font-size: 20px;
+    }
+
+    .facility-description {
+        font-size: 18px;
+        line-height: 35px;
+    }
+}

@@ -2,74 +2,56 @@
 
 namespace App\Models;
 
-use AjCastro\EagerLoadPivotRelations\EagerLoadPivotTrait;
-use App\Traits\HasLocalizedNameAttribute;
+use App\Traits\HasActionButtons;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Notifications\Notifiable;
 use OwenIt\Auditing\Auditable as AuditingAuditable;
 use OwenIt\Auditing\Contracts\Auditable;
+use Spatie\Translatable\HasTranslations;
 
 class Client extends Model implements Auditable
 {
-    use HasFactory, SoftDeletes, EagerLoadPivotTrait, HasLocalizedNameAttribute, AuditingAuditable;
+    use HasFactory, SoftDeletes, AuditingAuditable, HasActionButtons, Notifiable, AuditingAuditable, HasTranslations;
+    public $translatable = ['name'];
 
-    protected $guarded = ['id'];
 
-    public function city()
+    protected $fillable = [
+        'name',
+        'email',
+        'phone',
+        'address',
+        'number_family_members',
+        'lead_id',
+        'active',
+        'bank_id',
+        'bank_branch_id',
+        'bank_iban',
+        'bank_account_number',
+    ];
+    public const ui = [
+        'table' => 'clients',
+        'route' => 'clients',
+        's_ucf' => 'Client',
+        'p_ucf' => 'Clients',
+        's_lcf' => 'client',
+        'p_lcf' => 'clients',
+        'view' => 'CP.clients.',
+        '_id' => 'client_id',
+        'controller_name' => 'ClientController',
+        'image_path' => 'clients'
+    ];
+    public function lead()
     {
-        return $this->belongsTo(City::class, 'city_id');
+        return $this->belongsTo(Lead::class, Lead::ui['_id']);
     }
-    public function citys()
+    public function bank()
     {
-        return $this->belongsTo(City::class, 'city_id');
+        return $this->belongsTo(Constant::class, 'bank_id');
     }
-    public function categoryss()
+    public function bank_branch()
     {
-        return $this->belongsTo(Constant::class, 'clients.category')->withDefault(['name' => 'NA']);
+        return $this->belongsTo(Constant::class, 'bank_branch_id');
     }
-
-    public function statuss()
-    {
-        return $this->belongsTo(Constant::class, 'status')->withDefault(['name' => 'NA']);
-    }
-
-
-
-
-    public function attachments()
-    {
-        return $this->morphMany(Attachment::class, 'attachable');
-    }
-
-    public function callPhone2()
-    {
-        return $this->hasMany(CdrLog::class, 'to', 'telephone');
-    }
-
-    public function callPhone()
-    {
-        return $this->hasMany(CdrLog::class, 'from', 'telephone');
-    }
-
-    public function smsPhone()
-    {
-        return $this->hasMany(SystemSmsNotification::class, 'mobile', 'telephone');
-    }
-
-    public function visits()
-    {
-        return $this->morphMany(VisitRequest::class, 'visitable');
-    }
-    public function orders()
-    {
-        return $this->belongsTo(Order::class, 'client_id')->withDefault(['name' => 'NA']);
-    }
-    public function tickets()
-    {
-        return $this->hasMany(Ticket::class, 'telephone', 'telephone');
-    }
-
-
-
 }

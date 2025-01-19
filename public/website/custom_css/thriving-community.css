@@ -1,0 +1,128 @@
+.image-grid {
+    display: flex;
+    gap: 10px;
+    /* Space between columns */
+    width: 100%;
+}
+
+.image-column {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    /* Space between images in a column */
+}
+
+.image-container {
+    position: relative;
+    width: 272px;
+    /* From Figma width */
+}
+
+.image-container img {
+    width: 100%;
+    display: block;
+    border-radius: 39px;
+    object-fit: cover;
+}
+
+.overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(
+        180deg,
+        rgba(0, 0, 0, 0) 0%,
+        rgba(0, 0, 0, 0.8) 100%
+    );
+    border-radius: 39px;
+    opacity: 0.8;
+    pointer-events: none;
+}
+
+.tall-img {
+    height: 575px;
+}
+
+.small-img {
+    height: 399px;
+}
+
+/* Responsive styles */
+@media (max-width: 1200px) {
+    .image-container {
+        width: 100%;
+    }
+
+    .tall-img {
+        height: 500px;
+    }
+
+    .small-img {
+        height: 350px;
+    }
+}
+
+@media (max-width: 768px) {
+    .image-grid {
+        flex-direction: column;
+    }
+
+    .image-column {
+        width: 100%;
+    }
+
+    .tall-img {
+        height: 400px;
+    }
+
+    .small-img {
+        height: 300px;
+    }
+}
+
+/* Prefix everything with 'community-section' to scope the styles */
+.community-section .text-content {
+    text-align: right;
+    direction: rtl;
+}
+
+.community-section .section-title {
+    color: #222222;
+    font-size: 48px;
+    font-weight: 700;
+    line-height: 1.2;
+    margin-bottom: 24px;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.community-section .content-description {
+    color: #666666;
+    font-size: 18px;
+    line-height: 1.6;
+    font-weight: 400;
+    margin-bottom: 30px;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.community-section .content-description br {
+    display: none;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .community-section .section-title {
+        font-size: 36px;
+        margin-bottom: 20px;
+        -webkit-text-size-adjust: 100%;
+    }
+
+    .community-section .content-description {
+        font-size: 16px;
+        -webkit-text-size-adjust: 100%;
+    }
+}

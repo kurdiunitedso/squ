@@ -1,0 +1,196 @@
+.tower-design {
+    position: relative;
+    height: 100vh;
+    background: url("/website/img/tower-design.jpeg") no-repeat center
+        center/cover;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+/* Main overlay gradient */
+.tower-design::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        360deg,
+        rgba(49, 47, 76, 0.9) 0%,
+        rgba(102, 102, 102, 0) 100%
+    );
+    z-index: 1;
+}
+
+.tower-design .container {
+    position: relative;
+    z-index: 3;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+/* Header content */
+.tower-header {
+    padding-top: 15vh;
+    text-align: center;
+    margin-bottom: auto;
+}
+
+.tower-design h2 {
+    font-size: clamp(40px, 5vw, 70px);
+    font-weight: 700;
+    color: #fff;
+    font-family: "Cairo", sans-serif;
+    margin-bottom: 2vh;
+}
+
+.tower-design h3 {
+    font-size: clamp(30px, 3.5vw, 50px);
+    color: #fff;
+    font-family: "Cairo", sans-serif;
+    font-weight: 400;
+}
+
+.tower-design {
+    position: relative;
+    height: 100vh;
+    background: url("/website/img/tower-design.jpeg") no-repeat center
+        center/cover;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+/* Title Container */
+.tower-design .container {
+    position: relative;
+    z-index: 3;
+    text-align: center;
+    padding-top: 15vh;
+}
+
+.tower-design h2 {
+    font-size: 70px;
+    font-weight: 700;
+    color: #fff;
+    font-family: "Cairo", sans-serif;
+    margin-bottom: 20px;
+}
+
+.tower-design h3 {
+    font-size: 50px;
+    color: #fff;
+    font-family: "Cairo", sans-serif;
+    font-weight: 400;
+}
+
+/* Dark Overlay */
+.tower-design::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        to bottom,
+        rgba(49, 47, 76, 0.3) 0%,
+        rgba(49, 47, 76, 0.6) 50%,
+        rgba(49, 47, 76, 0.9) 100%
+    );
+    z-index: 1;
+}
+
+/* Features section */
+.features-wrapper {
+    position: absolute;
+    bottom: 15%;
+    /* Changed from bottom: 0 to create space */
+    left: 0;
+    right: 0;
+    background: rgba(30, 30, 30, 0.85);
+    padding: 40px 0;
+    z-index: 2;
+}
+
+.tower-design .features-grid {
+    max-width: 1595px;
+    margin: 0 auto;
+    padding: 0 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: start;
+}
+
+.tower-design .feature-text {
+    color: #fff;
+    font-family: "Cairo", sans-serif;
+    font-size: 30px;
+    line-height: 1.5;
+    text-align: center;
+    max-width: 400px;
+}
+
+/* Diamond icons */
+.tower-design .diamond-icon {
+    width: 38.16px;
+    height: 38.16px;
+    background: white;
+    transform: rotate(-46.1deg);
+    flex-shrink: 0;
+    margin: 0 40px;
+}
+
+@media (max-width: 1400px) {
+    .tower-design .features-grid {
+        padding: 0 20px;
+    }
+
+    .tower-design .feature-text {
+        font-size: 26px;
+    }
+
+    .tower-design .diamond-icon {
+        margin: 0 20px;
+    }
+}
+
+@media (max-width: 992px) {
+    .tower-design h2 {
+        font-size: 50px;
+    }
+
+    .tower-design h3 {
+        font-size: 40px;
+    }
+
+    .features-wrapper {
+        position: relative;
+        margin-top: auto;
+    }
+
+    .tower-design .features-grid {
+        flex-direction: column;
+        align-items: center;
+        gap: 30px;
+    }
+
+    .tower-design .feature-text {
+        font-size: 22px;
+    }
+
+    .tower-design .diamond-icon {
+        display: none;
+    }
+}
+
+@media (max-width: 768px) {
+    .tower-design h2 {
+        font-size: 40px;
+    }
+
+    .tower-design h3 {
+        font-size: 30px;
+    }
+
+    .tower-design .feature-text {
+        font-size: 18px;
+    }
+}

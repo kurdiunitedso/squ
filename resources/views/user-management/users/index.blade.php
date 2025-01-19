@@ -30,7 +30,7 @@
                             </span>
                             <!--end::Svg Icon-->
                             <input type="text" data-col-index="name_code" data-kt-user-table-filter="search"
-                                class="form-control form-control-solid w-250px ps-14" value="{{app()->request->username}}" placeholder="Search user" />
+                                class="form-control form-control-solid w-250px ps-14" placeholder="Search user" />
                         </div>
                         <!--end::Search-->
                     </div>
@@ -90,6 +90,7 @@
                                 <th></th>
                                 <th class="min-w-125px">User</th>
                                 <th class="min-w-125px">Mobile</th>
+
                                 <th class="min-w-125px mw-350px">Role and Permissions</th>
                                 <th class="min-w-125px">Status</th>
                                 <th class="min-w-125px">Last login</th>
@@ -426,9 +427,6 @@
             order: [
                 [7, "DESC"]
             ]
-            ,initComplete: function (settings, json) {
-                datatable.column(1).search(document.querySelector('[data-kt-user-table-filter="search"]').value).draw();
-            }
         });
 
 

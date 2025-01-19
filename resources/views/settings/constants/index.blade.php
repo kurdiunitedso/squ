@@ -17,6 +17,22 @@
                     <div class="card-title">
                         <!--begin::Search-->
                         <div class="d-flex align-items-center position-relative my-1">
+                            <span class="svg-icon svg-icon-1 position-absolute ms-6">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <rect opacity="0.5" x="17.0365" y="15.1223" width="8.15546" height="2"
+                                        rx="1" transform="rotate(45 17.0365 15.1223)" fill="currentColor" />
+                                    <path
+                                        d="M11 19C6.55556 19 3 15.4444 3 11C3 6.55556 6.55556 3 11 3C15.4444 3 19 6.55556 19 11C19 15.4444 15.4444 19 11 19ZM11 5C7.53333 5 5 7.53333 5 11C5 14.4667 7.53333 17 11 17C14.4667 17 17 14.4667 17 11C17 7.53333 14.4667 5 11 5Z"
+                                        fill="currentColor" />
+                                </svg>
+                            </span>
+                            <input type="text" data-kt-constants-table-filter="search"
+                                class="form-control form-control-solid w-250px ps-14"
+                                placeholder="{{ t('Search Constants') }}" />
+                        </div>
+
+                        <div class="d-flex align-items-center position-relative my-1">
                             <!--begin::Svg Icon | path: icons/duotune/general/gen021.svg-->
                             <span class="svg-icon svg-icon-1 position-absolute ms-6">
                                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
@@ -29,8 +45,26 @@
                                 </svg>
                             </span>
                             <!--end::Svg Icon-->
-                            <input type="text" data-kt-constant-table-filter="search"
-                                class="form-control form-control-solid w-250px ps-14" placeholder="Search constant" />
+                            <input type="text" data-kt-constants_fields-table-filter="search"
+                                class="form-control form-control-solid w-250px ps-14"
+                                placeholder="{{ t('Search Constant Fields') }}" />
+                        </div>
+                        <div class="d-flex align-items-center position-relative my-1 mx-3">
+                            <!--begin::Svg Icon | path: icons/duotune/general/gen021.svg-->
+                            <span class="svg-icon svg-icon-1 position-absolute ms-6">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <rect opacity="0.5" x="17.0365" y="15.1223" width="8.15546" height="2"
+                                        rx="1" transform="rotate(45 17.0365 15.1223)" fill="currentColor" />
+                                    <path
+                                        d="M11 19C6.55556 19 3 15.4444 3 11C3 6.55556 6.55556 3 11 3C15.4444 3 19 6.55556 19 11C19 15.4444 15.4444 19 11 19ZM11 5C7.53333 5 5 7.53333 5 11C5 14.4667 7.53333 17 11 17C14.4667 17 17 14.4667 17 11C17 7.53333 14.4667 5 11 5Z"
+                                        fill="currentColor" />
+                                </svg>
+                            </span>
+                            <!--end::Svg Icon-->
+                            <input type="text" data-kt-constants_module-table-filter="search"
+                                class="form-control form-control-solid w-250px ps-14"
+                                placeholder="{{ t('Search Modules') }}" />
                         </div>
                         <!--end::Search-->
                     </div>
@@ -97,11 +131,11 @@
                         <thead>
                             <!--begin::Table row-->
                             <tr class="text-start text-muted fw-bold fs-7 text-uppercase gs-0">
-                                <th class="min-w-125px">Field</th>
+                                <th class="min-w-125px">{{ t('Field') }}</th>
                                 {{-- <th class="min-w-125px">Parent</th> --}}
-                                <th class="min-w-125px">Module</th>
-                                <th class="">Total records</th>
-                                <th class="text-end min-w-100px">Actions</th>
+                                <th class="min-w-125px">{{ t('Module') }}</th>
+                                <th class="">{{ t('Total records') }}</th>
+                                <th class="text-end min-w-100px">{{ t('Actions') }}</th>
                             </tr>
                             <!--end::Table row-->
                         </thead>
@@ -312,48 +346,39 @@
             const editURl = $(this).attr('href');
             renderModal(editURl, $(this));
         });
+    </script>
+    <script>
+        // Function to get the current values of search inputs
+        function filterParameters() {
+            const searchConstants = document.querySelector('[data-kt-constants-table-filter="search"]').value;
+            const searchFields = document.querySelector('[data-kt-constants_fields-table-filter="search"]').value;
+            const searchModules = document.querySelector('[data-kt-constants_module-table-filter="search"]').value;
 
-        var table = document.querySelector('#kt_table_constants');
-        var datatable = $(table).DataTable({
-            processing: true,
-            serverSide: true,
-            searching: true,
-            searchDelay: 1050,
-            pageLength: 10,
-            lengthMenu: [10, 50, 100],
-            ajax: {
-                url: "{{ route('settings.constants.index') }}",
-                type: "POST",
-                data: function(d) {
-                    // var params = {};
-                    // $('.datatable-input').each(function() {
-                    //     var i = $(this).data('col-index');
-                    //     if (params[i]) {
-                    //         params[i] += '|' + $(this).val();
-                    //     } else {
-                    //         params[i] = $(this).val();
-                    //     }
-                    // });
-                    // d.params = params;
-                }
-            },
-            columns: [{
+            console.log('Current filter parameters:', {
+                searchConstants,
+                searchFields,
+                searchModules
+            });
+
+            return {
+                searchConstants,
+                searchFields,
+                searchModules
+            };
+        }
+
+        // Initialize the DataTable using the createDataTable function
+        console.log('............... Initializing Constants DataTable .................');
+        var datatable = createDataTable(
+            '#kt_table_constants', // Table selector
+            [ // Column definitions
+                {
                     data: 'field',
-                    name: 'field',
+                    name: 'field'
                 },
-                // {
-                //     data: function(row, type, set) {
-                //         if (type === 'display') {
-                //             if (row.parent)
-                //                 return row.parent.name;
-                //         }
-                //         return row.parent_id;
-                //     },
-                //     name: 'parent_id',
-                // },
                 {
                     data: 'module',
-                    name: 'module',
+                    name: 'module'
                 },
                 {
                     data: 'total_values',
@@ -367,17 +392,40 @@
                     searchable: false
                 }
             ],
-            order: [
+            "{{ route('settings.constants.index') }}", // AJAX URL
+            [
                 [0, "ASC"]
-            ]
-        });
-    </script>
-    <script>
-        const filterSearch = document.querySelector('[data-kt-constant-table-filter="search"]');
-        filterSearch.onkeydown = debounce(keyPressCallback, 400);
+            ] // Default order
+        );
+        console.log('DataTable initialized.');
 
-        function keyPressCallback() {
-            datatable.columns(0).search(filterSearch.value).draw();
+        // Add event listeners to the search inputs to redraw the table on input
+        const filterSearchInput = document.querySelector('[data-kt-constants-table-filter="search"]');
+        const filterSearchFields = document.querySelector('[data-kt-constants_fields-table-filter="search"]');
+        const filterSearchModules = document.querySelector('[data-kt-constants_module-table-filter="search"]');
+
+        filterSearchInput.addEventListener('input', debounce(function() {
+            console.log('Search input changed for Constants:', filterSearchInput.value);
+            datatable.draw();
+        }, 400));
+
+        filterSearchFields.addEventListener('input', debounce(function() {
+            console.log('Search input changed for Fields:', filterSearchFields.value);
+            datatable.draw();
+        }, 400));
+
+        filterSearchModules.addEventListener('input', debounce(function() {
+            console.log('Search input changed for Modules:', filterSearchModules.value);
+            datatable.draw();
+        }, 400));
+
+        // Debounce function to limit the rate of function calls
+        function debounce(func, delay) {
+            let timeout;
+            return function() {
+                clearTimeout(timeout);
+                timeout = setTimeout(() => func.apply(this, arguments), delay);
+            };
         }
     </script>
 @endpush

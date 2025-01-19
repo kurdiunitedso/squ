@@ -1,5 +1,6 @@
 <?php
 
+use App\Providers\PriceOfferServiceProvider;
 use Illuminate\Support\Facades\Facade;
 
 return [
@@ -41,7 +42,7 @@ return [
     |
     */
 
-    'debug' => (bool) env('APP_DEBUG', false),
+    'debug' => (bool)env('APP_DEBUG', false),
 
     /*
     |--------------------------------------------------------------------------
@@ -82,7 +83,7 @@ return [
     |
     */
 
-    'locale' => 'ar',
+    'locale' => 'en',
     'locales' => [
         'en',
         'ar'
@@ -99,7 +100,7 @@ return [
     |
     */
 
-    'fallback_locale' => 'ar',
+    'fallback_locale' => 'en',
 
     /*
     |--------------------------------------------------------------------------
@@ -112,7 +113,7 @@ return [
     |
     */
 
-    'faker_locale' => 'ar',
+    'faker_locale' => 'ens',
 
     /*
     |--------------------------------------------------------------------------
@@ -185,7 +186,7 @@ return [
         Illuminate\Translation\TranslationServiceProvider::class,
         Illuminate\Validation\ValidationServiceProvider::class,
         Illuminate\View\ViewServiceProvider::class,
-
+        Gr8Shivam\SmsApi\SmsApiServiceProvider::class,
         /*
          * Package Service Providers...
          */
@@ -204,8 +205,10 @@ return [
         OwenIt\Auditing\AuditingServiceProvider::class,
         Lab404\Impersonate\ImpersonateServiceProvider::class,
         Maatwebsite\Excel\ExcelServiceProvider::class,
-        Gr8Shivam\SmsApi\SmsApiServiceProvider::class,
+        Barryvdh\DomPDF\ServiceProvider::class,
         Elibyy\TCPDF\ServiceProvider::class,
+        PriceOfferServiceProvider::class,
+
     ],
 
     /*

@@ -1,14 +1,10 @@
-/public/restaurants_attachment/*
-/public/captins_attachment/*
-/public/attachments/*
+/public/attachments
 /public/images
 /.phpunit.cache
 /node_modules
 /public/build
 /public/hot
-/public/records
 /public/storage
-/public/uploads
 /storage/*.key
 /vendor
 .env
@@ -26,13 +22,4 @@ yarn-error.log
 Cities.json
 _ide_helper.php
 
-# Ignore htaccess temp files
-public/.htaccess.*
-public/.htaccess
-
-# Ignore attachment directories
-public/*_attachment
-
-# Ignore error logs
-public/error_log
-*.zip
+public/uploads/

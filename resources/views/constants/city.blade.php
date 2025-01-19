@@ -10,8 +10,8 @@
                     <span class="svg-icon svg-icon-1 position-absolute ms-6">
                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
                             xmlns="http://www.w3.org/2000/svg">
-                            <rect opacity="0.5" x="17.0365" y="15.1223" width="8.15546" height="2"
-                                rx="1" transform="rotate(45 17.0365 15.1223)" fill="currentColor" />
+                            <rect opacity="0.5" x="17.0365" y="15.1223" width="8.15546" height="2" rx="1"
+                                transform="rotate(45 17.0365 15.1223)" fill="currentColor" />
                             <path
                                 d="M11 19C6.55556 19 3 15.4444 3 11C3 6.55556 6.55556 3 11 3C15.4444 3 19 6.55556 19 11C19 15.4444 15.4444 19 11 19ZM11 5C7.53333 5 5 7.53333 5 11C5 14.4667 7.53333 17 11 17C14.4667 17 17 14.4667 17 11C17 7.53333 14.4667 5 11 5Z"
                                 fill="currentColor" />
@@ -19,7 +19,7 @@
                     </span>
                     <!--end::Svg Icon-->
                     <input type="text" data-kt-city-table-filter="search"
-                        class="form-control form-control-solid w-250px ps-14" placeholder="Search Cities" />
+                        class="form-control form-control-solid w-250px ps-14" placeholder="{{ t('Search Cities') }}" />
                 </div>
                 <!--end::Search-->
             </div>
@@ -41,7 +41,7 @@
                                         fill="currentColor" />
                                 </svg>
                             </span>
-                            <!--end::Svg Icon-->Add City
+                            <!--end::Svg Icon-->{{ t('Add City') }}
                         </span>
                         <span class="indicator-progress">
                             Please wait... <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
@@ -73,10 +73,10 @@
                     <!--begin::Table row-->
                     <tr class="text-start text-muted fw-bold fs-7 text-uppercase gs-0">
                         <th></th>
-                        <th class="min-w-125px">city</th>
-                        <th class="min-w-125px">City en</th>
-                        <th class="min-w-125px">Country</th>
-                        <th class="text-end min-w-100px">Actions</th>
+                        <th class="min-w-125px">{{ t(' Name') }}</th>
+                        {{-- <th class="min-w-125px">{{t('English Name')}}</th> --}}
+                        <th class="min-w-125px">{{ t('Country') }}</th>
+                        <th class="text-end min-w-100px">{{ t('Actions') }}</th>
                     </tr>
                     <!--end::Table row-->
                 </thead>
@@ -109,18 +109,24 @@
                     visible: false,
                     searchable: false
                 },
+
                 {
                     data: 'name',
                     name: 'name',
                 },
                 {
-                    data: 'name_en',
-                    name: 'name_en',
+                    data: function(row, type, set) {
+                        if (type === 'display') {
+                            if (row.country && row.country.name) {
+                                return row.country.name[currentLocale];
+                            }
+                        }
+                        return '';
+                    },
+                    name: 'country.name.' + currentLocale,
                 },
-                {
-                    data: 'country.name',
-                    name: 'country.name',
-                },
+
+
                 {
                     data: 'action',
                     name: 'action',
@@ -163,14 +169,21 @@
                     var validator_city = FormValidation.formValidation(
                         form_city, {
                             fields: {
-                                'city_name': {
+                                'name[ar]': {
                                     validators: {
                                         notEmpty: {
-                                            message: 'City Name is required'
+                                            message: 'Arabic Name is required'
                                         }
                                     }
                                 },
-                                'city_country_id': {
+                                'name[en]': {
+                                    validators: {
+                                        notEmpty: {
+                                            message: 'English Name is required'
+                                        }
+                                    }
+                                },
+                                'country_id': {
                                     validators: {
                                         notEmpty: {
                                             message: 'Country is required'

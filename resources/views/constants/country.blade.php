@@ -20,7 +20,7 @@
                     </span>
                     <!--end::Svg Icon-->
                     <input type="text" data-kt-country-table-filter="search"
-                        class="form-control form-control-solid w-250px ps-14" placeholder="Search Countries" />
+                        class="form-control form-control-solid w-250px ps-14" placeholder="{{t('Search Countries')}}" />
                 </div>
                 <!--end::Search-->
             </div>
@@ -42,10 +42,10 @@
                                         fill="currentColor" />
                                 </svg>
                             </span>
-                            <!--end::Svg Icon-->Add Country
+                            <!--end::Svg Icon-->{{t('Add Country')}}
                         </span>
                         <span class="indicator-progress">
-                            Please wait... <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
+                            {{t('Please wait...')}} <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
                         </span>
                     </button>
                     <!--end::Add country-->
@@ -74,8 +74,8 @@
                     <!--begin::Table row-->
                     <tr class="text-start text-muted fw-bold fs-7 text-uppercase gs-0">
                         <th></th>
-                        <th class="min-w-125px">Country</th>
-                        <th class="text-end min-w-100px">Actions</th>
+                        <th class="min-w-125px">{{t('Name')}}</th>
+                        <th class="text-end min-w-100px">{{t('Actions')}}</th>
                     </tr>
                     <!--end::Table row-->
                 </thead>
@@ -112,7 +112,7 @@
                 {
                     className: 'd-flex align-items-center',
                     data: 'name',
-                    name: 'name',
+                    name: 'name' ,
                 },
                 {
                     data: 'action',
@@ -157,10 +157,17 @@
                     var validator = FormValidation.formValidation(
                         form, {
                             fields: {
-                                'country_name': {
+                                'name[ar]': {
                                     validators: {
                                         notEmpty: {
-                                            message: 'Country Name is required'
+                                            message: 'Country Arabic Name is required'
+                                        }
+                                    }
+                                },
+                                'name[en]': {
+                                    validators: {
+                                        notEmpty: {
+                                            message: 'Country English Name is required'
                                         }
                                     }
                                 },

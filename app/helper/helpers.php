@@ -2,6 +2,7 @@
 
 use App\Enums\DropDownFields;
 use App\Enums\Modules;
+use App\helper\FormHelper;
 use App\Models\Constant;
 use App\Models\Objective;
 use Carbon\Carbon;
@@ -11,23 +12,7 @@ use Kreait\Firebase\Messaging\CloudMessage;
 
 
 
-function deleteFile($file_path, $file_name = '')
-{
-    if ($file_name == '') $file_name = basename($file_path);
 
-    // Check if the file exists
-    if (file_exists($file_path)) {
-        // Attempt to delete the file
-        if (unlink($file_path)) {
-            $message =  "File '$file_name' has been deleted successfully.";
-        } else {
-            $message = "There was an error deleting the file '$file_name'.";
-        }
-    } else {
-        $message = "File '$file_name' does not exist.";
-    }
-    return $message;
-}
 function t($key, $placeholder = [], $locale = null)
 {
 
@@ -73,9 +58,9 @@ function w($key, $placeholder = [], $locale = null)
     ];
 
     app('translator')->addLines($messages, $locale);
-    $langs = config('translatable.locales');
+    $langs = config('app.locales');
     foreach ($langs as $lang) {
-        $translation_file = base_path() . '/resources/lang/' . $lang . '/' . $group . '.php';
+        $translation_file = base_path() . '/lang/' . $lang . '/' . $group . '.php';
         $fh = fopen($translation_file, 'r+');
         $new_key = "  \n  '$key' => '$key',\n];\n";
         fseek($fh, -4, SEEK_END);
@@ -139,9 +124,9 @@ function isRtlJS()
     return app()->getLocale() === 'ar' ? 'true' : 'false';
 }
 
-function direction($dot = '')
+function direction()
 {
-    return isRtl() ? 'rtl' . $dot : '';
+    return isRtl() ? 'rtl' : 'ltr';
 }
 
 
@@ -1488,19 +1473,45 @@ if (!function_exists('filterArrayForNullValues')) {
     }
 }
 if (!function_exists('logQuery')) {
-    function logQuery($query)
+    function logQuery($query, $label = '')
     {
-        Log::info('Logging the final SQL query:', ['query' => $query->toSql(), 'bindings' => $query->getBindings()]);
+        // Get SQL and bindings
+        $sql = str_replace('?', "'%s'", $query->toSql());
+        $bindings = collect($query->getBindings())
+            ->map(function ($binding) {
+                if (is_numeric($binding)) {
+                    return $binding;
+                }
+                if (is_null($binding)) {
+                    return 'NULL';
+                }
+                return str_replace("'", "\'", $binding);
+            })->toArray();
 
-        // Construct the full SQL query with bindings replaced
-        $fullQuery = vsprintf(
-            str_replace('?', "'%s'", $query->toSql()),
-            collect($query->getBindings())->map(fn($binding) => is_numeric($binding) ? $binding : addslashes($binding))->toArray()
-        );
+        $finalQuery = vsprintf($sql, $bindings);
 
-        Log::info('Final SQL query with bindings replaced: ' . $fullQuery);
+        // Format query for PHPMyAdmin with label
+        $queryLabel = $label ? "/* $label */" : "/* Query logged at " . now() . " */";
+
+        $phpMyAdminQuery = "-- Copy from here\n"
+            . "SELECT $queryLabel * FROM (\n"
+            . $finalQuery
+            . "\n) AS test_query;\n\n"
+            . "-- Or use EXPLAIN to analyze the query:\n"
+            . "EXPLAIN " . $finalQuery . ";\n"
+            . "-- End query";
+
+        Log::info('PHPMyAdmin-ready SQL query:', [
+            'label' => $label,
+            'raw_query' => $finalQuery,
+            'phpmyadmin_format' => $phpMyAdminQuery,
+            'execution_time' => number_format((microtime(true) - LARAVEL_START) * 1000, 2) . 'ms'
+        ]);
+
+        return $finalQuery;
     }
 }
+
 
 
 
@@ -1646,29 +1657,29 @@ if (!function_exists('wrapInMenuContainer')) {
 }
 if (!function_exists('getSvgIcon')) {
 
-    function getSvgIcon($type)
+    function getSvgIcon($type, $title = '')
     {
         $icons = [
             'add' => '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <rect opacity="0.5" x="11.364" y="20.364" width="16" height="2" rx="1" transform="rotate(-90 11.364 20.364)" fill="currentColor"/>
-            <rect x="4.36396" y="11.364" width="16" height="2" rx="1" fill="currentColor"/>
-          </svg>',
+                        <rect opacity="0.5" x="11.364" y="20.364" width="16" height="2" rx="1" transform="rotate(-90 11.364 20.364)" fill="currentColor"/>
+                        <rect x="4.36396" y="11.364" width="16" height="2" rx="1" fill="currentColor"/>
+                     </svg>',
             'view' => '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M12 6C5.5 6 2 12 2 12C2 12 5.5 18 12 18C18.5 18 22 12 22 12C22 12 18.5 6 12 6ZM12 16C9.24 16 7 13.76 7 11C7 8.24 9.24 6 12 6C14.76 6 17 8.24 17 11C17 13.76 14.76 16 12 16Z" fill="currentColor"/>
-            <path d="M12 8C10.34 8 9 9.34 9 11C9 12.66 10.34 14 12 14C13.66 14 15 12.66 15 11C15 9.34 13.66 8 12 8Z" fill="currentColor"/>
-           </svg>',
+                            <path d="M12 6C5.5 6 2 12 2 12C2 12 5.5 18 12 18C18.5 18 22 12 22 12C22 12 18.5 6 12 6ZM12 16C9.24 16 7 13.76 7 11C7 8.24 9.24 6 12 6C14.76 6 17 8.24 17 11C17 13.76 14.76 16 12 16Z" fill="currentColor"/>
+                            <path d="M12 8C10.34 8 9 9.34 9 11C9 12.66 10.34 14 12 14C13.66 14 15 12.66 15 11C15 9.34 13.66 8 12 8Z" fill="currentColor"/>
+                        </svg>',
             'edit' => '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path opacity="0.3" fill-rule="evenodd" clip-rule="evenodd" d="M2 4.63158C2 3.1782 3.1782 2 4.63158 2H13.47C14.0155 2 14.278 2.66919 13.8778 3.04006L12.4556 4.35821C11.9009 4.87228 11.1726 5.15789 10.4163 5.15789H7.1579C6.05333 5.15789 5.15789 6.05333 5.15789 7.1579V16.8421C5.15789 17.9467 6.05333 18.8421 7.1579 18.8421H16.8421C17.9467 18.8421 18.8421 17.9467 18.8421 16.8421V13.7518C18.8421 12.927 19.1817 12.1387 19.7809 11.572L20.9878 10.4308C21.3703 10.0691 22 10.3403 22 10.8668V19.3684C22 20.8218 20.8218 22 19.3684 22H4.63158C3.1782 22 2 20.8218 2 19.3684V4.63158Z" fill="currentColor"/>
-            <path d="M10.9256 11.1882C10.5351 10.7977 10.5351 10.1645 10.9256 9.77397L18.0669 2.6327C18.8479 1.85165 20.1143 1.85165 20.8953 2.6327L21.3665 3.10391C22.1476 3.88496 22.1476 5.15129 21.3665 5.93234L14.2252 13.0736C13.8347 13.4641 13.2016 13.4641 12.811 13.0736L10.9256 11.1882Z" fill="currentColor"/>
-            <path d="M8.82343 12.0064L8.08852 14.3348C7.8655 15.0414 8.46151 15.7366 9.19388 15.6242L11.8974 15.2092C12.4642 15.1222 12.6916 14.4278 12.2861 14.0223L9.98595 11.7221C9.61452 11.3507 8.98154 11.5055 8.82343 12.0064Z" fill="currentColor"/>
-           </svg>',
+                        <path opacity="0.3" fill-rule="evenodd" clip-rule="evenodd" d="M2 4.63158C2 3.1782 3.1782 2 4.63158 2H13.47C14.0155 2 14.278 2.66919 13.8778 3.04006L12.4556 4.35821C11.9009 4.87228 11.1726 5.15789 10.4163 5.15789H7.1579C6.05333 5.15789 5.15789 6.05333 5.15789 7.1579V16.8421C5.15789 17.9467 6.05333 18.8421 7.1579 18.8421H16.8421C17.9467 18.8421 18.8421 17.9467 18.8421 16.8421V13.7518C18.8421 12.927 19.1817 12.1387 19.7809 11.572L20.9878 10.4308C21.3703 10.0691 22 10.3403 22 10.8668V19.3684C22 20.8218 20.8218 22 19.3684 22H4.63158C3.1782 22 2 20.8218 2 19.3684V4.63158Z" fill="currentColor"/>
+                        <path d="M10.9256 11.1882C10.5351 10.7977 10.5351 10.1645 10.9256 9.77397L18.0669 2.6327C18.8479 1.85165 20.1143 1.85165 20.8953 2.6327L21.3665 3.10391C22.1476 3.88496 22.1476 5.15129 21.3665 5.93234L14.2252 13.0736C13.8347 13.4641 13.2016 13.4641 12.811 13.0736L10.9256 11.1882Z" fill="currentColor"/>
+                        <path d="M8.82343 12.0064L8.08852 14.3348C7.8655 15.0414 8.46151 15.7366 9.19388 15.6242L11.8974 15.2092C12.4642 15.1222 12.6916 14.4278 12.2861 14.0223L9.98595 11.7221C9.61452 11.3507 8.98154 11.5055 8.82343 12.0064Z" fill="currentColor"/>
+                    </svg>',
             'delete' => '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M5 9C5 8.44772 5.44772 8 6 8H18C18.5523 8 19 8.44772 19 9V18C19 19.6569 17.6569 21 16 21H8C6.34315 21 5 19.6569 5 18V9Z" fill="currentColor" />
-              <path opacity="0.5" d="M5 5C5 4.44772 5.44772 4 6 4H18C18.5523 4 19 4.44772 19 5V5C19 5.55228 18.5523 6 18 6H6C5.44772 6 5 5.55228 5 5V5Z" fill="currentColor" />
-              <path opacity="0.5" d="M9 4C9 3.44772 9.44772 3 10 3H14C14.5523 3 15 3.44772 15 4V4H9V4Z" fill="currentColor" />
-             </svg>',
+                            <path d="M5 9C5 8.44772 5.44772 8 6 8H18C18.5523 8 19 8.44772 19 9V18C19 19.6569 17.6569 21 16 21H8C6.34315 21 5 19.6569 5 18V9Z" fill="currentColor" />
+                            <path opacity="0.5" d="M5 5C5 4.44772 5.44772 4 6 4H18C18.5523 4 19 4.44772 19 5V5C19 5.55228 18.5523 6 18 6H6C5.44772 6 5 5.55228 5 5V5Z" fill="currentColor" />
+                            <path opacity="0.5" d="M9 4C9 3.44772 9.44772 3 10 3H14C14.5523 3 15 3.44772 15 4V4H9V4Z" fill="currentColor" />
+                            </svg>',
             'email' => '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
-                                                        <title>Mail</title>
+                                                        <title>' . $title . '</title>
 
                                                         <defs/>
                                                         <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
@@ -1678,7 +1689,7 @@ if (!function_exists('getSvgIcon')) {
                                                         </g>
                                                     </svg>',
             'print' => '                   <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
-                                                                        <title>Print</title>
+                                                                        <title>' . $title . '</title>
 
                                                                         <defs/>
                                                                         <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
@@ -1688,20 +1699,126 @@ if (!function_exists('getSvgIcon')) {
                                                                         </g>
                                                                     </svg>',
             'convert/transorm' => '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-  <title>Convert</title>
-  <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-    <rect x="0" y="0" width="24" height="24"/>
-    <path d="M4.56066017,7.93933983 C5.34645669,7.15354331 6.61338647,7.15354331 7.39918299,7.93933983 L15.4991834,16.0393398 C16.2849799,16.8251363 16.2849799,18.0920661 15.4991834,18.8778626 C14.7133869,19.6636591 13.4464571,19.6636591 12.6606606,18.8778626 L4.56066017,10.7778626 C3.77486366,9.99206611 3.77486366,8.72513633 4.56066017,7.93933983 Z" fill="#999" transform="translate(10.030330, 13.409010) rotate(-45.000000) translate(-10.030330, -13.409010)"/>
-    <path d="M19.4393398,7.93933983 C20.2251363,7.15354331 21.4920661,7.15354331 22.2778626,7.93933983 C23.0636591,8.72513633 23.0636591,9.99206611 22.2778626,10.7778626 L14.1778626,18.8778626 C13.3920661,19.6636591 12.1251363,19.6636591 11.3393398,18.8778626 C10.5535433,18.0920661 10.5535433,16.8251363 11.3393398,16.0393398 L19.4393398,7.93933983 Z" fill="#999" opacity="0.3" transform="translate(16.838670, 13.409010) scale(-1, 1) rotate(-45.000000) translate(-16.838670, -13.409010)"/>
-  </g>
-</svg>',
+                                        <title>' . $title . '</title>
+                                        <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                            <rect x="0" y="0" width="24" height="24"/>
+                                            <path d="M4.56066017,7.93933983 C5.34645669,7.15354331 6.61338647,7.15354331 7.39918299,7.93933983 L15.4991834,16.0393398 C16.2849799,16.8251363 16.2849799,18.0920661 15.4991834,18.8778626 C14.7133869,19.6636591 13.4464571,19.6636591 12.6606606,18.8778626 L4.56066017,10.7778626 C3.77486366,9.99206611 3.77486366,8.72513633 4.56066017,7.93933983 Z" fill="#999" transform="translate(10.030330, 13.409010) rotate(-45.000000) translate(-10.030330, -13.409010)"/>
+                                            <path d="M19.4393398,7.93933983 C20.2251363,7.15354331 21.4920661,7.15354331 22.2778626,7.93933983 C23.0636591,8.72513633 23.0636591,9.99206611 22.2778626,10.7778626 L14.1778626,18.8778626 C13.3920661,19.6636591 12.1251363,19.6636591 11.3393398,18.8778626 C10.5535433,18.0920661 10.5535433,16.8251363 11.3393398,16.0393398 L19.4393398,7.93933983 Z" fill="#999" opacity="0.3" transform="translate(16.838670, 13.409010) scale(-1, 1) rotate(-45.000000) translate(-16.838670, -13.409010)"/>
+                                        </g>
+                                        </svg>',
 
 
             'menu' => '<svg width="16" height="15" viewBox="0 0 16 15" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <rect y="6" width="16" height="3" rx="1.5" fill="currentColor"/>
                         <rect opacity="0.3" y="12" width="8" height="3" rx="1.5" fill="currentColor"/>
                         <rect opacity="0.3" width="12" height="3" rx="1.5" fill="currentColor"/>
-                       </svg>'
+                       </svg>',
+            'price-offer' => '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path opacity="0.3" d="M12.4 6L20.7 14.3C21.1 14.7 21.1 15.3 20.7 15.7L15.7 20.7C15.3 21.1 14.7 21.1 14.3 20.7L6 12.4L6 7.5C6 6.7 6.7 6 7.5 6L12.4 6Z" fill="currentColor"/>
+                                    <path d="M12.4 6L20.7 14.3C21.1 14.7 21.1 15.3 20.7 15.7L15.7 20.7C15.3 21.1 14.7 21.1 14.3 20.7L6 12.4L6 7.5C6 6.7 6.7 6 7.5 6L12.4 6Z" stroke="currentColor" stroke-width="1.5"/>
+                                    <path d="M9 9H9.01" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+                                    <path d="M6.5 3.5L4 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                                    <path d="M3.5 4.5L6 7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                                    <path opacity="0.3" d="M11 13L17 19" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                                </svg>',
+            'dashboard' => '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <rect x="2" y="2" width="9" height="9" rx="2" fill="currentColor"></rect>
+                                <rect opacity="0.3" x="13" y="2" width="9" height="9" rx="2" fill="currentColor"></rect>
+                                <rect opacity="0.3" x="13" y="13" width="9" height="9" rx="2" fill="currentColor"></rect>
+                                <rect opacity="0.3" x="2" y="13" width="9" height="9" rx="2" fill="currentColor"></rect>
+                            </svg>',
+            'user_managment' => '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M6.28548 15.0861C7.34369 13.1814 9.35142 12 11.5304 12H12.4696C14.6486 12 16.6563 13.1814 17.7145 15.0861L19.3493 18.0287C20.0899 19.3618 19.1259 21 17.601 21H6.39903C4.87406 21 3.91012 19.3618 4.65071 18.0287L6.28548 15.0861Z" fill="currentColor"></path>
+                                <rect opacity="0.3" x="8" y="3" width="8" height="8" rx="4" fill="currentColor"></rect>
+                            </svg>',
+            'settings' => '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path opacity="0.3" d="M5 8.04999L11.8 11.95V19.85L5 15.85V8.04999Z" fill="currentColor"></path>
+                                <path d="M20.1 6.65L12.3 2.15C12 1.95 11.6 1.95 11.3 2.15L3.5 6.65C3.2 6.85 3 7.15 3 7.45V16.45C3 16.75 3.2 17.15 3.5 17.25L11.3 21.75C11.5 21.85 11.6 21.85 11.8 21.85C12 21.85 12.1 21.85 12.3 21.75L20.1 17.25C20.4 17.05 20.6 16.75 20.6 16.45V7.45C20.6 7.15 20.4 6.75 20.1 6.65ZM5 15.85V7.95L11.8 4.05L18.6 7.95L11.8 11.95V19.85L5 15.85Z" fill="currentColor"></path>
+                                </svg>',
+            'service' => '<!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo1/dist/../src/media/svg/icons/General/Smile.svg--><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"  viewBox="0 0 24 24" version="1.1">
+                            <title>Stockholm-icons / General / Smile</title>
+                            <desc>Created with Sketch.</desc>
+                            <defs/>
+                            <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                <rect x="0" y="0" width="24" height="24"/>
+                                <rect fill="currentColor"  x="2" y="2" width="20" height="20" rx="10"/>
+                                <path d="M6.16794971,14.5547002 C5.86159725,14.0951715 5.98577112,13.4743022 6.4452998,13.1679497 C6.90482849,12.8615972 7.52569784,12.9857711 7.83205029,13.4452998 C8.9890854,15.1808525 10.3543313,16 12,16 C13.6456687,16 15.0109146,15.1808525 16.1679497,13.4452998 C16.4743022,12.9857711 17.0951715,12.8615972 17.5547002,13.1679497 C18.0142289,13.4743022 18.1384028,14.0951715 17.8320503,14.5547002 C16.3224187,16.8191475 14.3543313,18 12,18 C9.64566871,18 7.67758127,16.8191475 6.16794971,14.5547002 Z" fill="#000"/>
+                            </g>
+                        </svg>',
+            'menu_webiste' => '<!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo1/dist/../src/media/svg/icons/Layout/Layout-horizontal.svg--><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">  <defs/>
+                                <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                    <rect x="0" y="0" width="24" height="24"/>
+                                    <rect fill="#fff" opacity="0.3" x="4" y="5" width="16" height="6" rx="1.5"/>
+                                    <rect fill="#fff" x="4" y="13" width="16" height="6" rx="1.5"/>
+                                </g>
+                            </svg>',
+            'feature_managment' => '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1" class="kt-svg-icon">
+                                    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                        <rect id="bound" x="0" y="0" width="24" height="24"/>
+                                        <path d="M13.5,6 C13.33743,8.28571429 12.7799545,9.78571429 11.8275735,10.5 C11.8275735,10.5 12.5,4 10.5734853,2 C10.5734853,2 10.5734853,5.92857143 8.78777106,9.14285714 C7.95071887,10.6495511 7.00205677,12.1418252 7.00205677,14.1428571 C7.00205677,17 10.4697177,18 12.0049375,18 C13.8025422,18 17,17 17,13.5 C17,12.0608202 15.8333333,9.56082016 13.5,6 Z" id="Path-17" fill="#fff"/>
+                                        <path d="M9.72075922,20 L14.2792408,20 C14.7096712,20 15.09181,20.2754301 15.2279241,20.6837722 L16,23 L8,23 L8.77207592,20.6837722 C8.90818997,20.2754301 9.29032881,20 9.72075922,20 Z" id="Rectangle-49" fill="#fff" opacity="0.3"/>
+                                    </g>
+                                </svg>',
+            'slider_managment' => '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1" class="kt-svg-icon">
+                                    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                        <rect id="bound" x="0" y="0" width="24" height="24"/>
+                                        <circle id="Combined-Shape" fill="#fff" cx="9" cy="15" r="6"/>
+                                        <path d="M8.8012943,7.00241953 C9.83837775,5.20768121 11.7781543,4 14,4 C17.3137085,4 20,6.6862915 20,10 C20,12.2218457 18.7923188,14.1616223 16.9975805,15.1987057 C16.9991904,15.1326658 17,15.0664274 17,15 C17,10.581722 13.418278,7 9,7 C8.93357256,7 8.86733422,7.00080962 8.8012943,7.00241953 Z" id="Combined-Shape" fill="#fff" opacity="0.3"/>
+                                    </g>
+                                </svg>',
+            'review_management' => '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1" class="kt-svg-icon">
+                                    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                        <rect id="bound" x="0" y="0" width="24" height="24"/>
+                                        <path d="M14.2928932,16.7071068 C13.9023689,16.3165825 13.9023689,15.6834175 14.2928932,15.2928932 C14.6834175,14.9023689 15.3165825,14.9023689 15.7071068,15.2928932 L19.7071068,19.2928932 C20.0976311,19.6834175 20.0976311,20.3165825 19.7071068,20.7071068 C19.3165825,21.0976311 18.6834175,21.0976311 18.2928932,20.7071068 L14.2928932,16.7071068 Z" id="Path-2" fill="#000000" fill-rule="nonzero" opacity="0.3"/>
+                                        <path d="M11,16 C13.7614237,16 16,13.7614237 16,11 C16,8.23857625 13.7614237,6 11,6 C8.23857625,6 6,8.23857625 6,11 C6,13.7614237 8.23857625,16 11,16 Z M11,18 C7.13400675,18 4,14.8659932 4,11 C4,7.13400675 7.13400675,4 11,4 C14.8659932,4 18,7.13400675 18,11 C18,14.8659932 14.8659932,18 11,18 Z" id="Path" fill="#fff" fill-rule="nonzero"/>
+                                        <rect id="Combined-Shape" fill="#fff" opacity="0.3" x="9" y="10.5" width="4" height="1" rx="0.5"/>
+                                    </g>
+                                </svg>',
+            'client_management' => '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+                    <title>Stockholm-icons / Communication / Clipboard-check</title>
+                    <desc>Created with Sketch.</desc>
+                    <defs/>
+                    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                        <rect x="0" y="0" width="24" height="24"/>
+                        <path d="M8,3 L8,3.5 C8,4.32842712 8.67157288,5 9.5,5 L14.5,5 C15.3284271,5 16,4.32842712 16,3.5 L16,3 L18,3 C19.1045695,3 20,3.8954305 20,5 L20,21 C20,22.1045695 19.1045695,23 18,23 L6,23 C4.8954305,23 4,22.1045695 4,21 L4,5 C4,3.8954305 4.8954305,3 6,3 L8,3 Z" fill="currentColor" />
+                        <path d="M10.875,15.75 C10.6354167,15.75 10.3958333,15.6541667 10.2041667,15.4625 L8.2875,13.5458333 C7.90416667,13.1625 7.90416667,12.5875 8.2875,12.2041667 C8.67083333,11.8208333 9.29375,11.8208333 9.62916667,12.2041667 L10.875,13.45 L14.0375,10.2875 C14.4208333,9.90416667 14.9958333,9.90416667 15.3791667,10.2875 C15.7625,10.6708333 15.7625,11.2458333 15.3791667,11.6291667 L11.5458333,15.4625 C11.3541667,15.6541667 11.1145833,15.75 10.875,15.75 Z" fill="#000000"/>
+                        <path d="M11,2 C11,1.44771525 11.4477153,1 12,1 C12.5522847,1 13,1.44771525 13,2 L14.5,2 C14.7761424,2 15,2.22385763 15,2.5 L15,3.5 C15,3.77614237 14.7761424,4 14.5,4 L9.5,4 C9.22385763,4 9,3.77614237 9,3.5 L9,2.5 C9,2.22385763 9.22385763,2 9.5,2 L11,2 Z" fill="#000000"/>
+                    </g>
+                </svg>',
+            'building_management' => '<!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo1/dist/../src/media/svg/icons/Files/Compiled-file.svg--><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+                                <title>Stockholm-icons / Files / Compiled-file</title>
+                                <desc></desc>
+                                <defs/>
+                                <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                    <polygon points="0 0 24 0 24 24 0 24"/>
+                                    <path d="M5.85714286,2 L13.7364114,2 C14.0910962,2 14.4343066,2.12568431 14.7051108,2.35473959 L19.4686994,6.3839416 C19.8056532,6.66894833 20,7.08787823 20,7.52920201 L20,20.0833333 C20,21.8738751 19.9795521,22 18.1428571,22 L5.85714286,22 C4.02044787,22 4,21.8738751 4,20.0833333 L4,3.91666667 C4,2.12612489 4.02044787,2 5.85714286,2 Z" fill="#fff" fill-rule="nonzero" opacity="0.3"/>
+                                    <rect fill="#fff" opacity="0.3" transform="translate(8.984240, 12.127098) rotate(-45.000000) translate(-8.984240, -12.127098) " x="7.41281179" y="10.5556689" width="3.14285714" height="3.14285714" rx="0.75"/>
+                                    <rect fill="#fff" opacity="0.3" transform="translate(15.269955, 12.127098) rotate(-45.000000) translate(-15.269955, -12.127098) " x="13.6985261" y="10.5556689" width="3.14285714" height="3.14285714" rx="0.75"/>
+                                    <rect fill="#fff" transform="translate(12.127098, 15.269955) rotate(-45.000000) translate(-12.127098, -15.269955) " x="10.5556689" y="13.6985261" width="3.14285714" height="3.14285714" rx="0.75"/>
+                                    <rect fill="#fff" transform="translate(12.127098, 8.984240) rotate(-45.000000) translate(-12.127098, -8.984240) " x="10.5556689" y="7.41281179" width="3.14285714" height="3.14285714" rx="0.75"/>
+                                </g>
+                            </svg>',
+            'lead_management' => '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+                                    <title>Stockholm-icons / Communication / Clipboard-check</title>
+                                    <desc>Created with Sketch.</desc>
+                                    <defs/>
+                                    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                        <rect x="0" y="0" width="24" height="24"/>
+                                        <path d="M8,3 L8,3.5 C8,4.32842712 8.67157288,5 9.5,5 L14.5,5 C15.3284271,5 16,4.32842712 16,3.5 L16,3 L18,3 C19.1045695,3 20,3.8954305 20,5 L20,21 C20,22.1045695 19.1045695,23 18,23 L6,23 C4.8954305,23 4,22.1045695 4,21 L4,5 C4,3.8954305 4.8954305,3 6,3 L8,3 Z" fill="currentColor" />
+                                        <path d="M10.875,15.75 C10.6354167,15.75 10.3958333,15.6541667 10.2041667,15.4625 L8.2875,13.5458333 C7.90416667,13.1625 7.90416667,12.5875 8.2875,12.2041667 C8.67083333,11.8208333 9.29375,11.8208333 9.62916667,12.2041667 L10.875,13.45 L14.0375,10.2875 C14.4208333,9.90416667 14.9958333,9.90416667 15.3791667,10.2875 C15.7625,10.6708333 15.7625,11.2458333 15.3791667,11.6291667 L11.5458333,15.4625 C11.3541667,15.6541667 11.1145833,15.75 10.875,15.75 Z" fill="#000000"/>
+                                        <path d="M11,2 C11,1.44771525 11.4477153,1 12,1 C12.5522847,1 13,1.44771525 13,2 L14.5,2 C14.7761424,2 15,2.22385763 15,2.5 L15,3.5 C15,3.77614237 14.7761424,4 14.5,4 L9.5,4 C9.22385763,4 9,3.77614237 9,3.5 L9,2.5 C9,2.22385763 9.22385763,2 9.5,2 L11,2 Z" fill="#000000"/>
+                                    </g>
+                                </svg>',
+            'Conversations' => '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path opacity="0.3" d="M14 3V20H2V3C2 2.4 2.4 2 3 2H13C13.6 2 14 2.4 14 3ZM11 13V11C11 9.7 10.2 8.59995 9 8.19995V7C9 6.4 8.6 6 8 6C7.4 6 7 6.4 7 7V8.19995C5.8 8.59995 5 9.7 5 11V13C5 13.6 4.6 14 4 14V15C4 15.6 4.4 16 5 16H11C11.6 16 12 15.6 12 15V14C11.4 14 11 13.6 11 13Z" fill="currentColor"/>
+                                <path d="M2 20H14V21C14 21.6 13.6 22 13 22H3C2.4 22 2 21.6 2 21V20ZM9 3V2H7V3C7 3.6 7.4 4 8 4C8.6 4 9 3.6 9 3ZM6.5 16C6.5 16.8 7.2 17.5 8 17.5C8.8 17.5 9.5 16.8 9.5 16H6.5ZM21.7 12C21.7 11.4 21.3 11 20.7 11H17.6C17 11 16.6 11.4 16.6 12C16.6 12.6 17 13 17.6 13H20.7C21.2 13 21.7 12.6 21.7 12ZM17 8C16.6 8 16.2 7.80002 16.1 7.40002C15.9 6.90002 16.1 6.29998 16.6 6.09998L19.1 5C19.6 4.8 20.2 5 20.4 5.5C20.6 6 20.4 6.60005 19.9 6.80005L17.4 7.90002C17.3 8.00002 17.1 8 17 8ZM19.5 19.1C19.4 19.1 19.2 19.1 19.1 19L16.6 17.9C16.1 17.7 15.9 17.1 16.1 16.6C16.3 16.1 16.9 15.9 17.4 16.1L19.9 17.2C20.4 17.4 20.6 18 20.4 18.5C20.2 18.9 19.9 19.1 19.5 19.1Z" fill="currentColor"/>
+                                </svg>',
+            'CDR' => '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path opacity="0.3" d="M5 15C3.3 15 2 13.7 2 12C2 10.3 3.3 9 5 9H5.10001C5.00001 8.7 5 8.3 5 8C5 5.2 7.2 3 10 3C11.9 3 13.5 4 14.3 5.5C14.8 5.2 15.4 5 16 5C17.7 5 19 6.3 19 8C19 8.4 18.9 8.7 18.8 9C18.9 9 18.9 9 19 9C20.7 9 22 10.3 22 12C22 13.7 20.7 15 19 15H5ZM5 12.6H13L9.7 9.29999C9.3 8.89999 8.7 8.89999 8.3 9.29999L5 12.6Z" fill="currentColor"/>
+                                <path d="M17 17.4V12C17 11.4 16.6 11 16 11C15.4 11 15 11.4 15 12V17.4H17Z" fill="currentColor"/>
+                                <path opacity="0.3" d="M12 17.4H20L16.7 20.7C16.3 21.1 15.7 21.1 15.3 20.7L12 17.4Z" fill="currentColor"/>
+                                <path d="M8 12.6V18C8 18.6 8.4 19 9 19C9.6 19 10 18.6 10 18V12.6H8Z" fill="currentColor"/>
+                                </svg>',
         ];
 
         return $icons[$type] ?? '';
@@ -1713,7 +1830,7 @@ if (!function_exists('jsonCRMResponse')) {
     {
         return response()->json([
             'status' => $status,
-            'message' => t($message)
+            'message' => $message
         ], $statusCode);
     }
 }
@@ -1749,10 +1866,7 @@ if (!function_exists('handleObjectives')) {
             Log::info('Processing individual objective', ['name' => $name]);
 
             $objective = Objective::firstOrCreate(
-                [
-                    'name' => $name,
-                    'objective_type_id' => $request->objective_type_id,
-                ],
+                ['name' => $name],
                 ['is_active' => true]
             );
 
@@ -1772,5 +1886,95 @@ if (!function_exists('handleObjectives')) {
         ]);
 
         return $objectiveIds;
+    }
+}
+
+if (!function_exists('shortURL')) {
+
+    function shortURL($link)
+    {
+        try {
+            if ($link) {
+                $client = new Client();
+
+
+                $response = $client->get(
+                    'https://is.gd/create.php?format=json&url=' . $link,
+                    []
+                );
+                $d = json_decode($response->getBody(), true);
+
+                if ($d["shorturl"])
+                    $slink = $d["shorturl"];
+            }
+            return $slink;
+        } catch (Exception $ex) {
+            return $link;
+        }
+    }
+}
+
+if (!function_exists('form_helper')) {
+    function form_helper($prefix = '', $model = null)
+    {
+        return FormHelper::make($prefix, $model);
+    }
+}
+if (!function_exists('deleteFile')) {
+    function deleteFile($oldPath, $oldName = '')
+    {
+        Log::info('Starting file deletion process', [
+            'path' => $oldPath,
+            'name' => $oldName
+        ]);
+
+        if ($oldName == '') {
+            $oldName = basename($oldPath);
+            Log::info('No name provided, using basename', ['name' => $oldName]);
+        }
+
+        try {
+            $message = "";
+
+            Log::info('Checking if file exists', ['path' => $oldPath]);
+
+            if (file_exists($oldPath)) {
+                Log::info('File exists, attempting to delete');
+
+                if (unlink($oldPath)) {
+                    $message = "File '$oldName' has been deleted successfully.";
+                    Log::info('File deleted successfully', [
+                        'path' => $oldPath,
+                        'name' => $oldName
+                    ]);
+                } else {
+                    $message = "There was an error deleting the file '$oldName'.";
+                    Log::warning('Failed to delete file', [
+                        'path' => $oldPath,
+                        'name' => $oldName
+                    ]);
+                }
+            } else {
+                $message = "File '$oldName' does not exist.";
+                Log::warning('File does not exist', [
+                    'path' => $oldPath,
+                    'name' => $oldName
+                ]);
+            }
+        } catch (\Exception $e) {
+            $message = "Exception occurred while deleting file: " . $e->getMessage();
+            Log::error('Error deleting file', [
+                'path' => $oldPath,
+                'name' => $oldName,
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]);
+        }
+
+        Log::info('File deletion process completed', [
+            'result' => $message
+        ]);
+
+        return $message;
     }
 }

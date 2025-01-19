@@ -1,0 +1,728 @@
+/* Base Modal Styles */
+.apt-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    backdrop-filter: blur(5px);
+}
+
+.apt-modal-content {
+    background: white;
+    padding: 2.5rem;
+    border-radius: 16px;
+    width: 90%;
+    max-width: 1000px;
+    max-height: 90vh;
+    position: relative;
+    transform: translateY(20px);
+    transition: all 0.3s ease;
+    overflow-y: auto;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.apt-modal.active {
+    display: flex;
+    opacity: 1;
+}
+
+.apt-modal.active .apt-modal-content {
+    transform: translateY(0);
+}
+
+/* Modal Header Styles */
+.apt-modal-header {
+    padding-top: 3rem;
+    margin-bottom: 2.5rem;
+    position: relative;
+    text-align: center;
+}
+
+.apt-modal-title {
+    color: #2d3648;
+    font-size: 1.75rem;
+    font-weight: 600;
+    margin: 0;
+}
+
+.apt-modal-subtitle {
+    color: #666;
+    font-size: 0.95rem;
+    margin-top: 0.5rem;
+}
+
+/* Button Styles */
+.apt-close-button {
+    position: absolute;
+    top: 1.5rem;
+    right: 1.5rem;
+    background: white;
+    border: none;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    color: #666;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    z-index: 100;
+}
+
+.apt-back-button {
+    position: absolute;
+    top: 1.5rem;
+    left: 1.5rem;
+    background: white;
+    border: none;
+    padding: 0.75rem 1.25rem;
+    border-radius: 25px;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: #666;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    z-index: 100;
+}
+
+.apt-close-button:hover,
+.apt-back-button:hover {
+    color: #b8997e;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Building Grid Styles */
+.apt-buildings-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 2rem;
+    padding: 1rem;
+}
+
+.apt-building-card {
+    background: white;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s ease;
+}
+
+.apt-building-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.apt-building-image {
+    width: 100%;
+    height: 250px;
+    object-fit: cover;
+}
+
+.apt-building-info {
+    padding: 1.75rem;
+}
+
+.apt-building-name {
+    font-size: 1.5rem;
+    color: #2d3648;
+    margin-bottom: 1.25rem;
+    font-weight: 600;
+}
+
+.apt-building-stats-container {
+    display: flex;
+    gap: 2rem;
+    margin-bottom: 1.75rem;
+}
+
+.apt-stat-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    color: #666;
+    font-size: 0.95rem;
+}
+
+.apt-amenities-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.75rem;
+}
+
+/* Apartment Carousel Styles */
+.apt-carousel {
+    width: 100%;
+    padding: 1rem 0;
+    overflow: hidden;
+}
+
+.apt-apartment-slide {
+    background: white;
+    border-radius: 16px;
+    padding: 2rem;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.swiper-slide-active {
+    opacity: 1;
+}
+
+.apt-apartment-image {
+    width: 100%;
+    height: 300px;
+    object-fit: cover;
+    border-radius: 12px;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+}
+
+.apt-apartment-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 1.75rem;
+}
+
+.apt-apartment-title {
+    font-size: 1.75rem;
+    color: #2d3648;
+    margin: 0;
+    font-weight: 600;
+}
+
+.apt-apartment-price {
+    font-size: 1.5rem;
+    color: #b8997e;
+    font-weight: bold;
+    margin-right: 2.5rem;
+}
+
+.apt-apartment-details {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.75rem;
+    margin-bottom: 2rem;
+}
+
+.apt-apartment-feature {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    color: #2d3648;
+    font-size: 1.1rem;
+}
+
+.apt-apartment-description {
+    color: #666;
+    line-height: 1.7;
+    margin-bottom: 2rem;
+    font-size: 1.05rem;
+}
+
+.apt-apartment-amenities {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.apt-amenity-tag {
+    background: #f8f8f8;
+    padding: 0.75rem 1.25rem;
+    border-radius: 25px;
+    font-size: 0.95rem;
+    color: #666;
+    transition: all 0.2s ease;
+}
+
+.apt-amenity-tag:hover {
+    background: #f0f0f0;
+    transform: translateY(-2px);
+}
+
+/* Navigation Buttons */
+.swiper-button-next,
+.swiper-button-prev {
+    color: #b8997e;
+    width: 45px;
+    height: 45px;
+    background: white;
+    border-radius: 50%;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    transition: all 0.2s ease;
+}
+
+.swiper-button-next:hover,
+.swiper-button-prev:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+}
+
+.swiper-button-next:after,
+.swiper-button-prev:after {
+    font-size: 1.2rem;
+}
+
+/* Form Styles */
+.apt-appointment-form {
+    display: grid;
+    gap: 1.25rem;
+    margin-top: 2rem;
+}
+
+.apt-form-input {
+    padding: 1rem;
+    border: 2px solid #eee;
+    border-radius: 8px;
+    font-size: 1rem;
+    width: 100%;
+    transition: all 0.2s ease;
+}
+
+.apt-form-input:focus {
+    outline: none;
+    border-color: #b8997e;
+    box-shadow: 0 0 0 3px rgba(184, 153, 126, 0.1);
+}
+
+.apt-submit-button {
+    background-color: #b8997e;
+    color: white;
+    border: none;
+    padding: 1.25rem 2rem;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1.1rem;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    width: 100%;
+}
+
+.apt-submit-button:hover {
+    background-color: #a68870;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(184, 153, 126, 0.2);
+}
+
+/* Scrollbar Styles */
+.apt-modal-content {
+    scrollbar-width: thin;
+    scrollbar-color: #b8997e #f5f5f5;
+}
+
+.apt-modal-content::-webkit-scrollbar {
+    width: 8px;
+}
+
+.apt-modal-content::-webkit-scrollbar-track {
+    background: #f5f5f5;
+    border-radius: 4px;
+}
+
+.apt-modal-content::-webkit-scrollbar-thumb {
+    background-color: #b8997e;
+    border-radius: 4px;
+}
+
+/* No Content States */
+.apt-no-content {
+    text-align: center;
+    padding: 3rem 2rem;
+    color: #666;
+}
+
+.apt-no-content-icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    color: #b8997e;
+}
+
+.apt-no-content-title {
+    font-size: 1.5rem;
+    color: #2d3648;
+    margin-bottom: 0.5rem;
+}
+
+.apt-no-content-message {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    max-width: 400px;
+    margin: 0 auto;
+    color: #666;
+}
+
+.apt-message-container {
+    margin-bottom: 1rem;
+}
+
+.apt-success-message,
+.apt-error-message {
+    padding: 1rem;
+    border-radius: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.apt-success-message {
+    background-color: #d1fae5;
+    color: #065f46;
+}
+
+.apt-error-message {
+    background-color: #fee2e2;
+    color: #991b1b;
+}
+
+.apt-success-icon,
+.apt-error-icon {
+    width: 24px;
+    height: 24px;
+    fill: currentColor;
+}
+
+.apt-success-message p,
+.apt-error-message p {
+    margin: 0;
+    font-size: 0.875rem;
+    font-weight: 500;
+}
+/******************** form styles*/
+
+/* Form container and basic input styles */
+.form-container {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    border-radius: 20px;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+    padding: 2.5rem !important;
+}
+
+.form-control {
+    width: 100%;
+    height: 50px;
+    padding: 0.75rem 1rem;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+.form-control:focus {
+    border-color: #c5a667;
+    box-shadow: 0 0 0 3px rgba(197, 166, 103, 0.1);
+    outline: none;
+}
+
+/* Input group wrapper for proper spacing */
+.input-wrapper {
+    position: relative;
+    margin-bottom: 1.5rem;
+}
+
+/* Error message styling */
+.error-text {
+    display: none;
+    color: #dc3545;
+    font-size: 0.8rem;
+    margin-top: 0.4rem;
+    margin-left: 0.5rem;
+    padding-left: 20px;
+    position: relative;
+}
+
+/* Show error when input is invalid */
+.form-control.is-invalid {
+    border-color: #dc3545;
+    margin-bottom: 0;
+}
+
+.form-control.is-invalid + .error-text {
+    display: block;
+}
+
+/* Error icon */
+.error-text::before {
+    content: "!";
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 14px;
+    height: 14px;
+    background: #dc3545;
+    color: white;
+    border-radius: 50%;
+    font-size: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+}
+
+/* Submit button styling */
+.btn-gold {
+    width: 100%;
+    height: 50px;
+    background: linear-gradient(45deg, #c5a667, #dfc298);
+    border: none;
+    border-radius: 8px;
+    color: white;
+    font-size: 1rem;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.btn-gold:hover {
+    background: linear-gradient(45deg, #b49556, #c5a667);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(197, 166, 103, 0.3);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .form-container {
+        padding: 1.5rem !important;
+    }
+
+    .input-wrapper {
+        margin-bottom: 1.25rem;
+    }
+}
+.error-message {
+    color: red;
+}
+
+/********* footer form */
+/* Footer Form Styles */
+.contact-form .form-control {
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: white;
+    border-radius: 4px;
+    padding: 0.75rem 1rem;
+    transition: all 0.3s ease;
+}
+
+.contact-form .form-control:focus {
+    border-color: #fff;
+    box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.1);
+    outline: none;
+}
+
+.contact-form .form-control::placeholder {
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.contact-form textarea.form-control {
+    min-height: 100px;
+    resize: vertical;
+}
+
+.contact-form .btn-outline-light {
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    padding: 0.5rem 2rem;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.contact-form .btn-outline-light:hover {
+    background: white;
+    color: #c5a667;
+}
+
+/* Error states */
+.contact-form .form-control.is-invalid {
+    border-color: #ff6b6b;
+    background-image: none;
+}
+
+.contact-form .error-text {
+    color: #ff6b6b;
+    font-size: 0.8rem;
+    margin-top: 0.25rem;
+    display: none;
+    padding-left: 0.5rem;
+}
+
+.contact-form .form-control.is-invalid + .error-text {
+    display: block;
+}
+
+/* Input wrapper for proper spacing */
+.contact-form .input-wrapper {
+    position: relative;
+    margin-bottom: 0.5rem;
+}
+
+/* Loading state */
+.contact-form .btn-outline-light:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+/* Footer Form Error Styles */
+.contact-form .error-text {
+    color: #ffe0e0;
+    font-size: 0.85rem;
+    margin-top: 0.5rem;
+    padding-left: 24px;
+    position: relative;
+    display: none;
+    animation: errorFadeIn 0.3s ease;
+    line-height: 1.4;
+}
+
+.contact-form .form-control.is-invalid {
+    border-color: rgba(255, 107, 107, 0.8);
+    border-width: 2px;
+    background: rgba(255, 107, 107, 0.1);
+}
+
+.contact-form .form-control.is-invalid + .error-text {
+    display: block;
+}
+
+/* Error Icon */
+.contact-form .error-text::before {
+    content: "!";
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 18px;
+    height: 18px;
+    background: rgba(255, 107, 107, 0.9);
+    color: white;
+    border-radius: 50%;
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* Shake Animation for Invalid Fields */
+@keyframes shake {
+    0%,
+    100% {
+        transform: translateX(0);
+    }
+    25% {
+        transform: translateX(-4px);
+    }
+    75% {
+        transform: translateX(4px);
+    }
+}
+
+.contact-form .form-control.is-invalid {
+    animation: shake 0.4s ease-in-out;
+}
+
+/* Error Message Fade In */
+@keyframes errorFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-5px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Input Spacing with Error */
+.contact-form .input-wrapper {
+    position: relative;
+    margin-bottom: 1rem;
+}
+
+.contact-form .input-wrapper.has-error {
+    margin-bottom: 2rem;
+}
+
+/* Better Contrast for Placeholder Text */
+.contact-form .form-control::placeholder {
+    color: rgba(255, 255, 255, 0.7);
+    font-weight: 300;
+}
+
+/* Focus State with Error */
+.contact-form .form-control.is-invalid:focus {
+    border-color: rgba(255, 107, 107, 0.9);
+    box-shadow: 0 0 0 3px rgba(255, 107, 107, 0.2);
+}
+
+/* Required Field Indicator */
+.contact-form .required-field::after {
+    content: "*";
+    color: #ffe0e0;
+    margin-left: 4px;
+}
+
+/* Error Counter Badge */
+.error-badge {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    background: rgba(255, 107, 107, 0.9);
+    color: white;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: badgePop 0.3s ease;
+}
+
+@keyframes badgePop {
+    from {
+        transform: scale(0);
+    }
+    to {
+        transform: scale(1);
+    }
+}
+
+/************/
+.error-message {
+    display: none;
+    color: #dc3545;
+    font-size: 12px;
+    margin-top: 5px;
+}
+
+.apt-form-group {
+    position: relative;
+    margin-bottom: 1rem;
+}
+
+.is-invalid {
+    border-color: #dc3545 !important;
+}
+
+/* Select2 styling */
+.select2-container--bootstrap-5 .select2-selection {
+    height: 40px;
+    padding: 8px 12px;
+}

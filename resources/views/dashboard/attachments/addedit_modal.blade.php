@@ -60,7 +60,7 @@
                   @isset($attachment)
                       <div class="fv-row">
                           <!--begin::Label-->
-                          <label class="fw-semibold fs-6 mb-2">{{__('Current attachment ')}}: </label>
+                          <label class="fw-semibold fs-6 mb-2">Current attachment : </label>
                           <!--end::Label-->
                           <!--begin::Input-->
                           <div class="mb-3">
@@ -88,7 +88,7 @@
 
                   <div class="fv-row">
                       <!--begin::Label-->
-                      <label class="required fw-semibold fs-6 mb-2" for="formFile">{{__('Attachment')}}</label>
+                      <label class="required fw-semibold fs-6 mb-2" for="formFile">Attachment</label>
                       <!--end::Label-->
                       <!--begin::Input-->
                       <div class="mb-3">
@@ -106,11 +106,11 @@
               <!--end::Scroll-->
               <!--begin::Actions-->
               <div class="text-center pt-15">
-                  <button type="reset" class="btn btn-light me-3" data-kt-attachments-whatsapp-modal-action="cancel"
-                      data-bs-dismiss="modal">{{__('Discard')}}</button>
-                  <button type="submit" class="btn btn-primary" data-kt-attachments-whatsapp-modal-action="submit">
-                      <span class="indicator-label">{{__('Submit')}}</span>
-                      <span class="indicator-progress">{{__('Please wait...')}}
+                  <button type="reset" class="btn btn-light me-3" data-kt-attachments-modal-action="cancel"
+                      data-bs-dismiss="modal">Discard</button>
+                  <button type="submit" class="btn btn-primary" data-kt-attachments-modal-action="submit">
+                      <span class="indicator-label">Submit</span>
+                      <span class="indicator-progress">Please wait...
                           <span class="spinner-border spinner-border-sm align-middle ms-2"></span></span>
                   </button>
               </div>

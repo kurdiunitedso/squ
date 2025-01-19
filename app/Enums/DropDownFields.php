@@ -4,95 +4,8 @@ namespace App\Enums;
 
 class DropDownFields
 {
-    const MARITAL_STATUS = 'marital_status';
-    const WHEELS_BRANCHES = 'WHEELS_branches';
-    const ticket_type = 'ticket_type';
-    const OFFER_TYPE = 'offer_type';
-    const sizes = 'sizes';
-    const accident_desc = 'accident_desc';
-    const policyOffer_type = 'policyOffer_type';
-    const client_type = 'client_type';
-    const currency = 'currency';
-    const CLAIM_TYPE = 'claim_type';
-    const position = 'position_type';
-    const LEAD_TYPE = 'lead_type';
-    const facility_type = 'facility_type';
-    const salary_status = 'salary_status';
-    const titles = 'title_type';
-    const payment_roll = 'payment_roll';
-    const career = 'career';
-    const salary = 'salary';
-    const Month = 'Month';
-    const Year = 'Year';
-    const education = 'education';
-    const FACILITY_CATEGORY = 'FACILITY_CATEGORY';
-    const vacation = 'vacation';
-    const mortgaged_type = 'mortgaged_type';
-    const employee_types = 'employee_types';
-    const shifts = 'shift_type';
-    const gender = 'gender';
-    const vacation_status = 'vacation_status';
-    const payment_roll_category = 'payment_roll_category';
-    const payment_roll_payment = ';payment_roll_payment';
-    const currences = 'currences';
-    const employment_type = 'employment_type';
-    const perject = 'perject';
-    const brand = 'brand_type';
-    const platform = 'platform_type';
-    const INSURANCECOMPANY_TYPE = 'insurance_company_type';
-    const MARKETINGAGENCY_TYPE = 'MARKETINGAGENCY_TYPE_type';
-    const refund_type = 'refund_type';
-    const targets = 'targets_type';
-    const departments = 'departments_type';
-    const color = 'color_type';
-    const destinations = 'destinations_type';
-    const order_type = 'orderv_type';
-    const POS_TYPE = 'pos_type';
-    const priority = 'priority_type';
-    const purpose = 'purpose_type';
-    const category = 'category_type';
-    const visit_category = 'visit_category';
-    const status = 'status_type';
-    const visit_type = 'visit_type';
-    const period = 'period';
-    const project = 'project';
-    const work_days = 'work_days';
-    const work_types = 'work_types';
-    const employee_task_assignment_status = 'employee_task_assignment_status';
-    const art_manager_task_assignment_status = 'art_manager_task_assignment_status';
-    const task_assignment_process_types = 'task_assignment_process_types';
-
-    const sys_satisfaction_rat = 'sys_satisfaction_rat';
-    const printer_type = 'printer_type';
-
-    const task_statuss = 'task_statusss';
-    const task_urgencys = 'task_urgencys';
-    const OS_TYPE = 'os_type';
-    const call_status = 'call_status';
-    const caller_type = 'caller_type';
-    const assign_status = 'assign_status';
-    const urgency = 'urgency';
-    const employee_status = 'employee_status';
-    const payment_method_captin = 'payment_method_captin';
-    const payment_type_captin = 'payment_type_captin';
-
-
-    const SHORT_MESSAGE = 'short_message';
-    const SHORT_MESSAGE_TEMPLATE = 'short_message_template';
-    const motor_cc = 'motor_cc';
-    const CALL_OPTION_TYPE = 'call_option_type';
-    const EMP_STATUS = 'employee_status';
-    const BANK = 'bank';
-    const PAYMENT_TYPE = 'payment_type';
-    const PAYMENT_METHOD = 'PAYMENT_METHOD';
-    const RESTAURANT_TYPE = 'restaurant_type';
-    const FACILITY_TYPE = 'facility_type';
-
-
-
-    const objective_type = 'objective_type';
-    const offer_status = 'offer_status';
-
+    const MARITAL_STATUS  = 'marital_status';
+    const ALHAYAT_BRANCHES = 'alhayat_branches';
     const BLOOD_TYPE = [
         ['value' => 'A+'],
         ['value' => 'A-'],
@@ -103,69 +16,269 @@ class DropDownFields
         ['value' => 'AB+'],
         ['value' => 'AB-'],
     ];
-    const PREPARATION_TIME = [
-        ['value' => '5'],
-        ['value' => '10'],
-        ['value' => '15'],
-        ['value' => '20'],
-        ['value' => '30'],
-        ['value' => '45'],
-        ['value' => '60'],
-    ];
-
-    const rating = [
-        '' => '',
-        '5' => 'Excellent-5',
-        '4' => 'Very Good-4',
-        '3' => 'Good-3',
-        '2' => 'Accept-2',
-        '1' => 'Bad-1',
-        '0' => 'Very Bad-0',
-    ];
-
-
-
+    const category = 'category_type';
+    const MEMBERSHIP_TYPE = 'membership_type';
+    const EXTERNAL_APPT_STATUS = 'external_app_status';
+    const MEMBERSHIP_SUBTYPE = 'membership_subtype';
+    // const RELATION_TYPE = 'relation_type';
     const IDENTITY_TYPE = 'identity_type';
-    const QUESTIONNAIRE_TYPE = 'call';
+    const PATIENT_RELATIVES = 'patient_relatives';
 
+    const Payment_Types = 'payment_types';
+    const Employee_Types = 'employee_types';
 
+    const SICK_FUND = 'sick_fund';
+    const status = 'status';
+    const type = 'type';
     const ATTACHMENT_TYPE = 'attachment_type';
-    const attachment_rest_type = 'attachment_rest_type';
 
+    const PROCEDURE_TYPE = 'procedure_type';
+    const PROCEDURE_FEE_TYPE = 'procedure_fee_type';
+    const INVOICE_TYPE = 'invoice_type';
 
     const CALL_ACTION = 'call_action';
-    const CAPTIN_ACTION = 'call_action';
-    const CAPTIN_SHIFT = 'CAPTIN_SHIFT';
-    const blood_type = 'blood_type';
-    const degree = 'degree';
-    const CAPTIN_CALL_ACTION = 'CAPTIN_CALL_ACTION';
+    const CALL_PATIENT_ACTION = 'call_patient_action';
 
-    const fuel_type = 'fuel_type';
-    const vehicle_type = 'vehicle_type';
-    const vehicle_model = 'vehicle_model';
-    const box_no = 'box_no';
-    const promissory = 'promissory';
-    const insurance_company = 'insurance_company';
-    const policy_degree = 'policy_degree';
-    const policy_code = 'policy_degree';
-    const insurance_type = 'insurance_type';
+    const SHORT_MESSAGE = 'short_message';
+    const SHORT_MESSAGE_TEMPLATE = 'short_message_template';
+    const QUESTIONNAIRE_TYPE = 'questionnaire_type';
 
-    const reference_relatives = 'reference_relatives';
+    const HOSITPAL_TYPE = 'hositpal_type';
+    const CLINIC_SERVICE_TYPE = 'clinic_service_type';
+    const CLINIC_TEAM_CONTACT_TYPE = 'clinic_team_contact_type';
+    const CLINIC_TEAM_TITLE_TYPE = 'clinic_team_title_type';
+    const CLINIC_TEAM_WORKING_SHIFT = 'clinic_team_working_shift';
+    const DOCTOR_TYPE = 'doctor_type';
 
-    const policy_codes = 'policy_codes';
+    const Pro_Types = 'pro_type';
+    const Card_Types = 'card_type';
+    const DOCTOR_SERVICE_TYPE = 'doctor_service_type';
+    const SYSTEM_NOTIFICATION_TYPE = 'system_notification_type';
+    const SMS_NOTIFICATION_TYPE = 'sms_notification_type';
+    const CALL_OPTION_TYPE = 'call_option_type';
+    const URGENCY_EXTERNAL_APPT = 'urgency_external_appt';
+    const EXTERNAL_APPT_SERVICE_TYPE = 'external_appt_service_type';
+    const EXTERNAL_APPT_RECOMMENDATIONS = 'external_appt_recommendations';
+    const UERGANCY_COVERAGE_REQUEST = 'uergancy_coverage_request';
+    const MEDICATION_COVERAGE_PERIOD = 'medication_coverage_period';
+    const TREATMENT_SERVICE_TYPE = 'treatment_service_type';
+    const COMPLAIN_TYPE = 'complain_type';
+    const sales_contract_type  = 'sales_contract_type';
+    const sales_payment_type  = 'sales_payment_type';
+    const sales_status  = 'sales_status';
+    const apartment_type  = 'apartment_type';
+    const apartment_size  = 'apartment_size';
+    const apartment_orientation  = 'apartment_orientation';
+    const apartment_parking_type  = 'apartment_parking_type';
+    const apartment_status  = 'apartment_status';
+    const lead_source  = 'lead_source';
+    const lead_form_type  = 'lead_form_type';
+    const lead_status  = 'lead_status';
+    const lead_actions  = 'lead_actions';
+    const price_offer_status  = 'price_offer_status';
+    const apartment_attachment_type  = 'apartment_attachment_type';
+    const building_attachment_type  = 'building_attachment_type';
+    const price_offer_attachment_type  = 'price_offer_attachment_type';
+    const lead_attachment_type  = 'lead_attachment_type';
+    const client_attachment_type  = 'client_attachment_type';
+    const sale_attachment_type  = 'sale_attachment_type';
+    const payments_payment_type  = 'payments_payment_type';
 
-    const objective_type_list = [
-        'long_term' => 'long_term',
-        'short_term' => 'short_term',
+
+
+    const website_section_type  = 'website_section_type';
+    // In App\Enums\DropDownFields.php
+
+    const banks = 'banks';
+    const bank_branches = 'bank_branches';
+
+
+    const banks_list = [
+        'bank_of_palestine' => 'bank_of_palestine',
+        'arab_bank' => 'arab_bank',
+        'cairo_amman_bank' => 'cairo_amman_bank',
     ];
-    const offer_status_list = [
+
+    const bank_branches_list = [
+        'bank_of_palestine' => [
+            'main_branch' => 'main_branch',
+            'ramallah_branch' => 'ramallah_branch',
+            'al_bireh_branch' => 'al_bireh_branch',
+        ],
+        'arab_bank' => [
+            'main_branch' => 'main_branch',
+            'gaza_branch' => 'gaza_branch',
+        ],
+        'cairo_amman_bank' => [
+            'main_branch' => 'main_branch',
+            'nablus_branch' => 'nablus_branch',
+        ],
+    ];
+    const sales_contract_type_list = [
+        'new_apartment_sales_agreement' => 'new_apartment_sales_agreement',
+        'resale_apartment_agreement' => 'resale_apartment_agreement',
+        'lease_to_own_agreement' => 'lease_to_own_agreement',
+        'installment_sales_agreement' => 'installment_sales_agreement',
+    ];
+    const sales_payment_type_list  = [
+        // 'downpayment_only' => 'downpayment_only',
+        'downpayment_installment' => 'downpayment_installment',
+        'downpayment_installment_balloon' => 'downpayment_installment_balloon',
+        // 'full_payment' => 'full_payment',
+    ];
+    /****************** Payments ************** */
+    const payment_plans_payment_frequency = 'payment_plans_payment_frequency';
+    const payment_plans_payment_frequency_list  = [
+        'monthly' => 'monthly',
+        'quarterly' => 'quarterly',
+        'yearly' => 'yearly',
+    ];
+    const payment_plans_status = 'payment_plans_status';
+    const payment_plans_status_list  = [
+        'active' => 'active',
+        'completed' => 'completed',
+        'defaulted' => 'defaulted',
+        'cancelled' => 'cancelled',
+    ];
+
+
+    const payment_schedules_payment_type = 'payment_schedules_payment_type';
+    const payment_schedules_payment_type_list = [
+        'downpayment' => 'downpayment',
+        'installment' => 'installment',
+        'balloon' => 'balloon'
+    ];
+    const payment_schedules_status  = 'payment_schedules_status';
+    const payment_schedules_status_list  = [
         'pending' => 'pending',
+        'partial' => 'partial',
+        'paid' => 'paid',
+        'overdue' => 'overdue',
+    ];
+
+
+
+    const payment_transactions_payment_method = 'payment_transactions_payment_method';
+    const  payment_transactions_payment_method_list = [
+        'cash' => 'cash',
+        'check' => 'check',
+        'bank_transfer' => 'bank_transfer',
+        'other' => 'other'
+    ];
+    const payment_transactions_status = 'payment_transactions_status';
+    const  payment_transactions_status_list = [
+        'pending' => 'pending',
+        'completed' => 'completed',
+        'failed' => 'failed',
+        'reversed' => 'reversed'
+    ];
+    const  payment_fees_fee_type = 'payment_fees_fee_type';
+    const  payment_fees_fee_type_list = [
+        'late_payment' => 'late_payment',
+        'processing' => 'processing',
+        'bounced_check' => 'bounced_check',
+        'other' => 'other',
+    ];
+    const  payment_fees_status = 'payment_fees_status';
+    const  payment_fees_status_list = [
+        'pending' => 'pending',
+        'paid' => 'paid',
+
+    ];
+
+
+
+
+
+    /************************ */
+    const sales_status_list  = [
         'processing' => 'processing',
         'approved' => 'approved',
-        'rejected' => 'rejected',
-        'created_by_system' => 'created_by_system',
+        'submitted_to_accounted' => 'submitted_to_accounted',
     ];
 
+    const apartment_types_list = [
+        'apartment_type_1' => 'apartment_type_1',
+        'apartment_type_2' => 'apartment_type_1',
+    ];
+    const apartment_sizes_list = [
+        'apartment_size_1' => 'apartment_size_1',
+        'apartment_size_2' => 'apartment_size_2',
+    ];
+    const apartment_orientations_list = [
+        'orientation_1' => 'orientation_1',
+        'orientation_2' => 'orientation_2',
+    ];
+    const apartment_parking_types_list = [
+        'parking_type_1' => 'parking_type_1',
+        'parking_type_2' => 'parking_type_2',
+    ];
+    const apartment_status_list = [
+        'created_by_system' => 'created_by_system',
+        'ready_to_sale' => 'ready_to_sale',
+        'sold' => 'sold',
+        'in_maintenance' => 'in_maintenance',
+        'paid_processing' => 'paid_processing',
+    ];
+    const lead_source_list = [
+        'dashboard' => 'dashboard',
+        'call_center' => 'call_center',
+        'whatsapp' => 'whatsapp',
+        'website' => 'website',
+    ];
+    const lead_form_types_list = [
+        'header' => 'header',
+        'choose_apartment' => 'choose_apartment',
+        'footer' => 'footer',
+        'inquiry_form' => 'inquiry_form',
+    ];
+    const lead_status_list = [
+        'pending' => 'pending',
+        // 'resolved' => 'resolved',
+        'inquiry' => 'inquiry',
+        'request_for_price_offer' => 'request_for_price_offer',
+    ];
+    // const lead_actions_list = [
+    //     'inquiry' => 'inquiry',
+    //     'request_for_price_offer' => 'request_for_price_offer',
+    // ];
+    const price_offer_status_list = [
+        'pending' => 'pending',
+        'approved' => 'approved',
+        'rejected' => 'rejected',
+    ];
+    const apartment_attachment_type_list = [
+        'brochure' => 'brochure',
+        'inside_view' => 'inside_view',
+        'outside_view' => 'outside_view',
+    ];
+    const client_attachment_type_list = [
+        'id_card' => 'id_card',
+        'passport' => 'passport',
+        'avatar' => 'avatar',
+    ];
+    const sale_attachment_type_list = [
+        'contract' => 'contract',
+    ];
+
+    const building_attachment_type_list = [
+        'top_view' => 'top_view',
+        'right_view' => 'right_view',
+        'left_view' => 'left_view',
+    ];
+    const price_offer_attachment_type_list = [
+        'price_type_1' => 'price_type_1',
+    ];
+    const lead_attachment_type_list = [
+        'lead_type_1' => 'lead_type_1',
+    ];
+    const website_section_type_list = [
+        'menu' => 'menu',
+        'slider' => 'slider',
+        'feature' => 'feature',
+        'service' => 'service',
+        'review_management' => 'review_management',
+    ];
     const colors_list = [
         'pending' => '#FFA800',      // Warning/Orange color
         'approved' => '#50CD89',     // Success/Green color
@@ -178,6 +291,35 @@ class DropDownFields
         'sold' => '#F1416C',                  // Red - not available/final state
         'in_maintenance' => '#FFA800',         // Orange - temporary unavailable state
         'paid_processing' => '#009EF7',        // Blue - active process
+        /********   sales   ******** */
+        'new_apartment_sales_agreement' => '#28a745',
+        'resale_apartment_agreement' => '#17a2b8',
+        'lease_to_own_agreement' => '#ffc107',
+        'installment_sales_agreement' => '#6610f2',
+        'downpayment_only' => '#20c997',
+        'downpayment_installment' => '#fd7e14',
+        'downpayment_installment_balloon' => '#6f42c1',
+        'full_payment' => '#198754',
+        /*************sales status list */
+        'processing' => '#FFA800',
+        'approved' => '#50CD89',
+        'submitted_to_accounted' => '#198754',
+        /*********payment */
+        // Payment Statuses
+        // 'pending' => '#FFA500',   // Orange for waiting/pending actions
+        'partial' => '#3498DB',   // Blue for in-progress/partial completion
+        'paid' => '#2ECC71',      // Green for successful/completed payments
+        'overdue' => '#E74C3C',   // Red for overdue/urgent attention
+
+        // Payment Types
+        'downpayment' => '#9B59B6',    // Purple for initial payments
+        'installment' => '#34495E',     // Dark blue-gray for regular payments
+        'balloon' => '#16A085',     // Teal for final/special payments
+        // Payment Plan Status Colors
+        'active' => '#00B74A',     // Bright green for active/ongoing plans
+        'completed' => '#1266F1',  // Royal blue for successfully completed
+        'defaulted' => '#F93154',  // Strong red for defaulted/failed payments
+        'cancelled' => '#757575'   // Gray for cancelled/terminated plans
 
     ];
 }

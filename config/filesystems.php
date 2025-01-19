@@ -72,16 +72,7 @@ return [
     'links' => [
         public_path('storage') => storage_path('app/public'),
         public_path('images') => storage_path('app/images'),
-        public_path('captins_attachment') => storage_path('app/captins/attachments'),
-        public_path('clients_attachment') => storage_path('app/clients/attachments'),
-        public_path('restaurants_attachment') => storage_path('app/restaurants/attachments'),
-        public_path('vehicles_attachment') => storage_path('app/captins/attachments'),
-        public_path('policyOffers_attachment') => storage_path('app/policyOffers/attachments'),
-        public_path('clientTrillions_attachment') => storage_path('app/clientTrillions/attachments'),
-        public_path('clientTrillions_attachment') => storage_path('app/clientTrillions/attachments'),
-        public_path('offers_attachment') => storage_path('app/offers/attachments'),
-        public_path('employees_attachment') => storage_path('app/employees/attachments'),
-        public_path('claims_attachment') => storage_path('app/claims/attachments'),
+
         public_path('flags') => storage_path('app/flags'),
     ],
 

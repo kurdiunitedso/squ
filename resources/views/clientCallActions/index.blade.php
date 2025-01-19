@@ -733,8 +733,6 @@
                         allowClear: true,
                     });
                     $('[ name="purpose"]').select2({
-                        dropdownParent: $(modalId),
-                        allowClear: true,
                         ajax: {
                             url: '/getSelect?type=purpose&category=' + $('[ name="category"]').val(),
                             dataType: 'json',
@@ -768,8 +766,6 @@
                     });
 
                     $("#employee").select2({
-                        dropdownParent: $(modalId),
-                        allowClear: true,
                         ajax: {
                             url: '/getSelect?type=employeeDepartment&department=' + $('[ name="department"]').val(),
                             dataType: 'json',
@@ -787,9 +783,6 @@
 
                     $(document).on('change', '#department', function (e) {
                         $("#employee").select2({
-                            dropdownParent: $(modalId),
-                            allowClear: true,
-
                             ajax: {
                                 url: '/getSelect?type=employeeDepartment&department=' + $(this).val(),
                                 dataType: 'json',

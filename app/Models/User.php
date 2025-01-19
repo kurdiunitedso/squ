@@ -12,11 +12,13 @@ use Illuminate\Notifications\Notifiable;
 use Lab404\Impersonate\Models\Impersonate;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
+use Spatie\Translatable\HasTranslations;
 
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable, HasRoles, SoftDeletes, Impersonate;
+    use HasApiTokens, HasFactory, Notifiable, HasRoles, SoftDeletes, Impersonate, HasTranslations;
 
+    public $translatable = ['name'];
     /**
      * The attributes that are mass assignable.
      *
@@ -57,26 +59,17 @@ class User extends Authenticatable
 
     public function canImpersonate()
     {
-        return $this->hasRole('super-admin') || $this->hasPermissionTo('impersonate');
-        // // For example
-        // return $this->id == 1;
+        // For example
+        return $this->id == 1;
     }
 
     public function branch()
     {
         return $this->belongsTo(Constant::class, 'branch_id');
     }
-    public function employee()
-    {
-        return $this->hasOne(Employee::class, 'user_id');
-    }
+
     public function scopeActive(Builder $query)
     {
         $query->where('active', 1);
-    }
-    public static function  getUserFullName($id)
-    {
-        if (User::find($id))
-            return User::find($id)->name;
     }
 }

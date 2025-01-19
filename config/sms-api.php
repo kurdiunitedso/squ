@@ -100,7 +100,7 @@ return [
         'wrapper' => 'sms', //Optional, use only if you want the JSON request to be wrapped
         'add_code' => false, //Include Country Code (true/false)
     ],
-    'TabibFind' => [
+    'EliteMedical' => [
         'url' => 'http://www.hotsms.ps/sendbulksms.php?',
         'params' => [
             'send_to_param_name' => 'mobile', //Send to Parameter Name
@@ -108,11 +108,12 @@ return [
             'others' => [
                 'user_name' => 'TabibFind', //Your username
                 'user_pass' => '1166968', //Your Password
-                'sender' => 'TabibFind', //Your Sender ID
+                'sender' => 'EliteMC', //Your Sender ID
                 'type' => '2'
 
             ],
         ],
         'add_code' => false, //Include Country Code
     ],
+
 ];

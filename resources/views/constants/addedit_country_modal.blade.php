@@ -1,9 +1,13 @@
+@php
+    $name = isset($country) ? $country->getTranslations()['name'] : null;
+    // dd($client->locales());
+@endphp
   <!--begin::Modal content-->
   <div class="modal-content">
       <!--begin::Modal header-->
       <div class="modal-header" id="kt_modal_add_country_header">
           <!--begin::Modal title-->
-          <h2 class="fw-bold">Add Country</h2>
+          <h2 class="fw-bold">{{ $title }}</h2>
           <!--end::Modal title-->
           <!--begin::Close-->
           <div class="btn btn-icon btn-sm btn-active-icon-primary" data-bs-dismiss="modal">
@@ -28,35 +32,43 @@
           <!--begin::Scroll-->
           <form id="kt_modal_add_country_form" class="form"
               data-editMode="{{ isset($country) ? 'enabled' : 'disabled' }}"
-              action="{{ isset($country) ? route('settings.country-city.country.update', ['country' => $country->id]) : route('settings.country-city.country.store') }}">
+              action="{{ route('settings.country-city.country.store') }}">
               <div class="d-flex flex-column scroll-y me-n7 pe-7" id="kt_modal_add_country_scroll" data-kt-scroll="true"
                   data-kt-scroll-activate="{default: false, lg: true}" data-kt-scroll-max-height="auto"
                   data-kt-scroll-dependencies="#kt_modal_add_country_header"
                   data-kt-scroll-wrappers="#kt_modal_add_country_scroll" data-kt-scroll-offset="300px">
                   <!--begin::Input group-->
-
+                  @isset($country)
+                      <input type="hidden" name="country_id" value="{{ $country->id }}">
+                  @endisset
                   <div class="row">
+
+                    @foreach(config('app.locales') as $locale)
+                    <div class="col-md-6">
+                        <div class="fv-row mb-4">
+                            <!--begin::Label-->
+                            <label class="fw-semibold fs-6 mb-2" data-input-name="name_{{ $locale }}">{{ t('Name') }} <small>({{ strtoupper($locale) }})</small></label>
+                            <!--end::Label-->
+                            <!--begin::Input-->
+                            <input type="text" name="name[{{ $locale }}]"
+                                   class="form-control form-control-solid mb-3 mb-lg-0" placeholder=""
+                                   value="{{ old("name[$locale]", isset($name) && is_array($name) && array_key_exists($locale, $name) ? $name[$locale] : '') }}"
+                            />
+                            <!--end::Input-->
+                        </div>
+                    </div>
+                @endforeach
+
+                      
                       <div class="col-md-6">
                           <div class="fv-row mb-4">
                               <!--begin::Label-->
-                              <label class="required fw-semibold fs-6 mb-2">Name</label>
+                              <label class="required fw-semibold fs-6 mb-2">{{ t('CODE') }}</label>
                               <!--end::Label-->
                               <!--begin::Input-->
-                              <input type="text" name="country_name"
-                                  class="form-control form-control-solid mb-3 mb-lg-0" placeholder="Country name"
-                                  value="{{ isset($country) ? $country->name : '' }}" />
-                              <!--end::Input-->
-                          </div>
-                      </div>
-                      <div class="col-md-6">
-                          <div class="fv-row mb-4">
-                              <!--begin::Label-->
-                              <label class="required fw-semibold fs-6 mb-2">CODE</label>
-                              <!--end::Label-->
-                              <!--begin::Input-->
-                              <input type="text" name="country_code" style="text-transform:uppercase"
+                              <input type="text" name="code" style="text-transform:uppercase"
                                   class="form-control form-control-solid mb-3 mb-lg-0"
-                                  placeholder="Country Code, Example : IL, PS"
+                                  placeholder="{{ t('Country Code, Example : IL, PS') }}"
                                   value="{{ isset($country) ? $country->code : '' }}" />
                               <!--end::Input-->
                           </div>
@@ -66,7 +78,8 @@
 
                   <div class="fv-row">
                       <!--begin::Label-->
-                      <label class="required fw-semibold fs-6 mb-2" for="formFile">Country Flag (Icon)</label>
+                      <label class="required fw-semibold fs-6 mb-2"
+                          for="formFile">{{ t('Country Flag (Icon)') }}</label>
                       <!--end::Label-->
                       <!--begin::Input-->
                       <div class="mb-3">
@@ -82,10 +95,10 @@
               <!--begin::Actions-->
               <div class="text-center pt-15">
                   <button type="reset" class="btn btn-light me-3" data-kt-country-modal-action="cancel"
-                      data-bs-dismiss="modal">Discard</button>
+                      data-bs-dismiss="modal">{{ t('Discard') }}</button>
                   <button type="submit" class="btn btn-primary" data-kt-country-modal-action="submit">
-                      <span class="indicator-label">Submit</span>
-                      <span class="indicator-progress">Please wait...
+                      <span class="indicator-label">{{ t('Submit') }}</span>
+                      <span class="indicator-progress">{{ t('Please wait...') }}
                           <span class="spinner-border spinner-border-sm align-middle ms-2"></span></span>
                   </button>
               </div>

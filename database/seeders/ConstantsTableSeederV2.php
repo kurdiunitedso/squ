@@ -5,74 +5,330 @@ namespace Database\Seeders;
 use App\Enums\DropDownFields;
 use App\Enums\Modules;
 use App\Models\Constant;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Services\Constants\ConstantService;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Log;
 
-class Constants extends Seeder
+class ConstantsTableSeederV2 extends Seeder
 {
     /**
-     * Run the database seeds.
+     * Define the constants configuration
      */
+    protected array $constants = [
+
+        [
+            'module' => Modules::sales_module,
+            'items' => [
+
+
+                [
+                    'field' => DropDownFields::sales_contract_type,
+                    'values' => DropDownFields::sales_contract_type_list
+                ],
+                [
+                    'field' => DropDownFields::sales_payment_type,
+                    'values' => DropDownFields::sales_payment_type_list
+                ],
+                [
+                    'field' => DropDownFields::sales_status,
+                    'values' => DropDownFields::sales_status_list
+                ],
+
+            ]
+        ],
+        [
+            'module' => Modules::main_module,
+            'items' => [
+
+                [
+                    'field' => DropDownFields::banks,
+                    'values' => DropDownFields::banks_list,
+                    'children' => [
+                        'field' => DropDownFields::bank_branches,
+                        'values' => DropDownFields::bank_branches_list
+                    ]
+                ]
+            ]
+        ],
+
+        [
+            'module' => Modules::attachment_module,
+            'items' => [
+
+                [
+                    'field' => DropDownFields::client_attachment_type,
+                    'values' => DropDownFields::client_attachment_type_list
+                ],
+                [
+                    'field' => DropDownFields::sale_attachment_type,
+                    'values' => DropDownFields::sale_attachment_type_list
+                ],
+                [
+                    'field' => DropDownFields::lead_attachment_type,
+                    'values' => DropDownFields::lead_attachment_type_list
+                ]
+            ]
+        ],
+        [
+            'module' => Modules::payment_module,
+            'items' => [
+
+                [
+                    'field' => DropDownFields::payment_plans_payment_frequency,
+                    'values' => DropDownFields::payment_plans_payment_frequency_list
+                ],
+                [
+                    'field' => DropDownFields::payment_plans_status,
+                    'values' => DropDownFields::payment_plans_status_list
+                ],
+                [
+                    'field' => DropDownFields::payment_schedules_payment_type,
+                    'values' => DropDownFields::payment_schedules_payment_type_list
+                ],
+                [
+                    'field' => DropDownFields::payment_schedules_status,
+                    'values' => DropDownFields::payment_schedules_status_list
+                ],
+                [
+                    'field' => DropDownFields::payment_transactions_payment_method,
+                    'values' => DropDownFields::payment_transactions_payment_method_list
+                ],
+                [
+                    'field' => DropDownFields::payment_transactions_status,
+                    'values' => DropDownFields::payment_transactions_status_list
+                ],
+                [
+                    'field' => DropDownFields::payment_fees_fee_type,
+                    'values' => DropDownFields::payment_fees_fee_type_list
+                ],
+                [
+                    'field' => DropDownFields::payment_fees_status,
+                    'values' => DropDownFields::payment_fees_status_list
+                ],
+
+            ]
+        ],
+
+
+        [
+            'module' => Modules::website_sections_module,
+            'items' => [
+                [
+                    'field' => DropDownFields::website_section_type,
+                    'values' => DropDownFields::website_section_type_list
+                ],
+
+
+            ]
+        ],
+
+
+    ];
+
     public function run(): void
     {
-        $IDENTITY_TYPE = [
-            // Contract Statuses
-            ['name' => t('Draft'), 'value' => 'draft', 'module' => Modules::contract_module, 'field' => DropDownFields::status, 'color' => '#6c757d'], // Gray
-            ['name' => t('Pending Approval'), 'value' => 'pending_approval', 'module' => Modules::contract_module, 'field' => DropDownFields::status, 'color' => '#ffc107'], // Yellow
-            ['name' => t('Active'), 'value' => 'active', 'module' => Modules::contract_module, 'field' => DropDownFields::status, 'color' => '#28a745'], // Green
-            ['name' => t('On Hold'), 'value' => 'on_hold', 'module' => Modules::contract_module, 'field' => DropDownFields::status, 'color' => '#fd7e14'], // Orange
-            ['name' => t('Completed'), 'value' => 'completed', 'module' => Modules::contract_module, 'field' => DropDownFields::status, 'color' => '#007bff'], // Blue
-            ['name' => t('Cancelled'), 'value' => 'cancelled', 'module' => Modules::contract_module, 'field' => DropDownFields::status, 'color' => '#dc3545'], // Red
-            ['name' => t('Expired'), 'value' => 'expired', 'module' => Modules::contract_module, 'field' => DropDownFields::status, 'color' => '#6610f2'], // Purple
+        $this->logStart();
 
+        try {
+            // Clear cache
+            $this->clearCache();
 
-            // Project Statuses
-            ['name' => t('Pending'), 'value' => 'pending', 'module' => Modules::project_module, 'field' => DropDownFields::status, 'color' => '#FFA500'], // Orange
-            ['name' => t('Active'), 'value' => 'active', 'module' => Modules::project_module, 'field' => DropDownFields::status, 'color' => '#4CAF50'], // Green
-            ['name' => t('On Hold'), 'value' => 'on_hold', 'module' => Modules::project_module, 'field' => DropDownFields::status, 'color' => '#FF9800'], // Dark Orange
-            ['name' => t('Completed'), 'value' => 'completed', 'module' => Modules::project_module, 'field' => DropDownFields::status, 'color' => '#2196F3'], // Blue
-            ['name' => t('Cancelled'), 'value' => 'cancelled', 'module' => Modules::project_module, 'field' => DropDownFields::status, 'color' => '#F44336'], // Red
+            // Seed constants
+            foreach ($this->constants as $moduleGroup) {
+                $module = $moduleGroup['module'];
+                $this->logModuleStart($module);
 
-            // Task Statuses
-            ['name' => t('Not Started'), 'value' => 'not_started', 'module' => Modules::task_module, 'field' => DropDownFields::status, 'color' => '#9E9E9E'], // Grey
-            ['name' => t('In Progress'), 'value' => 'in_progress', 'module' => Modules::task_module, 'field' => DropDownFields::status, 'color' => '#03A9F4'], // Light Blue
-            ['name' => t('Pending Review'), 'value' => 'pending_review', 'module' => Modules::task_module, 'field' => DropDownFields::status, 'color' => '#FF9800'], // Orange
-            ['name' => t('Revision Required'), 'value' => 'revision_required', 'module' => Modules::task_module, 'field' => DropDownFields::status, 'color' => '#FF5722'], // Deep Orange
-            ['name' => t('Approved'), 'value' => 'approved', 'module' => Modules::task_module, 'field' => DropDownFields::status, 'color' => '#8BC34A'], // Light Green
-            ['name' => t('Completed'), 'value' => 'completed', 'module' => Modules::task_module, 'field' => DropDownFields::status, 'color' => '#4CAF50'], // Green
+                foreach ($moduleGroup['items'] as $item) {
+                    // Add this check and pass children config
+                    $childConfig = isset($item['children']) ? $item['children'] : null;
+                    $this->seedConstants($module, $item['field'], $item['values'], $childConfig);
+                }
 
-            // Task Assignments Status
-            //  employee proccessing -> art manager aproval -> Completed
-            ['name' => t('Processing'), 'value' => 'Processing', 'module' => Modules::task_assignments_module, 'field' => DropDownFields::employee_task_assignment_status, 'color' => '#29B6F6'], // Lighter Blue
-            ['name' => t('Art Manager Approval'), 'value' => 'Art Manager Approval', 'module' => Modules::task_assignments_module, 'field' => DropDownFields::employee_task_assignment_status, 'color' => '#FF7043'], // Light Deep Orange
-            ['name' => t('Customer Approval'), 'value' => 'Customer Approval', 'module' => Modules::task_assignments_module, 'field' => DropDownFields::employee_task_assignment_status, 'color' => '#FF7043'], // Light Deep Orange
-            ['name' => t('Completed'), 'value' => 'completed', 'module' => Modules::task_assignments_module, 'field' => DropDownFields::employee_task_assignment_status, 'color' => '#66BB6A'], // Light Green
+                $this->logModuleEnd($module);
+            }
 
-            // art manager : approve or reject or wating customer approval
-            ['name' => t('Waiting Approval'), 'value' => 'Waiting Approval', 'module' => Modules::task_assignments_module, 'field' => DropDownFields::art_manager_task_assignment_status, 'color' => '#29B6F6'], // Lighter Blue
-            ['name' => t('Approved'), 'value' => 'Approved', 'module' => Modules::task_assignments_module, 'field' => DropDownFields::art_manager_task_assignment_status, 'color' => '#FF7043'], // Light Deep Orange
-            ['name' => t('Reject'), 'value' => 'Reject', 'module' => Modules::task_assignments_module, 'field' => DropDownFields::art_manager_task_assignment_status, 'color' => '#66BB6A'], // Light Green
+            // Verify seeding
+            $this->verifySeeding();
 
+            $this->logSuccess();
+        } catch (\Exception $e) {
+            $this->logError($e);
+            throw $e;
+        }
+    }
 
-            // Task Assignments Types
-            ['name' => t('Created'), 'value' => 'created', 'module' => Modules::task_assignments_module, 'field' => DropDownFields::task_assignment_process_types, 'color' => '#BDBDBD'], // Light Grey
-            ['name' => t('Status change'), 'value' => 'status change', 'module' => Modules::task_assignments_module, 'field' => DropDownFields::task_assignment_process_types, 'color' => '#BDBDBD'], // Light Grey
-            ['name' => t('Active'), 'value' => 'active', 'module' => Modules::task_assignments_module, 'field' => DropDownFields::task_assignment_process_types, 'color' => '#BDBDBD'], // Light Grey
-            ['name' => t('Title'), 'value' => 'Title', 'module' => Modules::task_assignments_module, 'field' => DropDownFields::task_assignment_process_types, 'color' => '#BDBDBD'], // Light Grey
-            ['name' => t('Description'), 'value' => 'Description', 'module' => Modules::task_assignments_module, 'field' => DropDownFields::task_assignment_process_types, 'color' => '#BDBDBD'], // Light Grey
-            ['name' => t('Start Date'), 'value' => 'Start Date', 'module' => Modules::task_assignments_module, 'field' => DropDownFields::task_assignment_process_types, 'color' => '#BDBDBD'], // Light Grey
-            ['name' => t('End Date'), 'value' => 'End Date', 'module' => Modules::task_assignments_module, 'field' => DropDownFields::task_assignment_process_types, 'color' => '#BDBDBD'], // Light Grey
+    private function clearCache(): void
+    {
+        Log::info('Starting cache cleanup...');
+        Cache::flush();
+        Log::info('Cache cleanup completed');
+        $this->command->info('Cache cleared successfully');
+    }
 
-        ];
+    private function seedConstants(string $module, string $field, array $values, ?array $childConfig = null): void
+    {
+        Log::info("Starting to seed constants for {$module} - {$field}");
 
-        foreach ($IDENTITY_TYPE as $value) {
-            $value['constant_name'] = str_replace(' ', '_', trim(strtolower($value["name"])));
-            Constant::updateOrCreate(
-                collect($value)->only(['name', 'module', 'field'])->toArray(),
-                collect($value)->except(['name', 'module', 'field'])->toArray(),
-            );
+        $successCount = 0;
+        $updateCount = 0;
+        $errorCount = 0;
+
+        foreach ($values as $key => $value) {
+            try {
+                $constantName = is_numeric($key) ? $value : $key;
+                $color = DropDownFields::colors_list[$constantName] ?? null;
+
+                $wasExisting = Constant::where([
+                    'constant_name' => $constantName,
+                    'module' => $module,
+                    'field' => $field,
+                ])->exists();
+
+                $constantData = [
+                    'name' => [
+                        'en' => splitAndUppercase($constantName),
+                        'ar' => t(splitAndUppercase($constantName), [], 'ar'),
+                    ],
+                    'value' => $value,
+                    'parent_id' => null,
+                ];
+
+                if ($color) {
+                    $constantData['color'] = $color;
+                }
+
+                $constant = Constant::updateOrCreate(
+                    [
+                        'constant_name' => $constantName,
+                        'module' => $module,
+                        'field' => $field,
+                    ],
+                    $constantData
+                );
+
+                // Handle child constants if they exist
+                if ($childConfig && isset($childConfig['values'][$constantName])) {
+                    $this->seedChildConstants(
+                        $module,
+                        $childConfig['field'],
+                        $childConfig['values'][$constantName],
+                        $constant->id
+                    );
+                }
+
+                if ($wasExisting) {
+                    $updateCount++;
+                } else {
+                    $successCount++;
+                }
+            } catch (\Exception $e) {
+                $errorCount++;
+                Log::error("Error processing constant {$constantName}: " . $e->getMessage());
+            }
         }
 
-        $this->command->info('IDENTITY_TYPE Seeded successfully!');
+        $summary = "Completed seeding {$field}: Created {$successCount}, Updated {$updateCount}, Errors {$errorCount}";
+        Log::info($summary);
+    }
+
+    private function seedChildConstants(string $module, string $field, array $children, int $parentId): void
+    {
+        foreach ($children as $key => $value) {
+            $childName = is_numeric($key) ? $value : $key;
+
+            Constant::updateOrCreate(
+                [
+                    'constant_name' => $childName,
+                    'module' => $module,
+                    'field' => $field,
+                    'parent_id' => $parentId,
+                ],
+                [
+                    'name' => [
+                        'en' => splitAndUppercase($childName),
+                        'ar' => t(splitAndUppercase($childName), [], 'ar'),
+                    ],
+                    'value' => $value,
+                ]
+            );
+        }
+    }
+
+    private function verifySeeding(): void
+    {
+        Log::info('Starting verification process...');
+        $this->command->info('Verifying seeded data...');
+
+        $totalConstants = 0;
+        foreach ($this->constants as $moduleGroup) {
+            $module = $moduleGroup['module'];
+
+            foreach ($moduleGroup['items'] as $item) {
+                $count = Constant::where('module', $module)
+                    ->where('field', $item['field'])
+                    ->count();
+
+                $totalConstants += $count;
+
+                $message = "Verified {$count} constants for {$module} - {$item['field']}";
+                Log::info($message);
+                $this->command->info($message);
+
+                // Log details of each constant for debugging
+                $constants = Constant::where('module', $module)
+                    ->where('field', $item['field'])
+                    ->get();
+
+                foreach ($constants as $constant) {
+                    Log::debug("Verified constant:", [
+                        'id' => $constant->id,
+                        'name' => $constant->name,
+                        'value' => $constant->value,
+                        'module' => $constant->module,
+                        'field' => $constant->field
+                    ]);
+                }
+            }
+        }
+
+        $finalMessage = "Total constants verified: {$totalConstants}";
+        Log::info($finalMessage);
+        $this->command->info($finalMessage);
+    }
+
+    private function logStart(): void
+    {
+        Log::info('=== Starting Constants Seeding Process ===');
+        $this->command->info('Starting constants seeding...');
+    }
+
+    private function logModuleStart(string $module): void
+    {
+        Log::info("Starting to process module: {$module}");
+        // $this->command->info("Processing module: {$module}");
+    }
+
+    private function logModuleEnd(string $module): void
+    {
+        Log::info("Completed processing module: {$module}");
+        $this->command->info("Completed module: {$module}");
+    }
+
+    private function logSuccess(): void
+    {
+        $message = '=== Constants Seeding Completed Successfully ===';
+        Log::info($message);
+        $this->command->info($message);
+    }
+
+    private function logError(\Exception $e): void
+    {
+        $message = "Error during seeding: " . $e->getMessage();
+        Log::error($message, [
+            'exception' => $e,
+            'trace' => $e->getTraceAsString()
+        ]);
+        $this->command->error($message);
     }
 }

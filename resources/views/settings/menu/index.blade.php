@@ -15,7 +15,7 @@
                 <div class="card-header border-0 pt-6">
                     <!--begin::Card title-->
                     <div class="card-title">
-                        Hayat CRM Menu Manager
+                        Elite CRM Menu Manager
                     </div>
                     <!--begin::Card title-->
                     <!--begin::Card toolbar-->
@@ -168,7 +168,7 @@
                                     // Show loading indication
                                     submitButton.setAttribute('data-kt-indicator',
                                         'on');
-                                    // Disable button to avoid multiple click 
+                                    // Disable button to avoid multiple click
                                     submitButton.disabled = true;
                                     console.log(formAddEdit);
                                     let data = formAddEdit.serialize();
@@ -189,7 +189,7 @@
                                             // KTUtil.btnRelease(btn);
                                             submitButton.removeAttribute(
                                                 'data-kt-indicator');
-                                            // Disable button to avoid multiple click 
+                                            // Disable button to avoid multiple click
                                             submitButton.disabled = false;
                                         },
                                         error: function(response, textStatus,

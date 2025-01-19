@@ -3,7 +3,7 @@
 <!--begin::Head-->
 
 <head>
-    <title>{{ env('APP_NAME') }}</title>
+    <title>{{env('APP_NAME')}} CRM </title>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="shortcut icon" href="{{ asset('media/logos/favicon.ico') }}" />
@@ -61,7 +61,7 @@
                 <div class="d-flex flex-center flex-lg-start flex-column">
                     <!--begin::Logo-->
                     <a href="#" class="mb-7">
-                        <img width="300px" alt="Logo" src="{{ asset('media/logos/logo-opts-light-small.png') }}" />
+                        <img alt="Logo" width="400" src="{{ asset('media/logos/logo-opts.svg') }}" />
                     </a>
                     <!--end::Logo-->
                     <!--begin::Title-->

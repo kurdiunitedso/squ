@@ -2,10 +2,12 @@
 
 namespace Database\Seeders;
 
+use App\Models\Client;
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 
 class AdminSeeder extends Seeder
 {
@@ -14,23 +16,26 @@ class AdminSeeder extends Seeder
      */
     public function run(): void
     {
-        //
-        $AdminUser = User::where('email', 'admin@wheels.delivery')->first();
-        // $farahUser = User::where('email', 'F.blaibleh@trillionz.ps')->first();
-        // if (isset($farahUser)) {
-        //     // $farahUser->roles()->delete();
-        //     $farahUser->assignRole('super-admin');
-        // }
-        // if (!$AdminUser) {
-        //     $AdminUser = new User();
-        // }
-        // $AdminUser->name = "Admin";
-        // $AdminUser->email = "admin@wheels.delivery";
-        // $AdminUser->password = Hash::make('admin');
-        // $AdminUser->active = true;
-        // $AdminUser->mobile = '0000';
-        // $AdminUser->save();
-        // $AdminUser->assignRole('super-admin');
-        // $this->command->info('Admin added  successfully!');
+
+        $this->create_admin();
+    }
+    private function create_admin(): void
+    {
+        Log::info('............... AdminSeeder run started ...............');
+
+        // Admin user setup
+        $adminUser = User::updateOrCreate(['email' => 'admin@squ.com'], [
+            'name' => [
+                'en' => 'Admin',
+                'ar' => 'Admin',
+            ],
+            'mobile' => '0000',
+            'password' => Hash::make('admin'),
+            'active' => true,
+        ]);
+        $adminUser->assignRole('super-admin');
+        Log::info('Admin user saved and role assigned', ['user_id' => $adminUser->id]);
+
+        Log::info('AdminSeeder run completed');
     }
 }

@@ -2,234 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Captin;
-use App\Models\ClientTrillionSocial;
-use App\Models\Constant;
-use App\Models\Employee;
-use App\Models\Item;
-use App\Models\ItemCost;
-use App\Models\Restaurant;
-use App\Models\SystemMailNotification;
 use App\Models\SystemSmsNotification;
-use App\Models\User;
-use App\Models\Vehicle;
-use App\Models\WhatsappHistory;
-use GuzzleHttp\Client;
+use Illuminate\Http\Request;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Validation\ValidatesRequests;
-use Illuminate\Http\Request;
 use Illuminate\Routing\Controller as BaseController;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\Validator;
 
 class Controller extends BaseController
 {
     use AuthorizesRequests, ValidatesRequests;
 
-
-    public
-    function sendWhatsapp($mobile, $msg, $type = 'graph', $token = 'Tabibfind', $instanceId = 'Tabibfind', $options = 0, $type2 = 0, $lnk = 0)
-    {
-
-        try {
-
-
-            if (true) {
-
-
-                if ($instanceId == "Tabibfind") {
-                    $version = env('tf_version', 0);
-                    $phoneID = env('tf_phoneID', 0);
-                    $tokenWHGraph = env('tf_token', 0);
-                } else {
-                    return 111;
-                }
-                $template = "welcome";
-
-                $url = "https://graph.facebook.com/$version/$phoneID/messages";
-                $client = new Client(['headers' => ['Content-Type' => 'application/json', 'Authorization' => "Bearer $tokenWHGraph"]]);
-                if ($type2 == 0 && !str_contains($instanceId, 'FB')) {
-                    if (WhatsappHistory::checkNewChat($mobile, $instanceId))
-                        $data = ["messaging_product" => "whatsapp", "to" => $mobile, "text" => ["body" => $msg]];
-                    else
-                        $data = ["messaging_product" => "whatsapp", "to" => $mobile, "type" => "template", "template" => ["name" => $template, "language" => ["code" => "ar"], "components" => [["type" => "body", "parameters" => [["type" => "text", "text" => $msg]]]]]];
-
-                } else if ($type2 == "1") {
-
-                    $sections = [["title" => "", "rows" => $options]];
-
-                    $data = ["messaging_product" => "whatsapp", "to" => $mobile, "type" => "interactive", "interactive" => ["type" => "list", "body" => ["text" => $msg], "action" => ["button" => "اختر من القائمة", "sections" => $sections]]];
-
-                } else if ($type2 == "2") {
-                    $template = "appointment3";
-
-                    $data = ["messaging_product" => "whatsapp", "to" => $mobile, "type" => "template", "template" => ["name" => $template, "language" => ["code" => "ar"], "components" => [["type" => "body", "parameters" => [["type" => "text", "text" => $msg]]], ["type" => "button", "sub_type" => "url", "index" => "0", "parameters" => [["type" => "text", "text" => $lnk]]]]]];
-                } else if ($type2 == "3") {
-                    $template = "welcome";
-
-                    $data = ["messaging_product" => "whatsapp", "to" => $mobile, "type" => "template", "template" => ["name" => $template, "language" => ["code" => "ar"], "components" => [["type" => "body", "parameters" => [["type" => "text", "text" => $msg]]]]]];
-                } else if (str_contains($instanceId, 'FB')) {
-
-                    $data = ["recipient" => ["id" => $mobile], "messaging_type" => "RESPONSE", "message" => ["text" => $msg]];
-                }
-                // return $data;
-
-            }
-            $response = $client->post(
-                $url,
-                ['form_params' => $data]
-            );
-
-
-            $d = json_decode($response->getBody(), true);
-            // return $d;
-            if (count($d["messages"]) || str_contains($instanceId, 'FB')) {
-                $w = new WhatsappHistory();
-                $w->body = $msg;
-                $w->fromMe = 1;
-                $w->wid = str_contains($instanceId, 'FB') ? strtotime(date('Y-m-d H:i:s')) : $d["messages"][0]["id"];
-                $w->isForwarded = 0;
-                $w->time = strtotime(date('Y-m-d H:i:s'));
-                $w->chatId = $mobile;
-                $w->type = 'chat';
-                $w->senderName = $instanceId;
-                $w->chatName = $mobile;
-                $w->instance_name = $instanceId;
-                $w->metadata = json_encode($d);
-                $w->save();
-                return 1;
-            }
-
-
-            return 1;
-        } catch (Exception $ex) {
-
-            return 0;
-            //return $ex->getMessage();
-        }
-        return 0;
-    }
-
-    function refineMobile($mobile, $code = 0)
-    {
-        $mobile = str_replace(' ', '', $mobile);
-        $mobile = str_replace('-', '', $mobile);
-
-        if ($code == 0) {
-            $code='972';
-        }
-
-        if (strlen($mobile) == 9)
-            $mobile = $code . $mobile;
-        else if (strlen($mobile) == 10)
-            $mobile = $code . substr($mobile, 1);
-        elseif (strlen($mobile) == 14)
-            $mobile = substr($mobile, 2);
-        elseif (strlen($mobile) >= 12)
-            $mobile = $mobile;
-        else
-            $mobile = 0;
-        /*
-                if (strlen($mobile) < 12)
-                    $mobile = 0;*/
-
-        $mobile = str_replace(' ', '', $mobile);
-        $mobile = str_replace('-', '', $mobile);
-        return $mobile;
-    }
-
-    public function filterArrayForNullValues($array)
-    {
-        $filteredArray = array_filter($array, function ($value) {
-            return  $value != '' && $value != null ;
-        });
-        return $filteredArray;
-    }
-    public function filterArrayForEmailValues($array)
-    {
-        $filteredArray = array_filter($array, function ($value) {
-            if (filter_var($value, FILTER_VALIDATE_EMAIL)) {
-               return $value;
-            }
-
-
-        });
-        return $filteredArray;
-    }
-
-
-    public
-    function sendWhatsappFile($mobile, $file, $file_name, $type = "0", $token = 'Tabibfind', $instanceId = 'Tabibfind', $caption = "", $type2 = 0)
-    {
-        try {
-
-            if ($instanceId == "Tabibfind") {
-                $version = env('tf_version');
-                $phoneID = env('tf_phoneID');
-                $tokenWHGraph = env('tf_token');
-            }
-
-            $url = "https://graph.facebook.com/$version/$phoneID/messages";
-            $urll = $file;
-            $client = new Client(['headers' => ['Content-Type' => 'application/json', 'Authorization' => "Bearer $tokenWHGraph"]]);
-
-            if (str_contains($instanceId, "FB")) {
-                $data = ["recipient" => ["id" => $mobile], "messaging_type" => "RESPONSE", "message" => ["attachment" => ["type" => "file", "filename" => $file_name, "payload" => ["url" => $urll, "is_reusable" => "true"]]]];
-            } else if (WhatsappHistory::checkNewChat($mobile, $instanceId) && $type2 != 2)
-                $data = ["messaging_product" => "whatsapp", "recipient_type" => "individual", "to" => $mobile, "type" => "document", "document" => ["caption" => $caption ? $caption : $file_name, "link" => $file, "filename" => $file_name]];
-            else {
-                $template = "welcome";
-
-                $data2 = ["messaging_product" => "whatsapp", "to" => $mobile, "type" => "template", "template" => ["name" => $template, "language" => ["code" => "ar"], "components" => [["type" => "body", "parameters" => [["type" => "text", "text" => "الرجاء معاينة المرفق"]]]]]];
-
-                $file = trim($file, 'https://crm.developon.co/');
-                $template = "appointment3";
-
-                $data = ["messaging_product" => "whatsapp", "to" => $mobile, "type" => "template", "template" => ["name" => $template, "language" => ["code" => "ar"], "components" => [["type" => "body", "parameters" => [["type" => "text", "text" => $file_name]]], ["type" => "button", "sub_type" => "url", "index" => "0", "parameters" => [["type" => "text", "text" => trim($file, 'https://crm.opts.expert/')]]]]]];
-
-
-            }
-
-
-            $response = $client->post(
-                $url,
-                ['form_params' => $data]
-            );
-
-            $d = json_decode($response->getBody(), true);
-
-            try {
-                if (count($d["messages"]) || str_contains($instanceId, 'FB')) {
-                    $w = new WhatsappHistory();
-                    $w->body = $urll;
-                    $w->fromMe = 1;
-                    $w->wid = str_contains($instanceId, 'FB') ? strtotime(date('Y-m-d H:i:s')) : $d["messages"][0]["id"];
-                    $w->isForwarded = 0;
-                    $w->time = strtotime(date('Y-m-d H:i:s'));
-                    $w->chatId = $mobile;
-                    $w->type = 'image';
-                    $w->senderName = $instanceId;
-                    $w->chatName = $mobile;
-                    $w->instance_name = $instanceId;
-                    $w->save();
-                } else if ($d["sent"]) {
-                    $message = $d["sent"] . " message: " . $d["message"] . " id : " . $d["id"] . " queueNumber: " . $d["queueNumber"] . " ";
-                }
-            } catch (\Exception $ex) {
-                $message = "  wrong mobile: " . $mobile;
-
-                return 0;
-            }
-            return 1;
-        } catch (Exception $ex) {
-            return $ex->getMessage();
-            return 0;
-        }
-        return 1;
-    }
-
+    public static $data = [];
     public function editButton($route, $className)
     {
         return '<a href="' . $route . '" class="btn btn-icon btn-active-light-primary w-30px h-30px ' . $className . '">
@@ -266,6 +49,45 @@ class Controller extends BaseController
                 </a>';
     }
 
+    public function confirmButton($route, $className, $attribute)
+    {
+        return '<a ' . $attribute . ' href=' . $route . ' class="btn btn-icon btn-active-light-primary w-30px h-30px ' . $className . '"
+                    >
+                    <!--begin::Svg Icon | path: icons/duotune/general/gen027.svg-->
+                    <span class="svg-icon svg-icon-3">
+                      <i class="la la-whatsapp"></i>
+                    </span>
+                    <!--end::Svg Icon-->
+                </a>';
+    }
+    function refineMobile($mobile, $code = 0)
+    {
+        $mobile = str_replace(' ', '', $mobile);
+        $mobile = str_replace('-', '', $mobile);
+        $code = '972';
+        if ($code == 0) {
+            return $mobile;
+            return substr($mobile, -8);
+        }
+
+        if (strlen($mobile) == 9)
+            $mobile = $code . $mobile;
+        else if (strlen($mobile) == 10)
+            $mobile = $code . substr($mobile, 1);
+        elseif (strlen($mobile) == 14)
+            $mobile = substr($mobile, 2);
+        elseif (strlen($mobile) >= 12)
+            $mobile = $mobile;
+        else
+            $mobile = 0;
+        /*
+                if (strlen($mobile) < 12)
+                    $mobile = 0;*/
+
+        $mobile = str_replace(' ', '', $mobile);
+        $mobile = str_replace('-', '', $mobile);
+        return $mobile;
+    }
     public
     function getSelect(Request $request, $lang = 0)
     {
@@ -275,229 +97,12 @@ class Controller extends BaseController
 
         $module = $request->module;
         $category_id = $request->category_id;
-        if ($type == "search_name") {
-            if ($request->category == '251') {
 
 
-                $sel = Captin::where(function ($q) use ($request, $lang) {
-                    $q->where(DB::raw('name'), 'like', "%" . $request->term . "%");
-                    $q->orwhere(DB::raw('mobile1'), 'like', "%" . $request->term . "%");
-                })
-                    ->pluck("name")->take(10)->toArray();
-                return response()->json(
-                    $sel
-
-                );
-            }
-            if ($request->category == '249') {
 
 
-                $sel = Restaurant::where(function ($q) use ($request, $lang) {
-                    $q->where(DB::raw('name'), 'like', "%" . $request->term . "%");
-                    $q->orwhere(DB::raw('telephone'), 'like', "%" . $request->term . "%");
-                })
-                    ->pluck("name")->take(10)->toArray();
-                return response()->json(
-                    $sel
-
-                );
-            }
-            if ($request->category == '250') {
-                $sel = \App\Models\Client::where(function ($q) use ($request, $lang) {
-                    $q->where(DB::raw('name'), 'like', "%" . $request->term . "%");
-                    $q->orwhere(DB::raw('mobile'), 'like', "%" . $request->term . "%");
-                })
-                    ->pluck("name")->take(10)->toArray();
-                return response()->json(
-                    $sel
-
-                );
-            }
-        }
-        if ($type == "getData") {
-            if ($request->category == '251') {
 
 
-                $data = Captin::where(function ($q) use ($request, $lang) {
-                    $q->where(DB::raw('name'), $request->name);
-                    $q->orwhere(DB::raw('mobile1'), $request->name);
-                })
-                    ->get()->first();
-
-
-            }
-            if ($request->category == '249') {
-
-
-                $data = Restaurant::where(function ($q) use ($request, $lang) {
-                    $q->where(DB::raw('name'), $request->name);
-                    $q->orwhere(DB::raw('telephone'), $request->name);
-                })
-                    ->get()->first();
-            }
-            if ($request->category == '250') {
-                $data = \App\Models\Client::where(function ($q) use ($request, $lang) {
-                    $q->where(DB::raw('name'), $request->name);
-                    $q->orwhere(DB::raw('mobile'), $request->name);
-                })
-                    ->get()->first();
-            }
-
-
-            if ($data)
-                return response(['status' => true, 'message' => 'done', "data" => $data], 200);
-            else
-                return response(['status' => true, 'message' => 'done'], 200);
-        }
-
-        if ($type == 'purpose') {
-            $category = $request->category;
-            if (!$category)
-                return response()->json(
-                    ["results" => $res]
-
-                );
-            $count = 0;
-            $sel = Constant::where('parent_id', $category);
-            if ($request->term)
-                $sel = $sel->where('name', 'like', '%' . $request->term . '%');
-            $sel = $sel->get()->take(100);
-            foreach ($sel as $c) {
-                $res[$count] = ["id" => $c->id, "text" => $c->name];
-                $count++;
-            }
-            return response()->json(
-                ["results" => $res]
-
-            );
-        }
-        if ($module == 'telephone') {
-            $telephone = $request->telephone;
-            $scrollWhatAppHis = view('tickets.whatsapp', [
-                'call' => $telephone,
-            ])->render();
-            $result = Captin::withCount('callPhone', 'callPhone2', 'visits', 'smsPhone', 'tickets', 'orders')->where('mobile1', $telephone)->get()->first();
-            if ($result)
-                return response(['status' => true, 'message' => 'done', "category" => 192, "data" => $result, "scrollWhatAppHis" => $scrollWhatAppHis], 200);
-
-            $result = Restaurant::with('callPhone', 'callPhone2', 'visits', 'smsPhone', 'tickets', 'orders')->where('telephone', $telephone)->get()->first();
-            if ($result)
-                return response(['status' => true, 'message' => 'done', "category" => 191, "data" => $result, "scrollWhatAppHis" => $scrollWhatAppHis], 200);
-            else
-                return response(['status' => true, 'message' => 'done', "category" => null, "data" => [], "scrollWhatAppHis" => ""], 200);
-
-        }
-        if ($module == 'employee') {
-            $id = $request->id;
-            $result = User::where('id', $id)->get()->first();
-
-            if ($result)
-                return response(['status' => true, 'message' => 'done', "category" => 192, "data" => $result], 200);
-            else
-                return response(['status' => true, 'message' => 'done', "category" => 192, "data" => []], 200);
-
-
-        }
-
-        if ($module == 'Item') {
-            $desc = $request->category_id;
-            $client_id = $request->client_id;
-            $facility_id = $request->facility_id;
-            $item = Item::where('description', $desc)->get()->first();
-            $result = 0;
-            if ($item) {
-                if ($facility_id)
-                    $result = ItemCost::where('item_id', $item->id)->where('facility_id', $facility_id)->orderBy('id','desc')->get()->first();
-
-
-                else if ($client_id)
-                    $result = ItemCost::where('item_id', $item->id)->where('client_id', $client_id)->orderBy('id','desc')->get()->first();
-                else
-                    $result=$item;
-
-            }
-            if($item && !$result)
-                $result=$item;
-            if ($result)
-                return response(['status' => true, 'message' => 'done', "data" => $result], 200);
-            else
-                return response(['status' => true, 'message' => 'done', "data" => []], 200);
-
-
-        }
-
-        if ($type == 'employeeDepartment') {
-            $department = $request->department;
-            if (!$department)
-                return response()->json(
-                    ["results" => $res]
-
-                );
-            $count = 0;
-            $sel = User::where('department_id', $department);
-            if ($request->term)
-                $sel = $sel->where('name', 'like', '%' . $request->term . '%');
-            $sel = $sel->get()->take(100);
-            foreach ($sel as $c) {
-                $res[$count] = ["id" => $c->id, "text" => $c->name];
-                $count++;
-            }
-            return response()->json(
-                ["results" => $res]
-
-            );
-        }
-
-
-        if ($type == 'vehicles') {
-            $captin = $request->captin_id;
-            if (!$captin)
-                return response()->json(
-                    ["results" => $res]
-
-                );
-            $count = 0;
-            $sel = Vehicle::where('captin_id', $captin);
-            if ($request->term)
-                $sel = $sel->where('vehicle_no', 'like', '%' . $request->term . '%');
-            $sel = $sel->get()->take(100);
-            foreach ($sel as $c) {
-                $res[$count] = ["id" => $c->id, "text" => $c->vehicle_no];
-                $count++;
-            }
-            return response()->json(
-                ["results" => $res]
-
-            );
-        }
-        if ($type == 'projects') {
-            $client = $request->client_id;
-            if (!$client)
-                return response()->json(
-                    ["results" => $res]
-
-                );
-            $count = 0;
-            $sel = ClientTrillionSocial::where('client_trillion_id', $client);
-            if ($request->term)
-                $sel = $sel->where('address', 'like', '%' . $request->term . '%');
-            $sel = $sel->get()->take(100);
-            foreach ($sel as $c) {
-                $res[$count] = ["id" => $c->id, "text" => $c->address];
-                $count++;
-            }
-            return response()->json(
-                ["results" => $res]
-
-            );
-        }
-
-        if ($module == 'Captin') {
-
-            $data = Captin::find($category_id);
-            if ($data)
-                return response(['status' => true, 'message' => 'done', "data" => $data], 200);
-        }
         $class = "App\\Models\\" . $module;
         $data = $class::find($category_id);
 
@@ -505,73 +110,35 @@ class Controller extends BaseController
             return response(['status' => true, 'message' => 'done', "data" => $data], 200);
         else
             return response(['status' => false, 'message' => 'error', "data" => ''], 401);
-
-
     }
 
 
-    public function sendSMS(Request $request)
-    {
-        if (!$request->sms)
-            $this->sendWhatsapp($this->refineMobile($request->mobile, 972), $request->input('content'), 0);
 
-        if ($request->sms == 1)
-            $this->sendSuperSMS('TabibFind', $request->mobile, $request->input('content'), $request->module, $request->module_id, $request->type);
-    }
 
-    public function sendSuperSMS($gateWay, $mobile, $msg, $module = 0, $module_id = 0, $type = 0)
-    {
-        smsapi()->gateway($gateWay)->sendMessage($mobile, $msg);
-        $sms = new SystemSmsNotification();
-        $sms->gateWay = 'Trillionz';
-        $sms->message = $msg;
-        $sms->mobile = $mobile;;
-        $sms->channel = $gateWay;;
-        $sms->module = $module;
-        $sms->type_id = $module_id;
-        $sms->sender_type = $type;
-        $sms->sender_id = Auth::user()->id;
-        $sms->sms_count = strlen($msg) / 52;
-        $sms->module_id = $module_id;
-        $sms->save();
-    }
 
     public
-    function LogNotification($module = 'crm', $id = 0, $type = 1, $EmailData = [], $user = 0, $subject = 0, $attachment = [], $sent_to = [], $sent_by = 'trillionz@developon.co', $sent_cc = [])
+    function sendSuperSMS($gateWay, $mobile, $msg, $module = 0, $module_id = 0, $type = 0, $note = 0, $tryWhats = 0, $link = 0)
     {
-        // try {
-        $user ? $user : \Auth::user()->id;
-        $sent_by == 0 ? $sent_by = 'trillionz@developon.co' : $sent_by = $sent_by;
-        $path = public_path('uploads'); // upload directory
-        Mail::send('parts.notification', $EmailData, function ($message) use ($path, $attachment, $subject, $sent_by, $sent_to, $sent_cc) {
+        $sent = 0;
 
-            $message->from('trillionz@developon.co');
+        if ($tryWhats) {
 
-            if (is_array($sent_to)) {
-                for ($i = 0; $i < count($sent_to); $i++)
-                    if (filter_var($sent_to[$i], FILTER_VALIDATE_EMAIL))
-                        $message->to($sent_to[$i]);
-            }
-
-            if (is_array($sent_cc)) {
-                for ($i = 0; $i < count($sent_cc); $i++)
-                    if (filter_var($sent_cc[$i], FILTER_VALIDATE_EMAIL))
-                        $message->cc($sent_cc[$i]);
-            }
-
-            $message->subject($subject);
-
-            if (is_array($attachment)) {
-                for ($i = 0; $i < count($attachment); $i++)
-                    $message->attach($attachment[$i]);
-            }
-        });
-        if (is_array($sent_to)) {
-            for ($i = 0; $i < count($sent_to); $i++)
-                SystemMailNotification::create(['type' => $type, 'subject' => $subject, 'message' => $EmailData["content"], 'module' => $module, 'request_id' => $id, 'sent_to' => $sent_to[$i], 'sent_by' => 'system']);
+            $this->sendWhatsapp($mobile, $msg, 'graph', $tryWhats, $tryWhats, 0, 2, $link);
+            $sent = 1;
         }
-
+        if ($sent == 0) {
+            $modelname = $module;
+            $class =   app("App\\Models\\" . $modelname);
+            $sms = new SystemSmsNotification();
+            $sms->gateWay = $gateWay;
+            $sms->message = $msg;
+            $sms->sender_type = $class->getMorphClass();;
+            $sms->mobile = $mobile;
+            $sms->sms_count = strlen($msg) / 52;
+            $sms->sender_id = $module_id;
+            $sms->type_id = 1;
+            $sms->save();
+            smsapi()->gateway($gateWay)->sendMessage($mobile, $msg);
+        }
     }
-
-
 }

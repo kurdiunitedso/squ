@@ -39,9 +39,9 @@
                         data-placeholder="Select option" data-dropdown-parent="#kt_menu_64ca1a18f399e"
                         data-allow-clear="true">
                         <option></option>
-                        @foreach ($WHEELS_BRANCHES as $WHEELS_BRANCHE)
-                            <option value="{{ $WHEELS_BRANCHE->id }}">
-                                {{ $WHEELS_BRANCHE->name }}</option>
+                        @foreach ($ALHAYAT_BRANCHES as $ALHAYAT_BRANCHE)
+                            <option value="{{ $ALHAYAT_BRANCHE->id }}">
+                                {{ $ALHAYAT_BRANCHE->name }}</option>
                         @endforeach
                     </select>
                 </div>

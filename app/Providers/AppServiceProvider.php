@@ -13,9 +13,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        if (App::isLocal()) {
+        /*if (App::isLocal()) {
             App::register(\Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class);
-        }
+        }*/
     }
 
     /**
@@ -24,6 +24,6 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         //
-        Paginator::useBootstrapFive();
+        // Paginator::useBootstrapFive();
     }
 }

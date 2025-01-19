@@ -69,10 +69,18 @@ class PatientService
         $patient->pobox = $request->pobox;
         $patient->email = $request->email;
         $patient->tel2 = $request->tel2;
-        $patient->membership_type = $request->membership_type;
-        $patient->membership_subtype = $request->membership_subtype;
+       // $patient->membership_type = $request->membership_type;
+       // $patient->membership_subtype = $request->membership_subtype;
         $patient->clinical_history = $request->clinical_history;
         $patient->sick_fund_id = $request->sick_fund_id;
+        $patient->patient_clinic_id = $request->patient_clinic_id;
+        $patient->last_update_date = $request->last_update_date;
+        $patient->com_whatsapp = $request->com_whatsapp != null ? true : false;
+        $patient->com_sms = $request->com_sms != null ? true : false;
+        $patient->com_email = $request->com_email != null ? true : false;
+        $patient->com_phone = $request->com_email != null ? true : false;
+        $patient->speak_en = $request->speak_en != null ? true : false;
+        $patient->speak_h = $request->speak_h != null ? true : false;
 
 
         $patient->save();
@@ -105,8 +113,8 @@ class PatientService
         $newPatient->pobox = $request->pobox;
         $newPatient->email = $request->email;
         $newPatient->tel2 = $request->tel2;
-        $newPatient->membership_type = $request->membership_type;
-        $newPatient->membership_subtype = $request->membership_subtype;
+       // $newPatient->membership_type = $request->membership_type;
+       // $newPatient->membership_subtype = $request->membership_subtype;
         $newPatient->clinical_history = $request->clinical_history;
         $newPatient->sick_fund_id = $request->sick_fund_id;
 
