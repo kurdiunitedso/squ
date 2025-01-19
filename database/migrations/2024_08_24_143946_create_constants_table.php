@@ -14,7 +14,8 @@ return new class extends Migration
         Schema::create('constants', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('name');
-            $table->string('value');
+            $table->string('value')->nullable();
+            $table->string('constant_name');
             $table->string('module')->index();
             $table->string('field')->index();
             $table->timestamps();

@@ -1,27 +1,25 @@
 <!DOCTYPE html>
-@if (app()->getLocale() == 'en')
-    <html lang="{{ app()->getLocale() }}">
-@elseif (app()->getLocale() == 'ar' || app()->getLocale() == 'he')
-    <html direction="rtl" dir="rtl" style="direction: rtl" lang="{{ app()->getLocale() }}">
-@endif
 
+<html direction="{{ direction() }}" dir="{{ direction() }}" style="direction: {{ direction() }}"
+    lang="{{ lang() }}">
 <!--begin::Head-->
 
 <head>
     {{-- <base href="" /> --}}
-    <title>{{ env('APP_NAME') }} CRM - @yield('title', 'Home')</title>
+    <title>{{ config('app.name') }} - @yield('title', 'Home')</title>
     <meta charset="utf-8" />
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <meta name="description" content="{{ env('APP_NAME') }} CRM " />
+    <meta name="description" content="{{ config('app.name') }}" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="shortcut icon" href="{{ asset('media/logos/favicon.ico') }}" />
+    <link rel="shortcut icon" href="{{ asset('media/logos/logo-opts-light-small.png') }}" />
+    {{-- <link rel="shortcut icon" href="{{ asset('media/logos/favicon.ico') }}" /> --}}
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <!--begin::Vendor Stylesheets(used for this page only)-->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:300,400,500,600,700" />
     <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500&family=Tajawal:wght@300;500&display=swap"
         rel="stylesheet">
-    @if (app()->getLocale() == 'en')
+    @if (lang() == 'en')
         <!--begin::Fonts(mandatory for all pages)-->
         <!--end::Fonts-->
         <link href="{{ asset('plugins/custom/datatables/datatables.bundle.css?v=1') }}" rel="stylesheet"
@@ -30,7 +28,7 @@
         <!--begin::Global Stylesheets Bundle(mandatory for all pages)-->
         <link href="{{ asset('plugins/global/plugins.bundle.css?v=1') }}" rel="stylesheet" type="text/css" />
         <link href="{{ asset('css/style.bundle.css?v=1') }}" rel="stylesheet" type="text/css" />
-    @elseif (app()->getLocale() == 'ar' || app()->getLocale() == 'he')
+    @elseif (lang() == 'ar' || lang() == 'he')
         <!--begin::Fonts(mandatory for all pages)-->
         <!--end::Fonts-->
         <link href="{{ asset('plugins/custom/datatables/datatables.bundle.rtl.css?v=1') }}" rel="stylesheet"
@@ -40,137 +38,44 @@
         <link href="{{ asset('plugins/global/plugins.bundle.rtl.css?v=1') }}" rel="stylesheet" type="text/css" />
         <link href="{{ asset('css/style.bundle.rtl.css?v=1') }}" rel="stylesheet" type="text/css" />
     @endif
-    @if (app()->getLocale() == 'he')
+    @if (lang() == 'he')
         <link href="{{ asset('css/custom.css?v=1') }}" rel="stylesheet" type="text/css" />
     @endif
 
     @stack('styles')
-    <style>
-        @media (min-width: 992px) {
-            [data-kt-app-sidebar-minimize=on][data-kt-app-sidebar-hoverable=true] .app-sidebar:not(:hover) .app-sidebar-menu input {
-                opacity: 0;
-                transition: opacity 0.3s ease !important;
+    @if (lang() == 'ar' || lang() == 'he')
+        <style>
+            .select2-container .select2-selection__clear {
+                right: 5px !important;
             }
-        }
 
-        .w-fit-content {
-            width: fit-content;
-            max-width: 80%;
-        }
-
-        .chat-messages-container {
-            display: flex;
-            flex-direction: column;
-            height: 100%;
-        }
-
-        .chat-messages {
-            flex: 1;
-            overflow-y: auto;
-            padding: 1rem;
-        }
-
-        #messageInputBox {
-            position: sticky;
-            bottom: 0;
-            background: white;
-            padding: 1rem;
-            border-top: 1px solid #eff2f5;
-        }
-
-        .input-group {
-            position: relative;
-        }
-
-        .form-control-solid {
-            background-color: #f5f8fa;
-            border-color: #f5f8fa;
-            color: #5e6278;
-            transition: color .2s ease, background-color .2s ease;
-        }
-    </style>
-    <style>
-        .pagination-message {
-            background-color: #f8f9fa;
-            padding: 1rem;
-            border-radius: 8px;
-        }
-
-        .white-space-pre-line {
-            white-space: pre-line;
-        }
-
-        .btn-light-primary {
-            background-color: #e8f0fe;
-            color: #3699ff;
-            border: none;
-        }
-
-        .btn-light-primary:hover {
-            background-color: #d4e4fd;
-            color: #1877f2;
-        }
-    </style>
-    <style>
-        .apartment-list {
-            width: 100%;
-        }
-
-        .apartments-grid {
-            display: grid;
-            grid-template-columns: repeat(1, 1fr);
-            gap: 0.75rem;
-        }
-
-        .apartment-item {
-            transition: all 0.2s ease;
-        }
-
-        .hover-shadow:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            cursor: pointer;
-        }
-
-        .section-title {
-            color: #5E6278;
-        }
-
-        /* RTL Support */
-        [dir="rtl"] .apartment-list {
-            text-align: right;
-        }
-
-        /* Responsive */
-        @media (min-width: 768px) {
-            .apartments-grid {
-                grid-template-columns: repeat(2, 1fr);
+            .select2-container--bootstrap5 .select2-dropdown .select2-results__option.select2-results__option--selected::after {
+                left: 1.25rem !important;
+                right: auto;
+                !important;
             }
-        }
-    </style>
+        </style>
+        <style>
+            table thead tr th {
+                text-align: center !important;
+                font-weight: bolder;
+                font-size: 14px !important;
+            }
 
-    <style>
-        .confirmation-message {
-            width: 100%;
-            max-width: 600px;
-        }
-
-        .detail-row {
-            padding: 8px 0;
-        }
-
-        .detail-row:last-child {
-            border-bottom: none !important;
-        }
-
-        [dir="rtl"] .confirmation-message {
-            text-align: right;
-        }
-
-        [dir="rtl"] .detail-row {
-            flex-direction: row-reverse;
-        }
-    </style>
+            table thead tr {
+                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+                /* Shadow effect */
+            }
+        </style>
+        <style>
+            @media (min-width: 992px) {
+                [data-kt-app-sidebar-minimize=on][data-kt-app-sidebar-hoverable=true] .app-sidebar:not(:hover) .app-sidebar-menu input {
+                    opacity: 0;
+                    transition: opacity 0.3s ease !important;
+                }
+            }
+        </style>
+    @endif
 
     <!--end::Global Stylesheets Bundle-->
 </head>
@@ -341,22 +246,14 @@
 
     <script>
         function createDataTable(tableSelector, columnDefs, ajaxUrl, order, additionalParams = {}) {
-            // console.log('Starting DataTable creation process.');
-            // console.log(`Table Selector: ${tableSelector}`);
-            // console.log('Column Definitions:', columnDefs);
-            // console.log('AJAX URL:', ajaxUrl);
-            // console.log('Order:', order);
-            // console.log('Additional Parameters:', additionalParams);
-
             var table = document.querySelector(tableSelector);
             if (!table) {
                 console.error(`Table with selector ${tableSelector} not found.`);
                 return;
             }
-            // console.log('Table element found:', table);
 
-            console.log('Initializing DataTable configuration...');
-            return $(table).DataTable({
+            // Initialize DataTable with modified configuration
+            var datatable = $(table).DataTable({
                 responsive: {
                     details: {
                         type: 'column',
@@ -365,18 +262,13 @@
                             header: function(row) {
                                 var data = row.data();
                                 var textt = $('#details_for_name').val();
-                                // console.log('Generating modal header for row:', data);
                                 return textt + data['name'];
                             }
                         }),
                         renderer: function(api, rowIdx, columns) {
-                            // console.log(`Rendering responsive details for row index: ${rowIdx}`);
                             var data = $.map(columns, function(col, i) {
                                 if (col.columnIndex != 0 && col.columnIndex != 1 && col.columnIndex != -
                                     1) {
-                                    // console.log(
-                                    //     `Processing column: index=${col.columnIndex}, title=${col.title}`
-                                    // );
                                     return datatable.column(i).visible() ?
                                         '<tr data-dt-row="' + col.rowIndex + '" data-dt-column="' + col
                                         .columnIndex + '">' +
@@ -386,7 +278,6 @@
                                         "";
                                 }
                             }).join("");
-                            // console.log('Rendered responsive details:', data);
                             return data ? $("<table class='table table-bordered'/>").append(data) : false;
                         },
                     }
@@ -401,34 +292,46 @@
                     url: ajaxUrl,
                     type: "POST",
                     data: function(d) {
-                        // console.log('Preparing AJAX request data...');
-                        // console.log('Initial data:', d);
                         var filterParams = filterParameters();
-                        // console.log('Filter parameters:', filterParams);
                         d.params = $.extend({}, filterParams, additionalParams);
-                        // console.log('Final AJAX request data:', d);
                         return d;
                     },
-                    error: function(xhr, error, thrown) {
-                        console.error('AJAX request failed:', error);
-                        console.error('Error details:', thrown);
-                        handleAjaxErrors(xhr, error, thrown);
-                    },
+                    error: handleAjaxErrors,
                 },
                 columns: columnDefs,
                 order: order,
-                drawCallback: function(settings) {
-                    // console.log('DataTable draw complete. Settings:', settings);
-                },
+                // Add these settings to improve Select2 compatibility
                 initComplete: function(settings, json) {
-                    // console.log('DataTable initialization complete. Settings:', settings);
-                    // console.log('Initial JSON data:', json);
+                    // Initialize Select2 for length menu after DataTable is fully loaded
+                    $(tableSelector + '_length select').select2({
+                        minimumResultsForSearch: Infinity,
+                        dropdownAutoWidth: true,
+                        width: 'auto'
+                    });
+                },
+                drawCallback: function(settings) {
+                    // Reinitialize Select2 dropdowns after table redraw
+                    $(tableSelector + '_length select').select2('destroy').select2({
+                        minimumResultsForSearch: Infinity,
+                        dropdownAutoWidth: true,
+                        width: 'auto'
+                    });
                 }
             });
+
+            // Handle window resize
+            $(window).on('resize', function() {
+                // Close any open Select2 dropdowns
+                $('.select2-container--open').remove();
+            });
+
+            return datatable;
         }
 
+
+
+        // Helper function to get filter parameters (keep your existing implementation)
         function filterParameters() {
-            console.log('Datatable Collecting filter parameters...');
             var params = {};
             $('.datatable-input').each(function() {
                 var i = $(this).data('col-index');
@@ -442,7 +345,6 @@
                     }
                 }
             });
-            console.log('Datatable Collected filter parameters:', params);
             return params;
         }
 
@@ -484,8 +386,6 @@
             toggle.disable();
         }
     </script>
-    @include('metronic.CustomJS.chat.index')
-    <!--end::Custom Javascript-->
     <!--end::Javascript-->
 </body>
 <!--end::Body-->

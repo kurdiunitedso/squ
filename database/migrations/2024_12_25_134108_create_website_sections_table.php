@@ -18,8 +18,9 @@ return new class extends Migration
             $table->string('name')->nullable();
             $table->foreignId('type_id')->nullable()->constrained(Constant::ui['table']);
             $table->text('description')->nullable();
-
+            $table->integer('order')->default(0);
             $table->string('image')->nullable();
+            $table->string('url')->nullable();
             $table->boolean('active')->default(false);
             $table->softDeletes();
             $table->timestamps();

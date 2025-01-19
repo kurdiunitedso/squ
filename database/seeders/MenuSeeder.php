@@ -103,7 +103,7 @@ class MenuSeeder extends Seeder
                 "route" => null,
                 "icon_svg" => getSvgIcon('menu_webiste'),
                 "order" => 9,
-                "permission_name" => 'settings_' . Slider::ui['s_lcf'] . '_access',
+                "permission_name" => "user_management_access",
                 "subRoutes" => [
                     // [
                     //     "name" => t(MenuWebSite::ui['p_ucf']),

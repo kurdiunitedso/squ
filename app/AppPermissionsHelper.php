@@ -34,10 +34,7 @@ class AppPermissionsHelper
 
             ],
             "Website Management" => [
-                MenuWebSite::ui['p_ucf'] => MenuWebSite::ui['s_lcf'] . '_access',
                 WebsiteSection::ui['p_ucf'] => WebsiteSection::ui['s_lcf'] . '_access',
-                Slider::ui['p_ucf'] => 'settings_' . Slider::ui['s_lcf'] . '_access',
-                // Feature::ui['p_ucf'] => 'settings_' . Feature::ui['s_lcf'] . '_access',
             ],
 
 

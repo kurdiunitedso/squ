@@ -1,6 +1,5 @@
 <?php
 
-use App\Providers\PriceOfferServiceProvider;
 use Illuminate\Support\Facades\Facade;
 
 return [
@@ -207,7 +206,6 @@ return [
         Maatwebsite\Excel\ExcelServiceProvider::class,
         Barryvdh\DomPDF\ServiceProvider::class,
         Elibyy\TCPDF\ServiceProvider::class,
-        PriceOfferServiceProvider::class,
 
     ],
 

@@ -662,5 +662,6 @@ return   [
   'Add City' => 'Add City',  
   'City has been created successfully!' => 'City has been created successfully!',  
   'Search Countries' => 'Search Countries',  
-  'Search Cities' => 'Search Cities',
+  'Search Cities' => 'Search Cities',  
+  'SQU' => 'SQU',
 ];

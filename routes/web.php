@@ -13,12 +13,5 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-
-
-// for login
-Route::middleware(['language'])->group(function () {
-
-    Route::get('/', 'App\Http\Controllers\MainController@index');
-    Route::get('index', 'App\Http\Controllers\MainController@index')->name('index');
-});
-// });
+Route::get('/', 'App\Http\Controllers\MainController@index');
+Route::get('index', 'App\Http\Controllers\MainController@index')->name('index');
