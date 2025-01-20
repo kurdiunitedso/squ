@@ -8,9 +8,7 @@ return [
         'roles' => 'Roles',
         'permissions' => 'Permissions'
     ],
-    'patient' => [
-        'title' => 'Patient Module'
-    ],
+
     'settings' => [
         'title' => 'Settings',
         'countriescities' => 'Countries and Cities'

@@ -1,1 +1,0 @@
-[11-Dec-2024 09:00:20 America/Chicago] PHP Fatal error:  Composer detected issues in your platform: Your Composer dependencies require a PHP version ">= 8.2.0". You are running 8.1.28. in /home1/crmmoors/elite-tower.developon.co/vendor/composer/platform_check.php on line 28

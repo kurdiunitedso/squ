@@ -15,7 +15,7 @@
                 <div class="card-header border-0 pt-6">
                     <!--begin::Card title-->
                     <div class="card-title">
-                        Elite CRM Menu Manager
+                        {{ config('app.name') }} CRM Menu Manager
                     </div>
                     <!--begin::Card title-->
                     <!--begin::Card toolbar-->
