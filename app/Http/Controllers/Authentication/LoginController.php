@@ -23,7 +23,7 @@ class LoginController extends Controller
 
     public function signIn(Request $request)
     {
-        return view('authentication.signIn');
+        return view('CP.authentication.signIn');
     }
     public function authenticate(Request $request)
     {

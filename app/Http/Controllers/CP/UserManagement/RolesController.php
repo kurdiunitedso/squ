@@ -27,7 +27,7 @@ class RolesController extends Controller
 
         $roleCards = '';
         foreach ($roles as $role) {
-            $roleCards .= view('user-management.roles.card', ['role' => $role])->render();
+            $roleCards .= view('CP.user-management.roles.card', ['role' => $role])->render();
         }
         return response()->json(['role_cards' => $roleCards]);
     }

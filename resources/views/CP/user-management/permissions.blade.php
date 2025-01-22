@@ -1,4 +1,4 @@
-@extends('metronic.index')
+@extends('CP.metronic.index')
 
 @section('title', 'User Management - Permissions')
 @section('subpageTitle', 'User Management')
@@ -44,8 +44,8 @@
                             <span class="svg-icon svg-icon-3">
                                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
                                     xmlns="http://www.w3.org/2000/svg">
-                                    <rect opacity="0.3" x="2" y="2" width="20" height="20"
-                                        rx="5" fill="currentColor" />
+                                    <rect opacity="0.3" x="2" y="2" width="20" height="20" rx="5"
+                                        fill="currentColor" />
                                     <rect x="10.8891" y="17.8033" width="12" height="2" rx="1"
                                         transform="rotate(-90 10.8891 17.8033)" fill="currentColor" />
                                     <rect x="6.01041" y="10.9247" width="12" height="2" rx="1"
@@ -62,7 +62,8 @@
                 <!--begin::Card body-->
                 <div class="card-body pt-0">
                     <!--begin::Table-->
-                    <table class="table table-bordered align-middle table-row-dashed fs-6 gy-5 mb-0" id="kt_permissions_table">
+                    <table class="table table-bordered align-middle table-row-dashed fs-6 gy-5 mb-0"
+                        id="kt_permissions_table">
                         <!--begin::Table head-->
                         <thead>
                             <!--begin::Table row-->
@@ -106,8 +107,8 @@
                                 <span class="svg-icon svg-icon-1">
                                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
                                         xmlns="http://www.w3.org/2000/svg">
-                                        <rect opacity="0.5" x="6" y="17.3137" width="16" height="2"
-                                            rx="1" transform="rotate(-45 6 17.3137)" fill="currentColor" />
+                                        <rect opacity="0.5" x="6" y="17.3137" width="16" height="2" rx="1"
+                                            transform="rotate(-45 6 17.3137)" fill="currentColor" />
                                         <rect x="7.41422" y="6" width="16" height="2" rx="1"
                                             transform="rotate(45 7.41422 6)" fill="currentColor" />
                                     </svg>
@@ -178,11 +179,10 @@
                                 <span class="svg-icon svg-icon-1">
                                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
                                         xmlns="http://www.w3.org/2000/svg">
-                                        <rect opacity="0.5" x="6" y="17.3137" width="16"
-                                            height="2" rx="1" transform="rotate(-45 6 17.3137)"
-                                            fill="currentColor" />
-                                        <rect x="7.41422" y="6" width="16" height="2"
-                                            rx="1" transform="rotate(45 7.41422 6)" fill="currentColor" />
+                                        <rect opacity="0.5" x="6" y="17.3137" width="16" height="2"
+                                            rx="1" transform="rotate(-45 6 17.3137)" fill="currentColor" />
+                                        <rect x="7.41422" y="6" width="16" height="2" rx="1"
+                                            transform="rotate(45 7.41422 6)" fill="currentColor" />
                                     </svg>
                                 </span>
                                 <!--end::Svg Icon-->
@@ -201,12 +201,12 @@
                                 <span class="svg-icon svg-icon-2tx svg-icon-warning me-4">
                                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
                                         xmlns="http://www.w3.org/2000/svg">
-                                        <rect opacity="0.3" x="2" y="2" width="20"
-                                            height="20" rx="10" fill="currentColor" />
-                                        <rect x="11" y="14" width="7" height="2"
-                                            rx="1" transform="rotate(-90 11 14)" fill="currentColor" />
-                                        <rect x="11" y="17" width="2" height="2"
-                                            rx="1" transform="rotate(-90 11 17)" fill="currentColor" />
+                                        <rect opacity="0.3" x="2" y="2" width="20" height="20" rx="10"
+                                            fill="currentColor" />
+                                        <rect x="11" y="14" width="7" height="2" rx="1"
+                                            transform="rotate(-90 11 14)" fill="currentColor" />
+                                        <rect x="11" y="17" width="2" height="2" rx="1"
+                                            transform="rotate(-90 11 17)" fill="currentColor" />
                                     </svg>
                                 </span>
                                 <!--end::Svg Icon-->
@@ -463,7 +463,7 @@
             }).then(function(result) {
                 if (result.value) {
                     form.reset();
-                    modal.hide(); // Hide modal				
+                    modal.hide(); // Hide modal
                 }
             });
         });
@@ -486,8 +486,8 @@
                 }
             }).then(function(result) {
                 if (result.value) {
-                    form.reset(); // Reset form	
-                    modal.hide(); // Hide modal				
+                    form.reset(); // Reset form
+                    modal.hide(); // Hide modal
                 } else if (result.dismiss === 'cancel') {
                     Swal.fire({
                         text: "Your form has not been cancelled!.",
@@ -515,7 +515,7 @@
                     if (status == 'Valid') {
                         // Show loading indication
                         submitButton.setAttribute('data-kt-indicator', 'on');
-                        // Disable button to avoid multiple click 
+                        // Disable button to avoid multiple click
                         submitButton.disabled = true;
                         let data = $(form).serialize()
                         $.ajax({
@@ -525,7 +525,7 @@
                             success: function(result) {
                                 submitButton.removeAttribute('data-kt-indicator');
                                 datatable.ajax.reload(null, false);
-                                // Show popup confirmation 
+                                // Show popup confirmation
                                 Swal.fire({
                                     text: "Permission successfully added!",
                                     icon: "success",

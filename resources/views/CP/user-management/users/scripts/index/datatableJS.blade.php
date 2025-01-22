@@ -9,9 +9,36 @@
             searchable: false
         },
         {
-            className: 'd-flex align-items-center',
-            data: 'fullname',
-            name: 'users.name',
+            data: function(row, type, set) {
+                if (type === 'display') {
+                    if (row.name && row.name['en']) {
+                        return row.name['en'];
+                    } else {
+                        return 'NA'; // Placeholder text if the value is missing
+                    }
+                }
+                return '';
+            },
+            name: `name->${'en'}`, // Use template literals for dynamic values
+            // name: `name->${'en'}`, // Use template literals for dynamic values
+        },
+        {
+            data: function(row, type, set) {
+                if (type === 'display') {
+                    if (row.name && row.name['ar']) {
+                        return row.name['ar'];
+                    } else {
+                        return 'NA'; // Placeholder text if the value is missing
+                    }
+                }
+                return '';
+            },
+            name: `name->${'ar'}`, // Use template literals for dynamic values
+            // name: `name->${'en'}`, // Use template literals for dynamic values
+        },
+        {
+            data: 'email',
+            name: 'email',
         },
         {
             data: 'mobile',
@@ -105,7 +132,7 @@
         }
     ];
     var datatable = createDataTable('#kt_table_items_model', columnDefs,
-        "{{ route('user-management.users.index') }}", [
+        "{{ route($_model::ui['route'] . '.index') }}", [
             [0, "ASC"]
         ]);
     datatable.on('draw', function() {
@@ -154,7 +181,7 @@
             }
         });
     });
-    const filterSearch = document.querySelector('[data-kt-user-table-filter="search"]');
+    const filterSearch = document.querySelector('[data-kt-table-filter="search"]');
     filterSearch.onkeydown = debounce(keyPressCallback, 400);
 
     function keyPressCallback() {

@@ -101,6 +101,15 @@
         </div>
         <!--end::Modal dialog-->
     </div>
+    <!--begin::User modal-->
+    <div class="modal fade" id="kt_modal_general_m" tabindex="-1" aria-hidden="true">
+        <!--begin::Modal dialog-->
+        <div class="modal-dialog modal-dialog-centered mw-650px">
+
+        </div>
+        <!--end::Modal dialog-->
+    </div>
+    <!--end::User modal-->
     <!-- Status Change Modal -->
     <div class="modal fade" id="kt_modal_general_sm" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-sm">

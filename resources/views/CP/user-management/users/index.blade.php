@@ -29,46 +29,53 @@
                                 </svg>
                             </span>
                             <!--end::Svg Icon-->
-                            <input type="text" data-col-index="name_code" data-kt-user-table-filter="search"
-                                class="form-control form-control-solid w-250px ps-14" placeholder="Search user" />
+                            <input type="text" data-col-index="search" data-kt-table-filter="search"
+                                class="form-control datatable-input form-control-solid w-250px ps-14"
+                                placeholder="{{ t('Search ' . $_model::ui['s_ucf']) }}" />
                         </div>
                         <!--end::Search-->
                     </div>
-                    <!--begin::Card title-->
-                    <!--begin::Card toolbar-->
                     <div class="card-toolbar">
+                        <!--begin::Toolbar-->
+                        <div class="d-flex justify-content-end" data-kt-departments-table-toolbar="base">
+                            <!--begin::Filter-->
+                            <!--begin::captins 1-->
+                            <!--end::captins 1-->
+                            @include($_model::ui['view'] . '_filter')
 
-                        @include('CP.user-management.users._filter')
-
-                        <a target="_blank" id="exportBtn" href="#"
-                            data-export-url="{{ route('user-management.users.export') }}" class="btn btn-primary me-3">
-                            <i class="ki-duotone ki-exit-down fs-2"><span class="path1"></span><span
-                                    class="path2"></span></i> {{ t('Export') }}
-                        </a>
-                        <!--begin::Add user-->
-                        <button type="button" class="btn btn-primary" id="AddUserModal">
-                            <!--begin::Svg Icon | path: icons/duotune/arrows/arr075.svg-->
-                            <span class="indicator-label">
-                                <span class="svg-icon svg-icon-2">
-                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
-                                        xmlns="http://www.w3.org/2000/svg">
-                                        <rect opacity="0.5" x="11.364" y="20.364" width="16" height="2"
-                                            rx="1" transform="rotate(-90 11.364 20.364)" fill="currentColor" />
-                                        <rect x="4.36396" y="11.364" width="16" height="2" rx="1"
-                                            fill="currentColor" />
-                                    </svg>
+                            <a target="_blank" id="exportBtn" href="#"
+                                data-export-url="{{ route($_model::ui['route'] . '.export') }}"
+                                class="btn btn-primary me-3">
+                                <i class="ki-duotone ki-exit-down fs-2"><span class="path1"></span><span
+                                        class="path2"></span></i> {{ __('Export') }}
+                            </a>
+                            <!--end::Filter-->
+                            <!--begin::Add captins-->
+                            <a href="{{ route($_model::ui['route'] . '.create') }}" class="btn btn-primary"
+                                id="add_{{ $_model::ui['s_lcf'] }}_modal">
+                                <span class="indicator-label">
+                                    <span class="svg-icon svg-icon-2">
+                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                            xmlns="http://www.w3.org/2000/svg">
+                                            <rect opacity="0.5" x="11.364" y="20.364" width="16" height="2"
+                                                rx="1" transform="rotate(-90 11.364 20.364)" fill="currentColor" />
+                                            <rect x="4.36396" y="11.364" width="16" height="2" rx="1"
+                                                fill="currentColor" />
+                                        </svg>
+                                    </span>
+                                    {{ t('Add ' . $_model::ui['s_ucf']) }}
                                 </span>
-                                <!--end::Svg Icon-->{{ t('Add User') }}
-                            </span>
-                            <span class="indicator-progress">
-                                {{ t('Please wait...') }} <span
-                                    class="spinner-border spinner-border-sm align-middle ms-2"></span>
-                            </span>
-                        </button>
-                        <!--end::Add user-->
+                                <span class="indicator-progress">
+                                    {{ t('Please wait...') }} <span
+                                        class="spinner-border spinner-border-sm align-middle ms-2"></span>
+                                </span>
+                            </a>
+                            <!--end::Add captins-->
+                        </div>
+                        <!--end::Toolbar-->
 
                         <!--begin::Modal - Add task-->
-                        <div class="modal fade" id="kt_modal_add_user" tabindex="-1" aria-hidden="true">
+                        <div class="modal fade" id="kt_modal_add_captins" tabindex="-1" aria-hidden="true">
                             <!--begin::Modal dialog-->
                             <div class="modal-dialog modal-dialog-centered mw-650px">
 
@@ -77,19 +84,20 @@
                         </div>
                         <!--end::Modal - Add task-->
                     </div>
-                    <!--end::Card toolbar-->
                 </div>
                 <!--end::Card header-->
                 <!--begin::Card body-->
                 <div class="card-body py-4">
                     <!--begin::Table-->
-                    <table class="table table-bordered align-middle table-row-dashed fs-6 gy-5" id="kt_table_users">
+                    <table class="table table-bordered align-middle table-row-dashed fs-6 gy-5" id="kt_table_items_model">
                         <!--begin::Table head-->
                         <thead>
                             <!--begin::Table row-->
                             <tr class="text-start text-muted fw-bold fs-7 text-uppercase gs-0">
                                 <th></th>
-                                <th class="min-w-125px">{{ t('User') }}</th>
+                                <th class="min-w-125px">{{ t('Name EN') }}</th>
+                                <th class="min-w-125px">{{ t('Name AR') }}</th>
+                                <th class="min-w-125px">{{ t('email') }}</th>
                                 <th class="min-w-125px">{{ t('Mobile') }}</th>
 
                                 <th class="min-w-125px mw-350px">{{ t('Role and Permissions') }}</th>
@@ -115,5 +123,6 @@
 
 
 @push('scripts')
-    {{-- @include('') --}}
+    @include('CP.user-management.users.scripts.index.datatableJS')
+    @include('CP.user-management.users.scripts.index.btnsJS')
 @endpush

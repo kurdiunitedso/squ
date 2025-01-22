@@ -48,9 +48,22 @@ Route::group(['prefix' => 'dashboard'], function () {
 
 
 
-        Route::prefix('roles')->name('roles.')
-            ->middleware(['permission:user_management_access'])
-            ->group(function () {
+        Route::prefix('users')->name('users.')->middleware(['permission:user_management_access'])->controller(UsersController::class)->group(function () {
+            Route::get('/export', 'export')->name('export');
+            Route::match(['get', 'post'], '/', 'index')->name('index');
+            Route::get('/create', 'create')->name('create');
+            Route::get('/{_model}/edit', 'edit')->name('edit');
+            Route::delete('{_model}/delete', 'delete')->name('delete');
+            Route::post('/addedit', 'addedit')->name('addedit');
+        });
+        Route::prefix('user-management')->name('user-management.')->group(function () {
+            Route::prefix('permissions')->name('permissions.')->middleware(['permission:user_management_access'])->group(function () {
+                Route::match(['get', 'post'], '/', [PermissionController::class, 'index'])->name('index');
+                Route::post('/add-permission', [PermissionController::class, 'addPermission'])->name('add');
+                Route::post('/delete-permission/{permission}', [PermissionController::class, 'deletePermission'])->name('delete');
+            });
+
+            Route::prefix('roles')->name('roles.')->middleware(['permission:user_management_access'])->group(function () {
                 Route::get('/', [RolesController::class, 'index'])->name('index');
                 Route::get('/getCards', [RolesController::class, 'getCards'])->name('getCards');
                 Route::get('/create', [RolesController::class, 'create'])->name('create');
@@ -59,52 +72,6 @@ Route::group(['prefix' => 'dashboard'], function () {
                 Route::post('{role}/update', [RolesController::class, 'update'])->name('update');
                 Route::delete('{role}/delete', [RolesController::class, 'delete'])->name('delete');
             });
-
-        Route::prefix('users')->name('users.')
-            ->middleware(['permission:user_management_access'])
-            ->group(function () {
-                Route::match(['get', 'post'], '/', [UsersController::class, 'index'])->name('index');
-                Route::get('/create', [UsersController::class, 'create'])->name('create');
-                Route::post('/store', [UsersController::class, 'store'])->name('store');
-                Route::get('/{user}/edit', [UsersController::class, 'edit'])->name('edit');
-                Route::post('{user}/update', [UsersController::class, 'update'])->name('update');
-                Route::delete('{user}/delete', [UsersController::class, 'delete'])->name('delete');
-
-                Route::get('/export', [UsersController::class, 'export'])->name('export');
-            });
-        Route::prefix('user-management')->name('user-management.')->group(function () {
-            Route::prefix('permissions')->name('permissions.')
-                ->middleware(['permission:user_management_access'])
-                ->group(function () {
-                    Route::match(['get', 'post'], '/', [PermissionController::class, 'index'])->name('index');
-                    Route::post('/add-permission', [PermissionController::class, 'addPermission'])->name('add');
-                    Route::post('/delete-permission/{permission}', [PermissionController::class, 'deletePermission'])->name('delete');
-                });
-
-            Route::prefix('roles')->name('roles.')
-                ->middleware(['permission:user_management_access'])
-                ->group(function () {
-                    Route::get('/', [RolesController::class, 'index'])->name('index');
-                    Route::get('/getCards', [RolesController::class, 'getCards'])->name('getCards');
-                    Route::get('/create', [RolesController::class, 'create'])->name('create');
-                    Route::post('/store', [RolesController::class, 'store'])->name('store');
-                    Route::get('/{role}/edit', [RolesController::class, 'edit'])->name('edit');
-                    Route::post('{role}/update', [RolesController::class, 'update'])->name('update');
-                    Route::delete('{role}/delete', [RolesController::class, 'delete'])->name('delete');
-                });
-
-            Route::prefix('users')->name('users.')
-                ->middleware(['permission:user_management_access'])
-                ->group(function () {
-                    Route::match(['get', 'post'], '/', [UsersController::class, 'index'])->name('index');
-                    Route::get('/create', [UsersController::class, 'create'])->name('create');
-                    Route::post('/store', [UsersController::class, 'store'])->name('store');
-                    Route::get('/{user}/edit', [UsersController::class, 'edit'])->name('edit');
-                    Route::post('{user}/update', [UsersController::class, 'update'])->name('update');
-                    Route::delete('{user}/delete', [UsersController::class, 'delete'])->name('delete');
-
-                    Route::get('/export', [UsersController::class, 'export'])->name('export');
-                });
         });
 
 

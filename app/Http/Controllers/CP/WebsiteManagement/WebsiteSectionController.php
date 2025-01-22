@@ -80,6 +80,7 @@ class WebsiteSectionController extends Controller
 
     public function create(Request $request)
     {
+        // dd($this->_model::ui['view'] . '.addedit');
         $data = $this->getCommonData('create');
         $createView = view(
             $this->_model::ui['view'] . '.addedit',

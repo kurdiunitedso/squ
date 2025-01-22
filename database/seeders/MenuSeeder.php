@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Models\Menu;
 
 use App\Models\Slider;
+use App\Models\User;
 use App\Models\WebsiteSection;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
@@ -80,7 +81,7 @@ class MenuSeeder extends Seeder
                         "name" => "المستخدمين",
                         "name_en" => "Users",
                         "name_he" => "משתמשים",
-                        "route" => "user-management.users.index",
+                        "route" => User::ui['route'] . ".index|" . User::ui['route'] . ".create",
                         "icon_svg" => NULL,
                         "order" => 1,
                         "permission_name" => "user_management_access",

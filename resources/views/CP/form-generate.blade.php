@@ -1,4 +1,4 @@
-@extends('metronic.index')
+@extends('CP.metronic.index')
 
 @section('title', t('leads'))
 @section('subpageTitle', t('leads'))
@@ -633,8 +633,8 @@
                             <select class="form-control" name="${field.name}" ${required} disabled>
                                 <option value="">Select an option / اختر خيارًا</option>
                                 ${selectOptions.en.map((opt, index) => `
-                                                                <option value="${opt.value}">${opt.label} / ${selectOptions.ar[index]?.label || ''}</option>
-                                                            `).join('')}
+                                                                    <option value="${opt.value}">${opt.label} / ${selectOptions.ar[index]?.label || ''}</option>
+                                                                `).join('')}
                             </select>
                         </div>
                     `;
@@ -649,11 +649,11 @@
                         <div class="mb-3">
                             <label class="form-label">${labelDisplay} ${required ? '<span class="text-danger">*</span>' : ''}</label>
                             ${radioOptions.en.map((opt, index) => `
-                                                            <div class="form-check">
-                                                                <input class="form-check-input" type="radio" name="${field.name}" value="${opt.value}" ${required} disabled>
-                                                                <label class="form-check-label">${opt.label} / ${radioOptions.ar[index]?.label || ''}</label>
-                                                            </div>
-                                                        `).join('')}
+                                                                <div class="form-check">
+                                                                    <input class="form-check-input" type="radio" name="${field.name}" value="${opt.value}" ${required} disabled>
+                                                                    <label class="form-check-label">${opt.label} / ${radioOptions.ar[index]?.label || ''}</label>
+                                                                </div>
+                                                            `).join('')}
                         </div>
                     `;
                                 break;
@@ -667,11 +667,11 @@
                         <div class="mb-3">
                             <label class="form-label">${labelDisplay} ${required ? '<span class="text-danger">*</span>' : ''}</label>
                             ${checkboxOptions.en.map((opt, index) => `
-                                                            <div class="form-check">
-                                                                <input class="form-check-input" type="checkbox" name="${field.name}[]" value="${opt.value}" disabled>
-                                                                <label class="form-check-label">${opt.label} / ${checkboxOptions.ar[index]?.label || ''}</label>
-                                                            </div>
-                                                        `).join('')}
+                                                                <div class="form-check">
+                                                                    <input class="form-check-input" type="checkbox" name="${field.name}[]" value="${opt.value}" disabled>
+                                                                    <label class="form-check-label">${opt.label} / ${checkboxOptions.ar[index]?.label || ''}</label>
+                                                                </div>
+                                                            `).join('')}
                         </div>
                     `;
                                 break;

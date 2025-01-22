@@ -205,15 +205,19 @@
                 this.setSubmitButtonLoading(false);
             }
         }
-
         prepareFormData() {
             const formData = new FormData();
 
-            const attachmentFile = $(this.form).find('input[type="file"]');
-            if (attachmentFile.length > 0 && attachmentFile[0].files.length > 0) {
-                formData.append('attachment_file', attachmentFile[0].files[0]);
-            }
+            // Handle file inputs, including avatar
+            const fileInputs = $(this.form).find('input[type="file"]');
+            fileInputs.each(function() {
+                const input = $(this)[0];
+                if (input.files.length > 0) {
+                    formData.append(input.name, input.files[0]);
+                }
+            });
 
+            // Handle all other form fields
             $.each($(this.form).serializeArray(), function(i, field) {
                 formData.append(field.name, field.value);
             });

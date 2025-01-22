@@ -4,6 +4,7 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 
+use App\Traits\HasActionButtons;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -16,7 +17,7 @@ use Spatie\Translatable\HasTranslations;
 
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable, HasRoles, SoftDeletes, Impersonate, HasTranslations;
+    use HasApiTokens, HasFactory, Notifiable, HasRoles, SoftDeletes, Impersonate, HasTranslations, HasActionButtons;
 
     public $translatable = ['name'];
     /**
@@ -33,6 +34,18 @@ class User extends Authenticatable
         'password',
         'active',
         'last_login_at',
+    ];
+    public const ui = [
+        'table' => 'users',
+        'route' => 'users',
+        's_ucf' => 'User',
+        'p_ucf' => 'Users',
+        's_lcf' => 'usre',
+        'p_lcf' => 'users',
+        'view' => 'CP.user-management.users.',
+        '_id' => 'user_id',
+        'controller_name' => 'UserController',
+        'image_path' => 'users'
     ];
 
     /**
@@ -71,5 +84,21 @@ class User extends Authenticatable
     public function scopeActive(Builder $query)
     {
         $query->where('active', 1);
+    }
+
+    protected function getAvatarAttribute($value)
+    {
+        return (isset($value) && !empty($value)) ? asset($value) : asset('media/avatars/blank.png');
+    }
+
+    /**
+     * Override getActionButtons to customize buttons for Lead model
+     */
+    protected function getActionButtons(): array
+    {
+        return [
+            $this->getEditButton(),
+            $this->getRemoveButton(),
+        ];
     }
 }
