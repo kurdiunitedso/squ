@@ -18,6 +18,7 @@ use Illuminate\Support\Facades\Route;
 
 
 Route::group(['prefix' => 'dashboard'], function () {
+
     Route::get('/login', [LoginController::class, 'signIn'])->name('login');
     Route::post('/authenticate', [LoginController::class, 'authenticate'])->name('authenticate');
 
@@ -34,6 +35,9 @@ Route::group(['prefix' => 'dashboard'], function () {
 
 
     Route::middleware(['auth'])->group(function () {
+        Route::get('/form-generate', function () {
+            return view('CP.form-generate');
+        }); //->name('login');
         Route::get('/setDashboardLanguage/{language}', [LanguageSwitcherController::class, 'setDashboardLanguage'])->name('setDashboardLanguage');
         Route::get('/logout', [LoginController::class, 'logout'])->name('logout');
         Route::get('/', [DashboardController::class, 'index'])->name('home');

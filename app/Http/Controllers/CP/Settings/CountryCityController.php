@@ -16,7 +16,7 @@ class CountryCityController extends Controller
 {
     public function index(Request $request)
     {
-        return view('constants.countrycity');
+        return view('CP.country_city.countrycity');
     }
 
     public function countries(Request $request)
@@ -59,7 +59,7 @@ class CountryCityController extends Controller
     public function country_create(Request $request)
     {
         $title = t('Add Country');
-        $createView = view('constants.addedit_country_modal', compact('title'))->render();
+        $createView = view('CP.country_city.addedit_country_modal', compact('title'))->render();
         return response()->json(['createView' => $createView]);
     }
 
@@ -86,7 +86,7 @@ class CountryCityController extends Controller
     public function country_edit(Request $request, Country $country)
     {
         $title = t('Edit Country');
-        $createView = view('constants.addedit_country_modal', ['country' => $country, 'title' => $title])->render();
+        $createView = view('CP.country_city.addedit_country_modal', ['country' => $country, 'title' => $title])->render();
         return response()->json(['createView' => $createView]);
     }
 
@@ -167,7 +167,7 @@ class CountryCityController extends Controller
     {
         $countries = Country::all();
         $title = t('Add City');
-        $createView = view('constants.addedit_city_modal', ['countries' => $countries, 'title' => $title])->render();
+        $createView = view('CP.country_city.addedit_city_modal', ['countries' => $countries, 'title' => $title])->render();
         return response()->json(['createView' => $createView]);
     }
 
@@ -189,7 +189,7 @@ class CountryCityController extends Controller
     {
         $countries = Country::all();
         $title = t('Edit City');
-        $createView = view('constants.addedit_city_modal', ['city' => $city, 'countries' => $countries, 'title' => $title])->render();
+        $createView = view('CP.country_city.addedit_city_modal', ['city' => $city, 'countries' => $countries, 'title' => $title])->render();
         return response()->json(['createView' => $createView]);
     }
 

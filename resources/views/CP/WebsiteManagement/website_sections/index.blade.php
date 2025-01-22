@@ -1,4 +1,4 @@
-@extends('metronic.index')
+@extends('CP.metronic.index')
 
 @section('title', $_model::ui['p_ucf'])
 @section('subpageTitle', $_model::ui['p_ucf'])

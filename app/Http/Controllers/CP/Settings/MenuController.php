@@ -14,10 +14,10 @@ class MenuController extends Controller
         if ($request->isMethod("GET")) {
 
             $menus = Menu::with('children')->whereNull('parent_id')->orderBy('order')->get();
-            return view('settings.menu.index', compact('menus'));
+            return view('CP.settings.menu.index', compact('menus'));
         } else if ($request->isMethod('POST')) {
             $menus = Menu::with('children')->whereNull('parent_id')->orderBy('order')->get();
-            $view = view('settings.menu.menulist', ['menus' => $menus])->render();
+            $view = view('CP.settings.menu.menulist', ['menus' => $menus])->render();
             return response()->json(['message' => 'Menu list updated !', 'listView' => $view]);
         }
     }
@@ -29,7 +29,7 @@ class MenuController extends Controller
         $earnedMenu = [];
         if ($menu->parent)
             $earnedMenu = [$menu->parent->id];
-        $createView = view('settings.menu.addedit_modal', [
+        $createView = view('CP.settings.menu.addedit_modal', [
             'menu' => $menu,
             'menus' => $menus,
             'earnedMenu' => $earnedMenu

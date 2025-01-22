@@ -36,7 +36,7 @@ class UsersController extends Controller
         if ($request->isMethod('GET')) {
             $roles = Role::where('name', '!=', 'super-admin')->get();
             $ALHAYAT_BRANCHES = Constant::where('module', Modules::Patient)->where('field', DropDownFields::ALHAYAT_BRANCHES)->get();
-            return view('user-management.users.index', compact('roles', 'ALHAYAT_BRANCHES'));
+            return view('CP.user-management.users.index', compact('roles', 'ALHAYAT_BRANCHES'));
         }
         if ($request->isMethod('POST')) {
             $users = User::with('branch')

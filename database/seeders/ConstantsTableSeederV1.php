@@ -17,62 +17,6 @@ class ConstantsTableSeederV1 extends Seeder
      */
     protected array $constants = [
         [
-            'module' => Modules::appartment_module,
-            'items' => [
-                [
-                    'field' => DropDownFields::apartment_type,
-                    'values' => DropDownFields::apartment_types_list
-                ],
-                [
-                    'field' => DropDownFields::apartment_size,
-                    'values' => DropDownFields::apartment_sizes_list
-                ],
-                [
-                    'field' => DropDownFields::apartment_orientation,
-                    'values' => DropDownFields::apartment_orientations_list
-                ],
-                [
-                    'field' => DropDownFields::apartment_parking_type,
-                    'values' => DropDownFields::apartment_parking_types_list
-                ],
-                [
-                    'field' => DropDownFields::apartment_status,
-                    'values' => DropDownFields::apartment_status_list
-                ]
-            ]
-        ],
-        [
-            'module' => Modules::lead_module,
-            'items' => [
-                [
-                    'field' => DropDownFields::lead_form_type,
-                    'values' => DropDownFields::lead_form_types_list
-                ],
-                [
-                    'field' => DropDownFields::lead_status,
-                    'values' => DropDownFields::lead_status_list
-                ],
-                // [
-                //     'field' => DropDownFields::lead_actions,
-                //     'values' => DropDownFields::lead_actions_list
-                // ],
-                [
-                    'field' => DropDownFields::lead_source,
-                    'values' => DropDownFields::lead_source_list
-                ],
-
-            ]
-        ],
-        [
-            'module' => Modules::price_offer_module,
-            'items' => [
-                [
-                    'field' => DropDownFields::price_offer_status,
-                    'values' => DropDownFields::price_offer_status_list
-                ]
-            ]
-        ],
-        [
             'module' => Modules::attachment_module,
             'items' => [
                 [
@@ -104,17 +48,7 @@ class ConstantsTableSeederV1 extends Seeder
 
             ]
         ],
-        [
-            'module' => Modules::appartment_module,
-            'items' => [
 
-
-                [
-                    'field' => DropDownFields::apartment_status,
-                    'values' => DropDownFields::apartment_status_list
-                ]
-            ]
-        ],
     ];
 
     public function run(): void
