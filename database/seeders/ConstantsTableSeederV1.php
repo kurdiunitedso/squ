@@ -16,27 +16,7 @@ class ConstantsTableSeederV1 extends Seeder
      * Define the constants configuration
      */
     protected array $constants = [
-        [
-            'module' => Modules::attachment_module,
-            'items' => [
-                [
-                    'field' => DropDownFields::apartment_attachment_type,
-                    'values' => DropDownFields::apartment_attachment_type_list
-                ],
-                [
-                    'field' => DropDownFields::building_attachment_type,
-                    'values' => DropDownFields::building_attachment_type_list
-                ],
-                [
-                    'field' => DropDownFields::price_offer_attachment_type,
-                    'values' => DropDownFields::price_offer_attachment_type_list
-                ],
-                [
-                    'field' => DropDownFields::lead_attachment_type,
-                    'values' => DropDownFields::lead_attachment_type_list
-                ]
-            ]
-        ],
+
         [
             'module' => Modules::website_sections_module,
             'items' => [

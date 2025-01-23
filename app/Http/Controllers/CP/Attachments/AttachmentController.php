@@ -7,7 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\CP\ApartmentRequest;
 use App\Models\Apartment;
 use App\Models\Attachment;
-use App\Services\CP\Filters\ApartmentFilterService;
+use App\Services\CP\Filters\AttachmentFilterService;
 use App\Traits\HasCommonData;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -25,7 +25,7 @@ class AttachmentController extends Controller
     private $_model;
 
 
-    public function __construct(Attachment $_model, ApartmentFilterService $filterService)
+    public function __construct(Attachment $_model, AttachmentFilterService $filterService)
     {
         $this->_model = $_model;
         $this->filterService = $filterService;

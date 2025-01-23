@@ -4,6 +4,7 @@ namespace App;
 
 use App\Models\Attachment;
 use App\Models\MenuWebSite;
+use App\Models\Program;
 use App\Models\Slider;
 use App\Models\WebsiteSection;
 use Exception;
@@ -43,6 +44,13 @@ class AppPermissionsHelper
                 "add" => Attachment::ui['s_lcf'] . '_add',
                 "edit" => Attachment::ui['s_lcf'] . '_edit',
                 "delete" => Attachment::ui['s_lcf'] . '_delete',
+            ],
+
+            Program::ui['p_ucf'] => [
+                "access" => Program::ui['s_lcf'] . "_access",
+                "add" => Program::ui['s_lcf'] . '_add',
+                "edit" => Program::ui['s_lcf'] . '_edit',
+                "delete" => Program::ui['s_lcf'] . '_delete',
             ],
 
 

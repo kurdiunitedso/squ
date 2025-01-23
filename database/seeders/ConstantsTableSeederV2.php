@@ -15,13 +15,34 @@ class ConstantsTableSeederV2 extends Seeder
     /**
      * Define the constants configuration
      */
-    protected array $constants = [];
+    protected array $constants = [
+        [
+            'module' => Modules::attachment_module,
+            'items' => [
+
+                [
+                    'field' => DropDownFields::program_attachment_type,
+                    'values' => DropDownFields::program_attachment_type_list
+                ]
+            ]
+        ],
+    ];
 
     public function run(): void
     {
         $this->logStart();
 
         try {
+            // Add debug logging
+            Log::info('Program attachment type list:', [
+                'values' => DropDownFields::program_attachment_type_list
+            ]);
+
+            Log::info('Constants configuration:', [
+                'module' => $this->constants[0]['module'],
+                'field' => $this->constants[0]['items'][0]['field'],
+                'values' => $this->constants[0]['items'][0]['values']
+            ]);
             // Clear cache
             $this->clearCache();
 

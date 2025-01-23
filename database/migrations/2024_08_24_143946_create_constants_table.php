@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('constant_name');
             $table->string('module')->index();
             $table->string('field')->index();
+            $table->foreignId('parent_id')->nullable()->constrained('constants');
             $table->timestamps();
             $table->softDeletes();
         });
