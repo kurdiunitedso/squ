@@ -115,7 +115,7 @@
         <div class="cursor-pointer symbol symbol-30px symbol-md-40px"
             data-kt-menu-trigger="{default: 'click', lg: 'hover'}" data-kt-menu-attach="parent"
             data-kt-menu-placement="bottom-end">
-            <img src="{{ auth()->user()->avatar != null ? asset('images/' . auth()->user()->avatar) : asset('media/avatars/blank.png') }}"
+            <img src="{{ auth()->user()->avatar != null ? auth()->user()->avatar : asset('media/avatars/blank.png') }}"
                 alt="user" />
         </div>
         @include('CP.metronic.partials.menus._user-account-menu')

@@ -7,7 +7,7 @@
             <!--begin::Avatar-->
             <div class="symbol symbol-50px me-5">
                 <img alt="Logo"
-                    src="{{ auth()->user()->avatar != null ? asset('images/' . auth()->user()->avatar) : asset('media/avatars/blank.png') }}" />
+                    src="{{ auth()->user()->avatar != null ? auth()->user()->avatar : asset('media/avatars/blank.png') }}" />
             </div>
             <!--end::Avatar-->
             <!--begin::Username-->

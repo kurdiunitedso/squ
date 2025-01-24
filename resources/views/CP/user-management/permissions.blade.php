@@ -318,6 +318,9 @@
                 {
                     data: 'created_at',
                     name: 'created_at',
+                    render: function(data, type, row) {
+                        return row.created_at?.display || 'NA';
+                    }
                 },
                 {
                     data: 'action',

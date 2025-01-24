@@ -1,15 +1,19 @@
+@php
+    use App\Models\ProgramPage;
+
+@endphp
 @extends('CP.metronic.index')
 
 
 @section('subpageTitle', $_model::ui['p_ucf'])
+@section('subpageTitleLink', route($_model::ui['route'] . '.index'))
 
-@section('title', t($_model::ui['s_ucf'] . '- Add new ' . $_model::ui['s_ucf']))
+@section('title', t($_model::ui['s_ucf'] . ($_model->exists ? ' Edit ' : '- Add new ') . $_model::ui['s_ucf']))
 @section('subpageTitle', $_model::ui['s_ucf'])
-@section('subpageName', 'Add new ' . $_model::ui['s_ucf'])
+@section('subpageName', ($_model->exists ? ' Edit ' : '- Add new ') . $_model::ui['s_ucf'])
 @push('styles')
     <link href="{{ asset('css/custom.css?v=1') }}" rel="stylesheet" type="text/css" />
 @endpush
-@section('content')
 @section('content')
     @include('CP.partials.notification')
 
@@ -28,6 +32,26 @@
 
                             </span>
                             {{ t($_model::ui['s_ucf']) }}
+                        </a>
+                    </li>
+                    <li class="nav-item mt-2">
+                        <a class="nav-link text-active-primary ms-0 me-6 px-2 py-5 " data-bs-toggle="tab"
+                            data-bs-target="#kt_tab_pane_{{ ProgramPage::ui['s_lcf'] }}"
+                            href="#kt_tab_pane_{{ ProgramPage::ui['s_lcf'] }}">
+                            <span class="svg-icon svg-icon-2 me-2">
+
+                            </span>
+                            {{ t(ProgramPage::ui['s_ucf']) }}
+                        </a>
+                    </li>
+
+                    <li class="nav-item mt-2">
+                        <a class="nav-link text-active-primary ms-0 me-6 px-2 py-5 " data-bs-toggle="tab"
+                            data-bs-target="#kt_tab_pane_application_setup" href="#kt_tab_pane_application_setup">
+                            <span class="svg-icon svg-icon-2 me-2">
+
+                            </span>
+                            {{ t('Application Setup') }}
                         </a>
                     </li>
 
@@ -87,9 +111,14 @@
         @endif
         <div class="tab-pane fade show active" id="kt_tab_pane_1" role="tabpanel">
             @include($_view_path . '.tabs.form')
+        </div>
 
+        <div class="tab-pane fade show" id="kt_tab_pane_{{ ProgramPage::ui['s_lcf'] }}" role="tabpanel">
+            @include($_model::ui['view'] . '.tabs.program-pages.index')
 
-
+        </div>
+        <div class="tab-pane fade show " id="kt_tab_pane_application_setup" role="tabpanel">
+            {{-- @include($_view_path . '.tabs.application_setup') --}}
         </div>
 
         <div class="tab-pane fade" id="kt_tab_pane_7" role="tabpanel">
@@ -124,7 +153,6 @@
 
 
 @push('scripts')
-    @include($_view_path . '.scripts.addeditJS')
     <script>
         // Initialize the form handler
         document.addEventListener('DOMContentLoaded', () => {
@@ -134,4 +162,5 @@
             );
         });
     </script>
+    @include($_view_path . '.scripts.addeditJS')
 @endpush

@@ -45,7 +45,10 @@ class Program extends Model implements Auditable
         'controller_name' => 'ProgramController',
         'image_path' => 'programs'
     ];
-
+    public function pages()
+    {
+        return $this->hasMany(ProgramPage::class)->orderBy('order');
+    }
 
     public function attachments()
     {

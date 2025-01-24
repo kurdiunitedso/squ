@@ -318,6 +318,8 @@
                                     dataTableId: dataTableId,
                                     onFormSuccessCallBack: onFormSuccessCallBack
                                 });
+                            } else {
+                                console.error('Error submitButtonName not found:', submitButtonName);
                             }
 
                             // Initialize modal-specific Flatpickr

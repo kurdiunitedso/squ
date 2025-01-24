@@ -14,8 +14,10 @@ use App\Models\WebsiteSection;
 
 use App\Http\Controllers\Authentication\LoginController;
 use App\Http\Controllers\CP\Programs\ProgramController;
+use App\Http\Controllers\CP\Programs\ProgramPageController;
 use App\Http\Controllers\CP\WebsiteManagement\WebsiteSectionController;
 use App\Models\Program;
+use App\Models\ProgramPage;
 use Illuminate\Support\Facades\Route;
 
 
@@ -151,6 +153,19 @@ Route::group(['prefix' => 'dashboard'], function () {
                 Route::get('/{_model}/edit', 'edit')->name('edit')->middleware('permission:' . Program::ui['s_lcf'] . '_edit');
                 Route::delete('{_model}/delete', 'delete')->name('delete')->middleware('permission:' . Program::ui['s_lcf'] . '_delete');
                 Route::post('/' . Program::ui['s_lcf'] . '/{Id?}', 'addedit')->name('addedit')->middleware('permission:' . Program::ui['s_lcf'] . '_add');
+
+
+
+                Route::prefix(ProgramPage::ui['route'] . '/{program}')
+                    ->name(ProgramPage::ui['route'] . '.')
+                    ->controller(ProgramPageController::class)
+                    ->group(function () {
+                        Route::match(['get', 'post'], '/', 'index')->name('index')->middleware('permission:' . ProgramPage::ui['s_lcf'] . '_access');
+                        Route::get('/create', 'create')->name('create')->middleware('permission:' . ProgramPage::ui['s_lcf'] . '_access');
+                        Route::get('/{_model}/edit', 'edit')->name('edit')->middleware('permission:' . ProgramPage::ui['s_lcf'] . '_access');
+                        Route::delete('{_model}/delete', 'delete')->name('delete')->middleware('permission:' . ProgramPage::ui['s_lcf'] . '_access');
+                        Route::post('/' . ProgramPage::ui['s_lcf'] . '/{Id?}', 'addedit')->name('addedit')->middleware('permission:' . ProgramPage::ui['s_lcf'] . '_access');
+                    });
             });
     });
 });

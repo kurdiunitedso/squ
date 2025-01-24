@@ -1,6 +1,3 @@
-@php
-    use App\Models\PriceOffer;
-@endphp
 <div class="card mb-5 mb-xl-10">
     <div class="card-header">
         <div class="card-title m-0">
