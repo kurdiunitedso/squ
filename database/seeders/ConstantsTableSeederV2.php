@@ -26,6 +26,31 @@ class ConstantsTableSeederV2 extends Seeder
                 ]
             ]
         ],
+        [
+            'module' => Modules::program_module,
+            'items' => [
+                [
+                    'field' => DropDownFields::program_eligibility_type,
+                    'values' => DropDownFields::program_eligibility_type_list
+                ],
+                [
+                    'field' => DropDownFields::program_target_applicants,
+                    'values' => DropDownFields::program_target_applicants_list
+                ],
+                [
+                    'field' => DropDownFields::program_category,
+                    'values' => DropDownFields::program_category_list
+                ],
+                [
+                    'field' => DropDownFields::program_facility,
+                    'values' => DropDownFields::program_facility_list
+                ],
+                [
+                    'field' => DropDownFields::program_attachment_type,
+                    'values' => DropDownFields::program_attachment_type_list
+                ]
+            ]
+        ]
     ];
 
     public function run(): void

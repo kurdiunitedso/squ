@@ -2,25 +2,16 @@
 
 namespace App\Http\Controllers\CP\Programs;
 
-use App\Enums\DropDownFields;
-use App\Enums\Modules;
 use App\Exports\LeadsExport;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\CP\Lead\LeadRequest;
 use App\Http\Requests\CP\Program\ProgramRequest;
-use App\Models\Apartment;
 use App\Models\Attachment;
-use App\Models\Constant;
-use App\Models\Lead;
 use App\Models\Program;
-use App\Services\CP\Apartment\CheckApartmentStatusReadyToSale;
 use App\Services\CP\Filters\ProgramFilterService;
 use App\Traits\HasCommonData;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\FacadesDB;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\FacadesLog;
 use Maatwebsite\Excel\Facades\Excel;
 use OwenIt\Auditing\Models\Audit;
 use Yajra\DataTables\Facades\DataTables;
@@ -46,10 +37,18 @@ class ProgramController extends Controller
     {
         return [
             'index' => [],
-            'create' => [],
-            'edit' => [],
-            'store' => [],
-            'update' => [],
+            'create' => [
+                'program_target_applicants_list',
+                'program_category_list',
+                'program_eligibility_type_list',
+                'program_facility_list'
+            ],
+            'edit' => [
+                'program_target_applicants_list',
+                'program_category_list',
+                'program_eligibility_type_list',
+                'program_facility_list'
+            ]
         ];
     }
     public function index(Request $request)
@@ -192,6 +191,26 @@ class ProgramController extends Controller
                 // Create new lead
                 $item = $this->_model->create($data);
             }
+            // Sync eligibilities if provided
+            if ($request->has('eligibility_ids')) {
+                $item->syncEligibilities($request->input('eligibility_ids'));
+            }
+            if ($request->has('facility_ids')) {
+                $item->syncFacilities($request->input('facility_ids'));
+            }
+            if ($request->has('important_dates')) {
+                $item->importantDates()->delete();
+                foreach ($request->input('important_dates') as $date) {
+                    // dd($date);
+                    $item->importantDates()->create([
+                        'title' => [
+                            'en' => $date['en'],
+                            'ar' => $date['ar'],
+                        ],
+                        'date' => $date['date']
+                    ]);
+                }
+            }
 
             DB::commit();
 
@@ -269,163 +288,6 @@ class ProgramController extends Controller
     }
 
     /**
-     * Generate a price offer for a lead
-     */
-    public function request_price_offer(Request $request, Program $_model)
-    {
-        Log::info('Starting price offer request process', [
-            'lead_id' => $_model->id,
-            'lead_name' => $_model->name
-        ]);
-
-        try {
-            DB::beginTransaction();
-            // Check if lead has an apartment
-            if (!$_model->apartment_id) {
-                Log::warning('No apartment assigned to lead', ['lead_id' => $_model->id]);
-                return $this->jsonResponse(false, t('Please choose an apartment first'), [], 400);
-            }
-
-            // Check if apartment is ready for sale
-            $result = $this->checkApartmentStatusReadyToSale->checkReadyForSale($_model->apartment);
-
-            if (!$result['status']) {
-                return jsonCRMResponse(false, $result['message'], $result['code']);
-            }
-
-            // Check existing price offer
-            if ($this->hasExistingPriceOffer($_model)) {
-                return $this->jsonResponse(false, 'A price offer already exists for this lead', [], 400);
-            }
-
-            // Get required statuses
-            $priceOfferStatus = $this->getPendingStatus();
-            $leadStatus = $this->getLeadPriceOfferStatus();
-
-            // Create price offer and update lead
-            $priceOffer = $this->createPriceOffer($_model, $priceOfferStatus);
-            $this->updateLeadStatus($_model, $leadStatus);
-
-            DB::commit();
-
-            return $this->jsonResponse(true, 'Price offer generated successfully', $priceOffer);
-        } catch (\Exception $e) {
-            DB::rollBack();
-            Log::error('Error generating price offer', [
-                'lead_id' => $_model->id,
-                'error' => $e->getMessage(),
-                'trace' => $e->getTraceAsString()
-            ]);
-
-            return $this->jsonResponse(false, 'An error occurred while generating the price offer', [], 500);
-        }
-    }
-
-    /**
-     * Check if lead already has a price offer
-     */
-    private function hasExistingPriceOffer(Lead $lead): bool
-    {
-        Log::info('Checking for existing price offer');
-
-        if ($lead->price_offer()->exists()) {
-            Log::warning('Price offer already exists', ['lead_id' => $lead->id]);
-            return true;
-        }
-
-        return false;
-    }
-
-    /**
-     * Get pending status for price offer
-     */
-    private function getPendingStatus(): Constant
-    {
-        $constantQuery = Constant::query()
-            ->where('module', Modules::price_offer_module)
-            ->where('field', DropDownFields::price_offer_status)
-            ->where('constant_name', DropDownFields::price_offer_status_list['pending']);
-
-        logQuery($constantQuery, 'Search for pending status constant');
-
-        $pendingStatus = $constantQuery->first();
-
-        if (!$pendingStatus) {
-            Log::error('Pending status not found in constants', [
-                'module' => Modules::price_offer_module,
-                'field' => DropDownFields::price_offer_status,
-                'searched_value' => DropDownFields::price_offer_status_list['pending']
-            ]);
-
-            throw new \Exception('System configuration error: Status ' .
-                DropDownFields::price_offer_status_list['pending'] . ' not found');
-        }
-
-        Log::info('Found pending status', [
-            'status_id' => $pendingStatus->id,
-            'status_name' => $pendingStatus->name
-        ]);
-
-        return $pendingStatus;
-    }
-
-    /**
-     * Get price offer request status for lead
-     */
-    private function getLeadPriceOfferStatus(): Constant
-    {
-        $constantQuery = Constant::query()
-            ->where('module', Modules::lead_module)
-            ->where('field', DropDownFields::lead_status)
-            ->where('constant_name', DropDownFields::lead_status_list['request_for_price_offer']);
-
-        logQuery($constantQuery, 'Search for lead price offer status constant');
-
-        $status = $constantQuery->first();
-
-        if (!$status) {
-            throw new \Exception('System configuration error: Lead status request_for_price_offer not found');
-        }
-
-        return $status;
-    }
-
-    /**
-     * Create new price offer
-     */
-    private function createPriceOffer(Lead $lead, Constant $status)
-    {
-        Log::info('Creating price offer');
-
-        $priceOffer = $lead->price_offer()->create([
-            'price' => $lead->apartment->price ?? 0,
-            'down_payment' => 0,
-            'status_id' => $status->id,
-            'apartment_id' => $lead->apartment_id,
-        ]);
-
-        Log::info('Price offer created successfully', [
-            'price_offer_id' => $priceOffer->id
-        ]);
-
-        return $priceOffer;
-    }
-
-    /**
-     * Update lead status
-     */
-    private function updateLeadStatus(Lead $lead, Constant $status): void
-    {
-        Log::info('Updating lead status', [
-            'lead_id' => $lead->id,
-            'old_status' => $lead->status_id,
-            'new_status' => $status->id
-        ]);
-
-        $lead->update(['status_id' => $status->id]);
-    }
-
-    /**
      * Generate JSON response
      */
     private function jsonResponse(bool $success, string $message, $data = [], int $status = 200)
@@ -436,117 +298,5 @@ class ProgramController extends Controller
             'data' => $data,
             'errors' => $success ? [] : ['general' => [t($message)]]
         ], $status);
-    }
-
-
-    public function get_status_form(Request $request, Program $_model)
-    {
-        try {
-            $data = $this->getCommonData('get_status_form');
-            $data['title'] = t('Change Status');
-            $data['_model'] = $_model;
-
-            $createView = view($data['_view_path'] . '.status_form', $data)->render();
-            return response()->json(['createView' => $createView]);
-        } catch (\Exception $e) {
-            Log::error('Error rendering change status view for insurance policy.', [
-                'error' => $e->getMessage(),
-                'policyOffer_id' => $_model->id,
-            ]);
-
-            return response()->json(['error' => t('An error occurred while rendering the change status view.')], 500);
-        }
-    }
-
-    public function update_status(Request $request, Program $_model)
-    {
-        try {
-            // Start logging - Initial request
-            Log::info('Starting price offer status update', [
-                'price_offer_id' => $_model->id,
-                'requested_status_id' => $request->status_id,
-                'current_datetime' => now()->toDateTimeString(),
-            ]);
-
-            // Get and log old status
-            $oldStatus = $_model->status;
-            Log::info('Current status details', [
-                'price_offer_id' => $_model->id,
-                'old_status_id' => $oldStatus->id,
-                'old_status_name' => $oldStatus->name,
-                'old_status_updated_at' => $_model->updated_at,
-            ]);
-
-            // Get and log new status
-            $newStatus = Constant::findOrFail($request->status_id);
-            Log::info('New status details', [
-                'price_offer_id' => $_model->id,
-                'new_status_id' => $newStatus->id,
-                'new_status_name' => $newStatus->name,
-                'requested_by' => auth()->id(),
-            ]);
-            if ($newStatus->constant_name == DropDownFields::price_offer_status_list['approved']) {
-                $lead = $_model->lead;
-                if (isset($lead)) {
-                    $client = Client::updateOrCreate([
-                        'lead_id' => $lead->id,
-                        // 'price_offer_id' => $_model->id,
-                    ], [
-                        'name' => $lead->name,
-                        'email' => $lead->email,
-                        'phone' => $lead->phone,
-                        'number_family_members' => $lead->number_family_members,
-                        'active' => true,
-                    ]);
-                    $_model->update(['client_id' => $client->id]);
-                }
-            }
-
-            // Perform update
-            $_model->update([
-                'status_id' => $newStatus->id,
-                'status_updated_at' => now(),
-            ]);
-
-            // Log successful update
-            Log::info('Price offer status updated successfully', [
-                'price_offer_id' => $_model->id,
-                'old_status' => [
-                    'id' => $oldStatus->id,
-                    'name' => $oldStatus->name,
-                ],
-                'new_status' => [
-                    'id' => $newStatus->id,
-                    'name' => $newStatus->name,
-                ],
-                'updated_at' => now()->toDateTimeString(),
-                'updated_by' => auth()->id(),
-            ]);
-
-            return response()->json([
-                'status' => true,
-                'message' => t('Status has been updated successfully!'),
-            ]);
-        } catch (\Exception $e) {
-            // Log error with comprehensive details
-            Log::error('Failed to update price offer status', [
-                'price_offer_id' => $_model->id,
-                'requested_status_id' => $request->status_id,
-                'current_status_id' => $_model->status_id,
-                'error' => [
-                    'message' => $e->getMessage(),
-                    'code' => $e->getCode(),
-                    'file' => $e->getFile(),
-                    'line' => $e->getLine(),
-                ],
-                'user_id' => auth()->id(),
-                'timestamp' => now()->toDateTimeString(),
-            ]);
-
-            return response()->json([
-                'status' => false,
-                'message' => t('An error occurred while updating the status.'),
-            ], 500);
-        }
     }
 }

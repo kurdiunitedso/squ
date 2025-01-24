@@ -13,11 +13,24 @@ use Spatie\Translatable\HasTranslations;
 class Program extends Model implements Auditable
 {
     use HasFactory, SoftDeletes, AuditingAuditable, HasActionButtons, HasTranslations;
-    public $translatable = ['name'];
+    public $translatable = ['name', 'description', 'how_to_apply'];
 
 
     protected $fillable = [
         'name',
+        'description',
+        'deadline',
+        'how_to_apply',
+        'target_applicant_id',
+        'category_id',
+        'fund',
+    ];
+
+    protected $casts = [
+        'name' => 'array',
+        'deadline' => 'datetime',
+        'fund' => 'decimal:2'
+
     ];
 
     public const ui = [
@@ -46,7 +59,38 @@ class Program extends Model implements Auditable
 
 
 
+    public function eligibilities()
+    {
+        return $this->belongsToMany(Constant::class, 'program_eligibility', 'program_id', 'eligibility_id');
+    }
 
+    public function facilities()
+    {
+        return $this->belongsToMany(Constant::class, 'program_facility', 'program_id', 'facility_id');
+    }
+
+    public function targetApplicant()
+    {
+        return $this->belongsTo(Constant::class, 'target_applicant_id');
+    }
+
+    public function category()
+    {
+        return $this->belongsTo(Constant::class, 'category_id');
+    }
+    public function importantDates()
+    {
+        return $this->hasMany(ProgramImportantDate::class);
+    }
+
+    public function syncEligibilities($eligibilityIds)
+    {
+        $this->eligibilities()->sync($eligibilityIds);
+    }
+    public function syncFacilities($facilityIds)
+    {
+        $this->facilities()->sync($facilityIds);
+    }
 
     /**
      * Override getActionButtons to customize buttons for Lead model

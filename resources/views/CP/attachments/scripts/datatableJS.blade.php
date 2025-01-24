@@ -100,8 +100,8 @@
             }
         });
     });
-    const filterSearch = document.querySelector('[data-kt-table-filter="search"]');
-    filterSearch.onkeydown = debounce(keyPressCallback, 400);
+    // const filterSearch = document.querySelector('[data-kt-table-filter="search"]');
+    // filterSearch.onkeydown = debounce(keyPressCallback, 400);
 
     function keyPressCallback() {
         datatable.draw();

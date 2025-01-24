@@ -19,24 +19,15 @@ trait HasCommonData
      */
     protected const DROPDOWN_TYPES = [
         'city_list' => 'city_list',
-        'building_list' => 'building_list',
-        'apartment_type_list' => 'apartment_type_list',
-        'apartment_status_list' => 'apartment_status_list',
-        'apartment_size_list' => 'apartment_size_list',
-        'orientation_list' => 'orientation_list',
-        'parking_type_list' => 'parking_type_list',
-        'lead_form_type_list' => 'lead_form_type_list',
-        'apartment_list' => 'apartment_list',
-        'lead_status_list' => 'lead_status_list',
-        'lead_source_list' => 'lead_source_list',
-        'price_offer_status_list' => 'price_offer_status_list',
+
         'attachment_type_list' => 'attachment_type_list',
-        'active_add_on_list' => 'active_add_on_list',
+
         'website_section_type_list' => 'website_section_type_list',
         'bank_list' => 'bank_list',
-        'sales_contract_type_list' => 'sales_contract_type_list',
-        'sales_payment_type_list' => 'sales_payment_type_list',
-        'sales_status_list' => 'sales_status_list',
+        'program_target_applicants_list' => 'program_target_applicants_list',
+        'program_category_list' => 'program_category_list',
+        'program_eligibility_type_list' => 'program_eligibility_type_list',
+        'program_facility_list' => 'program_facility_list',
         // Add other dropdown types here
     ];
 
@@ -161,6 +152,27 @@ trait HasCommonData
     {
         return GetConstantService::get_bank_list();
     }
+
+    protected function program_target_applicants_list()
+    {
+        return GetConstantService::get_program_target_applicants_list();
+    }
+
+    protected function program_category_list()
+    {
+        return GetConstantService::get_program_category_list();
+    }
+
+    protected function program_eligibility_type_list()
+    {
+        return GetConstantService::get_program_eligibility_type_list();
+    }
+
+    protected function program_facility_list()
+    {
+        return GetConstantService::get_program_facility_list();
+    }
+
     protected function attachment_type_list()
     {
         $model = request()->model;

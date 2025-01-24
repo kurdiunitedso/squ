@@ -29,7 +29,7 @@ class DropDownFields
         'cairo_amman_bank' => 'cairo_amman_bank',
     ];
     const program_attachment_type_list = [
-        'program_attachment1' => 'program_attachment1',
+        'program_photo' => 'program_photo',
     ];
 
     const bank_branches_list = [
@@ -46,6 +46,41 @@ class DropDownFields
             'main_branch' => 'main_branch',
             'nablus_branch' => 'nablus_branch',
         ],
+    ];
+
+    // App/Enums/DropDownFields.php
+
+    const program_eligibility_type = 'program_eligibility_type';
+    const program_target_applicants = 'program_target_applicants';
+    const program_category = 'program_category';
+    const program_facility = 'program_facility';
+
+    const program_eligibility_type_list = [
+        'student' => 'student',
+        'researcher' => 'researcher',
+        'faculty' => 'faculty',
+        'staff' => 'staff',
+        'external' => 'external'
+    ];
+
+    const program_target_applicants_list = [
+        'squ_only' => 'squ_only',
+        'all' => 'all'
+    ];
+
+    const program_category_list = [
+        'research' => 'research',
+        'innovation' => 'innovation',
+        'entrepreneurship' => 'entrepreneurship',
+        'training' => 'training'
+    ];
+
+    const program_facility_list = [
+        'lab_access' => 'lab_access',
+        'workspace' => 'workspace',
+        'equipment' => 'equipment',
+        'mentoring' => 'mentoring',
+        'funding' => 'funding'
     ];
 
     const website_section_type_list = [
