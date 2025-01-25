@@ -195,4 +195,37 @@ class ProgramPageController extends Controller
             return response()->json(['status' => false, 'message' => $e->getMessage()], 500);
         }
     }
+
+    public function formGenerator(Request $request, Program $program, ProgramPage $_model)
+    {
+        $data = $this->getCommonData('form-generator');
+        $data['program'] = $program;
+        $data['_model'] = $_model;
+
+        $formView = view($data['_view_path'] . 'modals.form-generator', $data)->render();
+        return response()->json(['createView' => $formView]);
+    }
+    public function updateStructure(Request $request, Program $program, ProgramPage $_model)
+    {
+        try {
+            DB::beginTransaction();
+
+            $_model->update([
+                'structure' => $request->input('structure')
+            ]);
+
+            DB::commit();
+
+            return response()->json([
+                'status' => true,
+                'message' => t('Form structure updated successfully')
+            ]);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return response()->json([
+                'status' => false,
+                'message' => $e->getMessage()
+            ], 422);
+        }
+    }
 }

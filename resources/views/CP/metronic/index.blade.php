@@ -76,7 +76,30 @@
             }
         </style>
     @endif
+    <style>
+        .form-field-card {
+            border: 1px solid #eee;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+            background: white;
+        }
 
+        .form-field-card:hover {
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .field-type-btn {
+            width: 100%;
+            margin-bottom: 10px;
+            text-align: left;
+        }
+
+        .drag-handle {
+            cursor: move;
+            color: #a1a5b7;
+        }
+    </style>
     <!--end::Global Stylesheets Bundle-->
 </head>
 <!--end::Head-->

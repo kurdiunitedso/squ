@@ -16,6 +16,7 @@ return new class extends Migration
             $table->foreignId('program_id')->constrained()->onDelete('cascade');
             $table->json('title');
             $table->integer('order')->default(0);
+            $table->json('structure')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

@@ -165,6 +165,10 @@ Route::group(['prefix' => 'dashboard'], function () {
                         Route::get('/{_model}/edit', 'edit')->name('edit')->middleware('permission:' . ProgramPage::ui['s_lcf'] . '_access');
                         Route::delete('{_model}/delete', 'delete')->name('delete')->middleware('permission:' . ProgramPage::ui['s_lcf'] . '_access');
                         Route::post('/' . ProgramPage::ui['s_lcf'] . '/{Id?}', 'addedit')->name('addedit')->middleware('permission:' . ProgramPage::ui['s_lcf'] . '_access');
+                        Route::get('/' . ProgramPage::ui['s_lcf'] . '/{_model}/form-generator', [ProgramPageController::class, 'formGenerator'])
+                            ->name('form-generator');
+                        Route::post('/' . ProgramPage::ui['s_lcf'] . '/{_model}/update-structure', [ProgramPageController::class, 'updateStructure'])
+                            ->name('update-structure');
                     });
             });
     });

@@ -1,8 +1,6 @@
 @php
     use App\Models\ProgramPage;
 @endphp
-
-
 {{-- add BTN --}}
 <script>
     $(document).on('click', "#add_{{ ProgramPage::ui['s_lcf'] }}_modal", function(e) {
@@ -97,3 +95,7 @@
         });
     });
 </script>
+
+
+
+@include('CP.programs.tabs.program-pages.scripts.form-generatorJS')
