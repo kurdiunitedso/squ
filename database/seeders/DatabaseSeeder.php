@@ -20,6 +20,7 @@ class DatabaseSeeder extends Seeder
             MenuSeeder::class,
             ConstantsTableSeederV2::class,
             WebsiteSectionSeeder::class,
+            ProgramSeeder::class,
 
         ]);
     }

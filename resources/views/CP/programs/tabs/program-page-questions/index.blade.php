@@ -41,6 +41,10 @@
                     <div class="d-flex justify-content-between align-items-center mb-5">
                         <!-- Filter buttons -->
                         <div class="d-flex gap-2" id="pageFilters">
+                            <a class="btn btn-light-primary btn-sm page-filter" data-page-id="all"
+                                onclick="filterByPage()">
+                                {{ t('All Pages') }}
+                            </a>
                             @foreach ($_model->pages as $page)
                                 <a class="btn btn-light-primary btn-sm page-filter" data-page-id="{{ $page->id }}"
                                     onclick="filterByPage({{ $page->id }})">
@@ -109,7 +113,7 @@
 @push('scripts')
 
     @if ($_model->exists())
-        {{-- @include($_model::ui['view'] . 'tabs.' . ProgramPageQuestion::ui['view'] . 'scripts.ProgramQuestionHandlers') --}}
+        @include($_model::ui['view'] . 'tabs.' . ProgramPageQuestion::ui['view'] . 'scripts.ProgramQuestionHandlers')
         @include($_model::ui['view'] . 'tabs.' . ProgramPageQuestion::ui['view'] . 'scripts.datatableJS')
         @include($_model::ui['view'] . 'tabs.' . ProgramPageQuestion::ui['view'] . 'scripts.btnsJS')
     @endif

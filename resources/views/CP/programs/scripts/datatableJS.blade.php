@@ -1,7 +1,6 @@
 <script>
     var selectedItemsModelsRows = [];
     var selectedItemModelsData = [];
-
     const columnDefs = [{
             data: null,
             render: function(data, type, row, meta) {
@@ -33,101 +32,53 @@
                 return data || 'NA';
             }
         },
-        {
-            data: 'phone',
-            name: 'phone',
-            render: function(data, type, row) {
-                return data || 'NA';
-            }
-        },
-        {
-            data: 'email',
-            name: 'email',
-            render: function(data, type, row) {
-                return data || 'NA';
-            }
-        },
-        {
-            data: 'apartment.name',
-            name: 'apartment.name',
-            render: function(data, type, row) {
-                return row.apartment?.name || 'NA';
-            }
-        },
-        {
-            data: 'lead_form_type.name',
-            name: 'lead_form_type.name',
-            render: function(data, type, row) {
-                const source = row.source?.name[currentLocale] || 'NA';
-                const formType = row.lead_form_type?.name?.[currentLocale];
-                const chatSession = row.chat_session?.current_state;
-                if (formType) {
-                    return `${source} <small class="text-gray-600 fst-italic">(${formType})</small>`;
-                } else if (chatSession) {
-                    return `${source} <small class="text-gray-600 fst-italic">(${chatSession})</small>`;
-
-                } else {
-                    return source;
-                }
-
-            }
-        },
-        {
-            data: 'number_family_members',
-            name: 'number_family_members',
-            render: function(data, type, row) {
-                return data || 'NA';
-            }
-        },
-        {
-            data: 'desired_apartment_size.name',
-            name: 'desired_apartment_size.name',
-            render: function(data, type, row) {
-                return row.desired_apartment_size?.name[currentLocale] || 'NA';
-            }
-        },
-
-
-        {
-            data: 'subject',
-            name: 'subject',
-            render: function(data, type, row) {
-                return data || 'NA';
-            }
-        },
-        {
-            data: 'notes',
-            name: 'notes',
-            render: function(data, type, row) {
-                return data || 'NA';
-            }
-        },
-        {
-            data: row => row.status || 'NA',
-            name: `status.name->${currentLocale}`
-        },
-
-
         // {
-        //     data: 'status.name',
-        //     name: 'status.name',
+        //     data: 'description',
+        //     name: 'description',
         //     render: function(data, type, row) {
-        //         if (!row.status) return 'NA';
-
-        //         const statusName = row.status.name[currentLocale] || 'NA';
-        //         const bgColor = row.status.color || '#000000';
-        //         const textColor = getContrastYIQ(bgColor);
-
-        //         return `<span class="badge fw-semibold fs-7 px-3" style="background-color: ${bgColor}; color: ${textColor}">
-        //                 ${statusName}
-        //             </span>`;
+        //         return data[currentLocale] || 'NA';
         //     }
         // },
+        {
+            data: 'deadline',
+            name: 'deadline',
+            render: function(data, type, row) {
+                return data ? moment(data).format('YYYY-MM-DD') : 'NA';
+            }
+        },
+        // {
+        //     data: 'how_to_apply',
+        //     name: 'how_to_apply',
+        //     render: function(data, type, row) {
+        //         return data[currentLocale] || 'NA';
+        //     }
+        // },
+        {
+            data: 'target_applicant.name',
+            name: 'target_applicant.name',
+            render: function(data, type, row) {
+                return row.target_applicant?.name[currentLocale] || 'NA';
+            }
+        },
+        {
+            data: 'category.name',
+            name: 'category.name',
+            render: function(data, type, row) {
+                return row.category?.name[currentLocale] || 'NA';
+            }
+        },
+        {
+            data: 'fund',
+            name: 'fund',
+            render: function(data, type, row) {
+                return data ? parseFloat(data).toFixed(2) : 'NA';
+            }
+        },
         {
             data: 'created_at',
             name: 'created_at',
             render: function(data, type, row) {
-                return row.created_at?.display || 'NA';
+                return data ? moment(data).format('YYYY-MM-DD HH:mm:ss') : 'NA';
             }
         },
         {

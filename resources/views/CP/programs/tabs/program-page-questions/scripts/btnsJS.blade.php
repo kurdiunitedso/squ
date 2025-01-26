@@ -22,7 +22,9 @@
             submitButtonName: "[data-kt-modal-action='submit_{{ ProgramPageQuestion::ui['s_lcf'] }}']",
             // onFormSuccessCallBack: onFormSuccessCallBack,
             callBackFunction: function() {
-                // ProgramQuestionHandlers.init();
+                if (typeof window.initializeFieldTypeHandlers === 'function') {
+                    window.initializeFieldTypeHandlers();
+                }
             }
         });
     });

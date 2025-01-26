@@ -48,6 +48,10 @@ class ProgramPageQuestionController extends Controller
         if ($request->isMethod('POST')) {
             $page_id = $request->get('page_id', null);
             $items = $this->_model->query()
+                ->with([
+                    'page',
+                    'field_type',
+                ])
                 ->where('program_id', $program->id)
                 ->when($page_id, function ($q) use ($page_id) {
                     $q->where('program_page_id', $page_id);

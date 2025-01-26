@@ -3,7 +3,43 @@
     use App\Models\ProgramPage;
     use App\Models\ProgramPageQuestion;
 @endphp
+{{-- functions --}}
+<script>
+    function filterByPage(pageId = null) {
+        // Update active state
+        $('.page-filter').removeClass('btn-primary').addClass('btn-light-primary');
+        $(`[data-page-id="${(pageId == null?'all':pageId)}"]`).removeClass('btn-light-primary').addClass('btn-primary');
+        let route =
+            "{{ route(Program::ui['route'] . '.' . ProgramPageQuestion::ui['route'] . '.index', ['program' => $_model->id]) }}"
 
+        if (pageId && pageId != '') {
+            route += ('?page_id=' + pageId);
+        }
+        // Reload datatable with filter
+        datatableProgramPageQuestion.ajax.url(route).load();
+    }
+
+    // Refresh filter function
+    function refreshPageFilters() {
+        $.get("{{ route(Program::ui['route'] . '.' . ProgramPage::ui['route'] . '.pages', ['program' => $_model->id]) }}",
+            function(pages) {
+                let html = `
+                  <a class="btn btn-light-primary btn-sm page-filter" data-page-id="all"
+                                onclick="filterByPage()">
+                                {{ t('All Pages') }}
+                            </a>`
+                html += pages.map(page => `
+            <a class="btn btn-light-primary btn-sm page-filter me-2"
+                data-page-id="${page.id}"
+                onclick="filterByPage(${page.id})">
+                ${page.title[currentLocale]}
+            </a>
+        `).join('');
+
+                $('#pageFilters').html(html);
+            });
+    }
+</script>
 {{-- btn_show_ questions --}}
 <script>
     $(document).on('click', ".btn_show_{{ ProgramPageQuestion::ui['s_lcf'] }}", function(e) {
@@ -17,17 +53,6 @@
         $('a[data-bs-target="#kt_tab_pane_{{ ProgramPageQuestion::ui['s_lcf'] }}"]').tab('show');
         filterByPage(pageId)
     });
-
-    function filterByPage(pageId) {
-        // Update active state
-        $('.page-filter').removeClass('btn-primary').addClass('btn-light-primary');
-        $(`[data-page-id="${pageId}"]`).removeClass('btn-light-primary').addClass('btn-primary');
-
-        // Reload datatable with filter
-        datatableProgramPageQuestion.ajax.url(
-            "{{ route(Program::ui['route'] . '.' . ProgramPageQuestion::ui['route'] . '.index', ['program' => $_model->id]) }}?page_id=" +
-            pageId).load();
-    }
 </script>
 
 {{-- add BTN --}}
@@ -54,21 +79,6 @@
             // }
         });
     });
-
-    // Refresh filter function
-    function refreshPageFilters() {
-        $.get("{{ route(Program::ui['route'] . '.' . ProgramPage::ui['route'] . '.pages', ['program' => $_model->id]) }}",
-            function(pages) {
-                let html = pages.map(page => `
-            <button class="btn btn-light-primary btn-sm page-filter me-2"
-                data-page-id="${page.id}"
-                onclick="filterPageQuestions(${page.id})">
-                ${page.title[currentLocale]}
-            </button>
-        `).join('');
-                $('#pageFilters').html(html);
-            });
-    }
 </script>
 {{-- Update BTN --}}
 <script>
@@ -121,6 +131,8 @@
                     dataType: "json",
                     success: function(response) {
                         datatableProgramPage.ajax.reload(null, false);
+                        datatableProgramPageQuestion.ajax.reload(null, false);
+
                         Swal.fire({
                             text: response.message,
                             icon: "success",
@@ -134,7 +146,9 @@
 
                     complete: function() {
 
+                        // datatableProgramPageQuestion.ajax.reload(null, false);
                         refreshPageFilters();
+
                     },
                     error: function(response, textStatus,
                         errorThrown) {

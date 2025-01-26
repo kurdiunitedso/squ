@@ -3,9 +3,6 @@
 namespace App\Models;
 
 use App\Traits\HasActionButtons;
-use App\Services\Constants\GetConstantService;
-use App\Enums\DropDownFields;
-use App\Enums\Modules;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -20,8 +17,8 @@ class ProgramPageQuestion extends Model
     protected $fillable = [
         'program_id',
         'program_page_id',
+        'field_type_id',
         'question',
-        'type',
         'options',
         'score',
         'required',
@@ -36,8 +33,6 @@ class ProgramPageQuestion extends Model
         'order' => 'integer'
     ];
 
-    protected $appends = ['type_text'];
-
     public const ui = [
         'table' => 'program_page_questions',
         'route' => 'program-page-questions',
@@ -49,6 +44,7 @@ class ProgramPageQuestion extends Model
         '_id' => 'program_page_question_id',
         'controller_name' => 'ProgramPageQuestionController',
     ];
+
     public function program()
     {
         return $this->belongsTo(Program::class);
@@ -59,26 +55,14 @@ class ProgramPageQuestion extends Model
         return $this->belongsTo(ProgramPage::class, 'program_page_id');
     }
 
+    public function field_type()
+    {
+        return $this->belongsTo(Constant::class, 'field_type_id');
+    }
+
     public function answers()
     {
         return $this->hasMany(ProgramAnswer::class);
-    }
-
-    /**
-     * Get translated type text from constants
-     */
-    public function getTypeTextAttribute()
-    {
-        $typeConstant = GetConstantService::get_question_type_list($this->type)->first();
-        return $typeConstant ? $typeConstant->name : $this->type;
-    }
-
-    /**
-     * Get available question types
-     */
-    public static function getTypes()
-    {
-        return GetConstantService::get_question_type_list();
     }
 
     protected function getActionButtons(): array
@@ -88,6 +72,7 @@ class ProgramPageQuestion extends Model
             $this->getRemoveButton(),
         ];
     }
+
     protected function getEditButton($route = null)
     {
         if (!isset($route)) {
@@ -102,7 +87,6 @@ class ProgramPageQuestion extends Model
 
     protected function getRemoveButton($route = null, $attributes = null)
     {
-        // i do it becuase of the attachemnt (has file name not name directly )
         if (!isset($attributes)) {
             $attributes = 'data-' . self::ui['s_lcf'] . '-name="' . ($this->title ?? '') . '"';
         }

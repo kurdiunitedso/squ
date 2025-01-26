@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Constant;
 use App\Models\ProgramPageQuestion;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -16,8 +17,8 @@ return new class extends Migration
             $table->id();
             $table->foreignId('program_id')->constrained()->onDelete('cascade');
             $table->foreignId('program_page_id')->constrained()->onDelete('cascade');
-            $table->json('question');
-            $table->string('type');
+            $table->foreignId('field_type_id')->constrained(Constant::ui['table'])->onDelete('cascade');
+            $table->json('question')->nullable();
             $table->json('options')->nullable();
             $table->integer('score')->default(0);
             $table->boolean('required')->default(false);

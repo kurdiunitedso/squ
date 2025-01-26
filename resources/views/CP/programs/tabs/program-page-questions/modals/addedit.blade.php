@@ -89,19 +89,29 @@
                             @enderror
                         </div>
                     </div>
-                    {{-- Type --}}
-                    <div class="col-md-6">
-                        <label class="required fw-semibold fs-6 mb-2">{{ t('Type') }}</label>
-                        <select name="type" class="form-select" id="question_type" required>
-                            <option value="">{{ t('Select Type') }}</option>
-                            @foreach ($question_type_list ?? [] as $item)
-                                <option value="{{ $item->constant_name }}"
-                                    {{ isset($_model) && $_model->type == $item->constant_name ? 'selected' : '' }}>
-                                    {{ $item->name }}
-                                </option>
-                            @endforeach
-                        </select>
+
+                    {{-- Field Type --}}
+
+                    <div class="col-md-4">
+                        <div class="fv-row mb-7">
+                            <label class="fw-semibold fs-6 mb-2">{{ t('Field Type') }}</label>
+                            <select name="field_type_id"
+                                class="form-select form-select-solid validate-required @error('field_type_id') is-invalid @enderror"
+                                data-dropdown-parent="#kt_modal_general" data-allow-clear="true">
+                                <option value="">{{ t('Select Type') }}</option>
+                                @foreach ($question_type_list ?? [] as $type)
+                                    <option value="{{ $type->id }}"
+                                        {{ $_model->field_type_id == $type->id ? 'selected' : '' }}>
+                                        {{ $type->name }}
+                                    </option>
+                                @endforeach
+                            </select>
+                            @error('field_type_id')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
                     </div>
+
 
                     {{-- Score --}}
                     <div class="col-md-6">
@@ -172,4 +182,5 @@
             </div>
         </form>
     </div>
+
 </div>

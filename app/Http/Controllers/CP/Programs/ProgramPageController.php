@@ -151,6 +151,7 @@ class ProgramPageController extends Controller
     {
         try {
             DB::beginTransaction();
+            $_model->questions()->delete();
             $_model->delete();
             DB::commit();
 

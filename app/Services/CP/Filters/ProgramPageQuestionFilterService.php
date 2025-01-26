@@ -56,18 +56,18 @@ class ProgramPageQuestionFilterService
         $locales = config('app.locales'); // Fetch locales from the config file
         Log::info('Locales fetched from config:', $locales);
 
-        // Loop through each locale to apply search on 'title' field
+        // Loop through each locale to apply search on 'question' field
         foreach ($locales as $index => $locale) {
-            Log::info("Applying search for 'title' in locale: $locale");
+            Log::info("Applying search for 'question' in locale: $locale");
 
             if ($index === 0) {
                 $query->whereRaw(
-                    "json_extract(LOWER(title), \"$.$locale\") LIKE convert(? using utf8mb4) collate utf8mb4_general_ci",
+                    "json_extract(LOWER(question), \"$.$locale\") LIKE convert(? using utf8mb4) collate utf8mb4_general_ci",
                     ['%' . $value . '%']
                 );
             } else {
                 $query->orWhereRaw(
-                    "json_extract(LOWER(title), \"$.$locale\") LIKE convert(? using utf8mb4) collate utf8mb4_general_ci",
+                    "json_extract(LOWER(question), \"$.$locale\") LIKE convert(? using utf8mb4) collate utf8mb4_general_ci",
                     ['%' . $value . '%']
                 );
             }

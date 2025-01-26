@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\CP\Program;
 
+use App\Models\Constant;
 use App\Models\Program;
 use App\Models\ProgramPage;
 use Illuminate\Foundation\Http\FormRequest;
@@ -21,11 +22,12 @@ class ProgramPageRequestQuestion extends FormRequest
 
         $rules = [
             'question' => 'required|array',
-            'type' => 'required|string',
+            // 'type' => 'required|string',
             'score' => 'nullable|numeric|min:0',
             'order' => 'required|integer|min:0',
             'required' => 'nullable|boolean',
             ProgramPage::ui['_id'] => 'required|exists:' . ProgramPage::ui['table'] . ',id',
+            'field_type_id' => 'required|exists:' . Constant::ui['table'] . ',id',
 
         ];
 

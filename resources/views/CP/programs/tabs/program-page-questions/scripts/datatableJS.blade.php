@@ -25,12 +25,18 @@
             name: 'question->ar',
         },
         {
-            data: 'order',
-            name: 'order'
+            data: 'page.title',
+            name: 'page.title',
+            render: function(data, type, row) {
+                return row.page?.title[currentLocale] || 'NA';
+            }
         },
         {
-            data: 'order',
-            name: 'order'
+            data: 'field_type.name',
+            name: 'field_type.name',
+            render: function(data, type, row) {
+                return row.field_type?.name[currentLocale] || 'NA';
+            }
         },
         {
             data: 'order',

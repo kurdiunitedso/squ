@@ -58,7 +58,11 @@ class ProgramController extends Controller
             return view($data['_view_path'] . 'index', $data);
         }
         if ($request->isMethod('POST')) {
-            $items = $this->_model->query()->latest($this->_model::ui['table'] . '.updated_at');
+            $items = $this->_model->query()
+                ->with([
+                    'target_applicant',
+                    'category',
+                ])->latest($this->_model::ui['table'] . '.updated_at');
 
             if ($request->input('params')) {
                 $this->filterService->applyFilters($items, $request->input('params'));
@@ -199,10 +203,10 @@ class ProgramController extends Controller
                 $item->syncFacilities($request->input('facility_ids'));
             }
             if ($request->has('important_dates')) {
-                $item->importantDates()->delete();
+                $item->important_dates()->delete();
                 foreach ($request->input('important_dates') as $date) {
                     // dd($date);
-                    $item->importantDates()->create([
+                    $item->important_dates()->create([
                         'title' => [
                             'en' => $date['en'],
                             'ar' => $date['ar'],

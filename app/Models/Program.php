@@ -72,7 +72,7 @@ class Program extends Model implements Auditable
         return $this->belongsToMany(Constant::class, 'program_facility', 'program_id', 'facility_id');
     }
 
-    public function targetApplicant()
+    public function target_applicant()
     {
         return $this->belongsTo(Constant::class, 'target_applicant_id');
     }
@@ -81,7 +81,7 @@ class Program extends Model implements Auditable
     {
         return $this->belongsTo(Constant::class, 'category_id');
     }
-    public function importantDates()
+    public function important_dates()
     {
         return $this->hasMany(ProgramImportantDate::class);
     }

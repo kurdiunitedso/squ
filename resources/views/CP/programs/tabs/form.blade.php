@@ -114,8 +114,8 @@
                         <label class="fw-semibold fs-6 mb-2">{{ t('Important Dates') }}</label>
                         <div id="important-dates-repeater">
                             <div data-repeater-list="important_dates">
-                                @if (isset($_model) && $_model->importantDates->count())
-                                    @foreach ($_model->importantDates as $date)
+                                @if (isset($_model) && $_model->important_dates->count())
+                                    @foreach ($_model->important_dates as $date)
                                         <div data-repeater-item class="form-group d-flex flex-wrap mb-3">
                                             @foreach (config('app.locales') as $locale)
                                                 <div class="col-md-4 pe-2 mb-2">

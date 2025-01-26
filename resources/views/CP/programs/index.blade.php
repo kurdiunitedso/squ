@@ -95,27 +95,20 @@
                     <table class="table table-bordered align-middle table-row-dashed fs-6 gy-5" id="kt_table_items_model">
                         <!--begin::Table head-->
                         <thead>
-                            <!--begin::Table row-->
                             <tr class="text-start text-muted fw-bold fs-7 text-uppercase gs-0">
                                 <th class="min-w-25px all"><input type="checkbox" id="select-all"></th>
                                 <th class="all"></th>
-                                <th class="min-w-100px bold all">{{ __('SN') }}</th>
-                                <th class="min-w-100px bold all">{{ t('Name') }}</th>
-                                <th class="min-w-200px bold all">{{ t('Phone') }}</th>
-                                <th class="min-w-200px bold all">{{ t('Email') }}</th>
-                                <th class="min-w-100px bold all">{{ t('Apartment') }}</th>
-                                {{-- <th class="min-w-100px bold all">{{ t('Lead Form Type') }}</th> --}}
-                                <th class="min-w-100px bold all">{{ t('Source') }}</th>
-                                <th class="min-w-100px bold all">{{ t('Number Of Family Members') }}</th>
-                                <th class="min-w-100px bold all">{{ t('Desired Apartment Size') }}</th>
-                                <th class="min-w-100px bold all">{{ t('Subject') }}</th>
-                                <th class="min-w-100px bold all">{{ t('Notes') }}</th>
-                                <th class="min-w-100px bold all">{{ t('Status') }}</th>
-                                <th class="min-w-100px bold all">{{ t('Created Date') }}</th>
-                                <th class="min-w-200px bold all">{{ __('Actions') }}</th>
-
+                                <th class="min-w-100px bold all">{{ __('ID') }}</th>
+                                <th class="min-w-200px bold all">{{ t('Name') }}</th>
+                                {{-- <th class="min-w-200px bold all">{{ t('Description') }}</th> --}}
+                                <th class="min-w-150px bold all">{{ t('Deadline') }}</th>
+                                {{-- <th class="min-w-200px bold all">{{ t('How to Apply') }}</th> --}}
+                                <th class="min-w-150px bold all">{{ t('Target Applicant') }}</th>
+                                <th class="min-w-150px bold all">{{ t('Category') }}</th>
+                                <th class="min-w-100px bold all">{{ t('Fund') }}</th>
+                                <th class="min-w-150px bold all">{{ t('Created At') }}</th>
+                                <th class="min-w-150px bold all">{{ t('Actions') }}</th>
                             </tr>
-                            <!--end::Table row-->
                         </thead>
                         <!--end::Table head-->
 
