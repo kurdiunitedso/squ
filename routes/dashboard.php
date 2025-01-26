@@ -15,9 +15,11 @@ use App\Models\WebsiteSection;
 use App\Http\Controllers\Authentication\LoginController;
 use App\Http\Controllers\CP\Programs\ProgramController;
 use App\Http\Controllers\CP\Programs\ProgramPageController;
+use App\Http\Controllers\CP\Programs\ProgramPageQuestionController;
 use App\Http\Controllers\CP\WebsiteManagement\WebsiteSectionController;
 use App\Models\Program;
 use App\Models\ProgramPage;
+use App\Models\ProgramPageQuestion;
 use Illuminate\Support\Facades\Route;
 
 
@@ -168,6 +170,21 @@ Route::group(['prefix' => 'dashboard'], function () {
                         Route::get('/' . ProgramPage::ui['s_lcf'] . '/{_model}/form-generator', [ProgramPageController::class, 'formGenerator'])
                             ->name('form-generator');
                         Route::post('/' . ProgramPage::ui['s_lcf'] . '/{_model}/update-structure', [ProgramPageController::class, 'updateStructure'])
+                            ->name('update-structure');
+                    });
+
+                Route::prefix(ProgramPageQuestion::ui['route'] . '/{program}')
+                    ->name(ProgramPageQuestion::ui['route'] . '.')
+                    ->controller(ProgramPageQuestionController::class)
+                    ->group(function () {
+                        Route::match(['get', 'post'], '/', 'index')->name('index')->middleware('permission:' . ProgramPageQuestion::ui['s_lcf'] . '_access');
+                        Route::get('/create', 'create')->name('create')->middleware('permission:' . ProgramPageQuestion::ui['s_lcf'] . '_access');
+                        Route::get('/{_model}/edit', 'edit')->name('edit')->middleware('permission:' . ProgramPageQuestion::ui['s_lcf'] . '_access');
+                        Route::delete('{_model}/delete', 'delete')->name('delete')->middleware('permission:' . ProgramPageQuestion::ui['s_lcf'] . '_access');
+                        Route::post('/' . ProgramPageQuestion::ui['s_lcf'] . '/{Id?}', 'addedit')->name('addedit')->middleware('permission:' . ProgramPageQuestion::ui['s_lcf'] . '_access');
+                        Route::get('/' . ProgramPageQuestion::ui['s_lcf'] . '/{_model}/form-generator', [ProgramPageQuestionController::class, 'formGenerator'])
+                            ->name('form-generator');
+                        Route::post('/' . ProgramPageQuestion::ui['s_lcf'] . '/{_model}/update-structure', [ProgramPageQuestionController::class, 'updateStructure'])
                             ->name('update-structure');
                     });
             });

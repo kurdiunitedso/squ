@@ -83,6 +83,18 @@ class DropDownFields
         'funding' => 'funding'
     ];
 
+    const question_type = 'question_type';
+
+    const question_type_list = [
+        'text' => 'text',
+        'textarea' => 'textarea',
+        'dropdown' => 'dropdown',
+        'checkbox' => 'checkbox',
+        'tags' => 'tags',
+        'repeater' => 'repeater',
+        'file' => 'file'
+    ];
+
     const website_section_type_list = [
         'menu' => 'menu',
         'slider' => 'slider',

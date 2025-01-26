@@ -1,9 +1,7 @@
-@php
-    use App\Models\ProgramPage;
-@endphp
 <div class="modal-content">
     <div class="modal-header">
-        <h2 class="fw-bold">{{ isset($_model) ? t('Edit Program Page') : t('Add Program Page') }}</h2>
+        <h2 class="fw-bold">{{ $_model->exists ? t('Edit ' . $_model::ui['s_ucf']) : t('Add ' . $_model::ui['s_ucf']) }}
+        </h2>
         <div class="btn btn-icon btn-sm btn-active-icon-primary" data-bs-dismiss="modal">
             <span class="svg-icon svg-icon-1">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -17,7 +15,7 @@
     </div>
 
     <div class="modal-body scroll-y mx-5 mx-xl-15 my-7">
-        <form id="{{ ProgramPage::ui['s_lcf'] }}_modal_form" class="form"
+        <form id="{{ $_model::ui['s_lcf'] }}_modal_form" class="form"
             action="{{ route('programs.program-pages.addedit', ['program' => $program->id]) }}">
             @if (isset($_model))
                 <input type="hidden" name="program_page_id" value="{{ $_model->id }}">
@@ -62,7 +60,7 @@
                     {{ t('Discard') }}
                 </button>
                 <button type="submit" class="btn btn-primary"
-                    data-kt-modal-action="submit_{{ ProgramPage::ui['s_lcf'] }}">
+                    data-kt-modal-action="submit_{{ $_model::ui['s_lcf'] }}">
                     <span class="indicator-label">{{ t('Submit') }}</span>
                     <span class="indicator-progress">{{ t('Please wait...') }}
                         <span class="spinner-border spinner-border-sm align-middle ms-2"></span>

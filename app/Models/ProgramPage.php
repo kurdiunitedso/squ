@@ -28,7 +28,7 @@ class ProgramPage extends Model
         'p_ucf' => 'Program Pages',
         's_lcf' => 'program_page',
         'p_lcf' => 'program_pages',
-        'view' => Program::ui['view'] . 'tabs.program-pages.',
+        'view' =>  'program-pages.',
         '_id' => 'program_page_id',
         'controller_name' => 'ProgramPageController',
     ];

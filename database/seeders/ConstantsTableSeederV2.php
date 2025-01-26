@@ -50,6 +50,15 @@ class ConstantsTableSeederV2 extends Seeder
                     'values' => DropDownFields::program_attachment_type_list
                 ]
             ]
+        ],
+        [
+            'module' => Modules::program_page_module,
+            'items' => [
+                [
+                    'field' => DropDownFields::question_type,
+                    'values' => DropDownFields::question_type_list
+                ],
+            ]
         ]
     ];
 

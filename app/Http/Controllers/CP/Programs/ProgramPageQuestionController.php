@@ -3,23 +3,26 @@
 namespace App\Http\Controllers\CP\Programs;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\CP\Program\ProgramPageRequestQuestion;
 use App\Models\Program;
 use App\Models\ProgramPage;
-use App\Services\CP\Filters\ProgramPageFilterService;
+use App\Models\ProgramPageQuestion;
+use App\Services\Constants\GetConstantService;
+use App\Services\CP\Filters\ProgramPageQuestionFilterService;
 use App\Traits\HasCommonData;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Yajra\DataTables\Facades\DataTables;
 
-class ProgramPageController extends Controller
+class ProgramPageQuestionController extends Controller
 {
     use HasCommonData;
 
     protected $filterService;
     private $_model;
 
-    public function __construct(ProgramPage $_model, ProgramPageFilterService $filterService)
+    public function __construct(ProgramPageQuestion $_model, ProgramPageQuestionFilterService $filterService)
     {
         $this->_model = $_model;
         $this->filterService = $filterService;
@@ -74,60 +77,77 @@ class ProgramPageController extends Controller
         }
     }
 
+
+    protected function getCommonData($program)
+    {
+        $data = [
+            '_view_path' =>  $this->_model::ui['view'],
+            '_model' => $this->_model
+        ];
+        $data['question_type_list'] = GetConstantService::get_question_type_list();
+        $data['program_page_list'] = $program->pages()->get();
+        return $data;
+    }
+
+
     public function create(Request $request, Program $program)
     {
-        $data = $this->getCommonData('create');
+        $data = $this->getCommonData($program);
         $data['program'] = $program;
-        $_view_path = $program::ui['view'] . 'tabs.' . ProgramPage::ui['view'] . 'modals.addedit';
+        $_view_path = $program::ui['view'] . 'tabs.' . $this->_model::ui['view'] . 'modals.addedit';
         $createView = view($_view_path, $data)->render();
         return response()->json(['createView' => $createView]);
     }
 
-    public function edit(Request $request, Program $program, ProgramPage $_model)
+    public function edit(Request $request, Program $program, ProgramPageQuestion $_model)
     {
-        $data = $this->getCommonData('edit');
+        $data = $this->getCommonData($program);
         $data['program'] = $program;
         $data['_model'] = $_model;
         // dd($programPage, $data);
 
-        $_view_path = $program::ui['view'] . 'tabs.' . ProgramPage::ui['view'] . 'modals.addedit';
+        $_view_path = $program::ui['view'] . 'tabs.' . $this->_model::ui['view'] . 'modals.addedit';
         $editView = view($_view_path, $data)->render();
         return response()->json(['createView' => $editView]);
     }
 
-    public function addedit(Request $request, Program $program)
+    public function addedit(ProgramPageRequestQuestion $request, Program $program)
     {
-        $request->validate([
-            'title' => 'required|array',
-            'title.en' => 'required|string',
-            'title.ar' => 'required|string',
-            'order' => 'required|integer|min:0',
-            'structure' => 'nullable|json'
-        ]);
-
         try {
             DB::beginTransaction();
 
-            $data = $request->all();
-            $id = $request->get($this->_model::ui['_id']);
+            $data = $request->validated();
+            $id = $request->get('program_page_id');
+
+            // Prepare the data
+            $saveData = [
+                'question' => $data['question'],
+                'type' => $data['type'],
+                'score' => $data['score'] ?? 0,
+                'order' => $data['order'],
+                'required' => $request->boolean('required'),
+            ];
+
+            // Add options if present
+            if ($request->has('options')) {
+                $saveData['options'] = $data['options'];
+            }
 
             if (isset($id)) {
                 $item = $this->_model->findOrFail($id);
-                $item->update($data);
+                $item->update($saveData);
             } else {
-                $data['program_id'] = $program->id;
-                $item = $this->_model->create($data);
+                $saveData['program_id'] = $program->id;
+                $item = $this->_model->create($saveData);
             }
 
             DB::commit();
 
-            $message = isset($id)
-                ? t($this->_model::ui['s_ucf'] . ' has been updated successfully!')
-                : t($this->_model::ui['s_ucf'] . ' has been added successfully!');
-
             return response()->json([
                 'status' => true,
-                'message' => $message,
+                'message' => isset($id)
+                    ? t($this->_model::ui['s_ucf'] . ' has been updated successfully!')
+                    : t($this->_model::ui['s_ucf'] . ' has been added successfully!'),
                 'id' => $item->id,
                 'data' => $item
             ]);
@@ -147,7 +167,7 @@ class ProgramPageController extends Controller
         }
     }
 
-    public function delete(Request $request, Program $program, ProgramPage $_model)
+    public function delete(Request $request, Program $program, ProgramPageQuestion $_model)
     {
         try {
             DB::beginTransaction();
@@ -197,7 +217,7 @@ class ProgramPageController extends Controller
         }
     }
 
-    public function formGenerator(Request $request, Program $program, ProgramPage $_model)
+    public function formGenerator(Request $request, Program $program, ProgramPageQuestion $_model)
     {
         $data = $this->getCommonData('form-generator');
         $data['program'] = $program;
@@ -206,7 +226,7 @@ class ProgramPageController extends Controller
         $formView = view($data['_view_path'] . 'modals.form-generator', $data)->render();
         return response()->json(['createView' => $formView]);
     }
-    public function updateStructure(Request $request, Program $program, ProgramPage $_model)
+    public function updateStructure(Request $request, Program $program, ProgramPageQuestion $_model)
     {
         try {
             DB::beginTransaction();

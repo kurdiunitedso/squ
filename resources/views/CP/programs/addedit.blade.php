@@ -1,5 +1,6 @@
 @php
     use App\Models\ProgramPage;
+    use App\Models\ProgramPageQuestion;
 
 @endphp
 @extends('CP.metronic.index')
@@ -47,15 +48,14 @@
 
                     <li class="nav-item mt-2">
                         <a class="nav-link text-active-primary ms-0 me-6 px-2 py-5 " data-bs-toggle="tab"
-                            data-bs-target="#kt_tab_pane_application_setup" href="#kt_tab_pane_application_setup">
+                            data-bs-target="#kt_tab_pane_{{ ProgramPageQuestion::ui['s_lcf'] }}"
+                            href="#kt_tab_pane_{{ ProgramPageQuestion::ui['s_lcf'] }}">
                             <span class="svg-icon svg-icon-2 me-2">
 
                             </span>
-                            {{ t('Application Setup') }}
+                            {{ t(ProgramPageQuestion::ui['s_ucf']) }}
                         </a>
                     </li>
-
-
 
                     <!--end::Nav item-->
                     <!--begin::Nav item-->
@@ -112,14 +112,20 @@
         <div class="tab-pane fade show active" id="kt_tab_pane_1" role="tabpanel">
             @include($_view_path . '.tabs.form')
         </div>
+        @if ($_model->exists)
+            <div class="tab-pane fade show" id="kt_tab_pane_{{ ProgramPage::ui['s_lcf'] }}" role="tabpanel">
+                @include($_model::ui['view'] . 'tabs.' . ProgramPage::ui['view'] . 'index')
 
-        <div class="tab-pane fade show" id="kt_tab_pane_{{ ProgramPage::ui['s_lcf'] }}" role="tabpanel">
-            @include($_model::ui['view'] . '.tabs.program-pages.index')
+            </div>
+        @endif
+        @if ($_model->exists)
+            <div class="tab-pane fade show" id="kt_tab_pane_{{ ProgramPageQuestion::ui['s_lcf'] }}" role="tabpanel">
+                @include($_model::ui['view'] . 'tabs.' . ProgramPageQuestion::ui['view'] . 'index')
 
-        </div>
-        <div class="tab-pane fade show " id="kt_tab_pane_application_setup" role="tabpanel">
-            {{-- @include($_view_path . '.tabs.application_setup') --}}
-        </div>
+            </div>
+        @endif
+
+
 
         <div class="tab-pane fade" id="kt_tab_pane_7" role="tabpanel">
             <div class="card mb-5 mb-xl-10" id="kt_attachments_view">

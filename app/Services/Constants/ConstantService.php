@@ -5,6 +5,7 @@ namespace App\Services\Constants;
 use App\Models\Constant;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Log;
 
 class ConstantService
 {
@@ -141,7 +142,7 @@ class ConstantService
      */
     public static function clearCache(Constant $constant): void
     {
-        \Log::info("Starting cache clear for constant:", [
+        Log::info("Starting cache clear for constant:", [
             'id' => $constant->id,
             'module' => $constant->module,
             'field' => $constant->field,
@@ -151,19 +152,19 @@ class ConstantService
         // Clear existing caches
         $idCacheKey = self::CACHE_PREFIX . "id:{$constant->id}";
         Cache::forget($idCacheKey);
-        \Log::info("Cleared cache by ID:", ['cache_key' => $idCacheKey]);
+        Log::info("Cleared cache by ID:", ['cache_key' => $idCacheKey]);
 
         $moduleCacheKey = self::CACHE_PREFIX . "module:{$constant->module}";
         Cache::forget($moduleCacheKey);
-        \Log::info("Cleared cache by module:", ['cache_key' => $moduleCacheKey]);
+        Log::info("Cleared cache by module:", ['cache_key' => $moduleCacheKey]);
 
         $fieldCacheKey = self::CACHE_PREFIX . "field:{$constant->field}";
         Cache::forget($fieldCacheKey);
-        \Log::info("Cleared cache by field:", ['cache_key' => $fieldCacheKey]);
+        Log::info("Cleared cache by field:", ['cache_key' => $fieldCacheKey]);
 
         $moduleFieldCacheKey = self::CACHE_PREFIX . "module:{$constant->module}:field:{$constant->field}";
         Cache::forget($moduleFieldCacheKey);
-        \Log::info("Cleared cache by module and field:", ['cache_key' => $moduleFieldCacheKey]);
+        Log::info("Cleared cache by module and field:", ['cache_key' => $moduleFieldCacheKey]);
 
         // Clear search cache for this module and field combination
         $searchCriteria = [
@@ -172,14 +173,39 @@ class ConstantService
         ];
         $searchCacheKey = self::CACHE_PREFIX . "search:" . md5(json_encode($searchCriteria));
         Cache::forget($searchCacheKey);
-        \Log::info("Cleared search cache:", ['cache_key' => $searchCacheKey]);
+        Log::info("Cleared search cache:", ['cache_key' => $searchCacheKey]);
 
         if ($constant->constant_name) {
             $nameCacheKey = self::CACHE_PREFIX . "name:{$constant->constant_name}";
             Cache::forget($nameCacheKey);
-            \Log::info("Cleared cache by constant name:", ['cache_key' => $nameCacheKey]);
+            Log::info("Cleared cache by constant name:", ['cache_key' => $nameCacheKey]);
         }
 
-        \Log::info("Completed clearing all caches for constant ID: " . $constant->id);
+        Log::info("Completed clearing all caches for constant ID: " . $constant->id);
+    }
+
+    /**
+     * Get constant name based on module, field and constant_name
+     *
+     * @param array $criteria Should contain module, field and constant_name
+     * @param string|null $locale Locale to get name for
+     * @return string
+     */
+    public static function getName(array $criteria, string $locale = null): string
+    {
+        if (!isset($criteria['module']) || !isset($criteria['field']) || !isset($criteria['constant_name'])) {
+            Log::warning('Missing required criteria for getName', $criteria);
+            return '';
+        }
+
+        $constant = self::search($criteria)->first();
+
+        if (!$constant) {
+            Log::warning('No constant found for criteria', $criteria);
+            return '';
+        }
+
+        $locale = $locale ?? app()->getLocale();
+        return $constant->getTranslation('name', $locale, false) ?? '';
     }
 }

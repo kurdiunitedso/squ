@@ -1,9 +1,9 @@
 @php
-    use App\Models\ProgramPage;
+    use App\Models\ProgramPageQuestion;
 @endphp
 {{-- add BTN --}}
 <script>
-    $(document).on('click', "#add_{{ ProgramPage::ui['s_lcf'] }}_modal", function(e) {
+    $(document).on('click', "#add_{{ ProgramPageQuestion::ui['s_lcf'] }}_modal", function(e) {
         e.preventDefault();
         const button = $(this);
         button.attr("data-kt-indicator", "on");
@@ -13,17 +13,19 @@
             button: button,
             modalId: '#kt_modal_general',
             modalBootstrap: new bootstrap.Modal(document.querySelector('#kt_modal_general')),
-            formId: '#{{ ProgramPage::ui['s_lcf'] }}_modal_form',
-            dataTableId: datatableProgramPage,
-            submitButtonName: "[data-kt-modal-action='submit_{{ ProgramPage::ui['s_lcf'] }}']",
+            formId: '#{{ ProgramPageQuestion::ui['s_lcf'] }}_modal_form',
+            dataTableId: datatableProgramPageQuestion,
+            submitButtonName: "[data-kt-modal-action='submit_{{ ProgramPageQuestion::ui['s_lcf'] }}']",
             // onFormSuccessCallBack: onFormSuccessCallBack,
-            // callBackFunction: function() {}
+            callBackFunction: function() {
+                // ProgramQuestionHandlers.init();
+            }
         });
     });
 </script>
 {{-- Update BTN --}}
 <script>
-    $(document).on('click', ".btn_update_{{ ProgramPage::ui['s_lcf'] }}", function(e) {
+    $(document).on('click', ".btn_update_{{ ProgramPageQuestion::ui['s_lcf'] }}", function(e) {
         e.preventDefault();
         const button = $(this);
         button.attr("data-kt-indicator", "on");
@@ -33,9 +35,9 @@
             button: button,
             modalId: '#kt_modal_general',
             modalBootstrap: new bootstrap.Modal(document.querySelector('#kt_modal_general')),
-            formId: '#{{ ProgramPage::ui['s_lcf'] }}_modal_form',
-            dataTableId: datatableProgramPage,
-            submitButtonName: "[data-kt-modal-action='submit_{{ ProgramPage::ui['s_lcf'] }}']",
+            formId: '#{{ ProgramPageQuestion::ui['s_lcf'] }}_modal_form',
+            dataTableId: datatableProgramPageQuestion,
+            submitButtonName: "[data-kt-modal-action='submit_{{ ProgramPageQuestion::ui['s_lcf'] }}']",
             // onFormSuccessCallBack: onFormSuccessCallBack,
             // callBackFunction: function() {
             //     totalCostCallBack(); // Your existing callback
@@ -47,10 +49,10 @@
 
 {{-- Delete BTN --}}
 <script>
-    $(document).on('click', '.btn_delete_' + "{{ ProgramPage::ui['s_lcf'] }}", function(e) {
+    $(document).on('click', '.btn_delete_' + "{{ ProgramPageQuestion::ui['s_lcf'] }}", function(e) {
         e.preventDefault();
         const URL = $(this).attr('href');
-        const itemModelName = $(this).attr('data-' + "{{ ProgramPage::ui['s_lcf'] }}" + '-name');
+        const itemModelName = $(this).attr('data-' + "{{ ProgramPageQuestion::ui['s_lcf'] }}" + '-name');
         Swal.fire({
             html: "Are you sure you want to delete " + itemModelName + "?",
             icon: "warning",
@@ -69,7 +71,7 @@
                     url: URL,
                     dataType: "json",
                     success: function(response) {
-                        datatableProgramPage.ajax.reload(null, false);
+                        datatableProgramPageQuestion.ajax.reload(null, false);
                         Swal.fire({
                             text: response.message,
                             icon: "success",

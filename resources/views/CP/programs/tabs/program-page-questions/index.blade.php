@@ -1,5 +1,5 @@
 @php
-    use App\Models\ProgramPage;
+    use App\Models\ProgramPageQuestion;
 @endphp
 <div class="row g-5 g-xl-10 mb-5 mb-xl-10">
     <!--begin::Col-->
@@ -25,10 +25,10 @@
                         </span>
                         <!--end::Svg Icon-->
 
-                        <input type="text" data-kt-{{ ProgramPage::ui['s_lcf'] }}-table-filter="search"
+                        <input type="text" data-kt-{{ ProgramPageQuestion::ui['s_lcf'] }}-table-filter="search"
                             data-col-index="search" {{-- data-kt-teams-table-filter="search" --}}
                             class="form-control form-control-solid w-250px ps-14 datatable-input"
-                            placeholder="Search {{ ProgramPage::ui['p_ucf'] }}" />
+                            placeholder="Search {{ ProgramPageQuestion::ui['p_ucf'] }}" />
 
 
                     </div>
@@ -44,8 +44,8 @@
                         <!--end::offers 1-->
                         <!--end::Filter-->
                         <!--begin::Add offers-->
-                        <a href="{{ route($_model::ui['route'] . '.' . ProgramPage::ui['route'] . '.create', ['program' => $_model->id]) }}"
-                            class="btn btn-primary" id="add_{{ ProgramPage::ui['s_lcf'] }}_modal">
+                        <a href="{{ route($_model::ui['route'] . '.' . ProgramPageQuestion::ui['route'] . '.create', ['program' => $_model->id]) }}"
+                            class="btn btn-primary" id="add_{{ ProgramPageQuestion::ui['s_lcf'] }}_modal">
                             <span class="indicator-label">
                                 <span class="svg-icon svg-icon-2">
                                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
@@ -82,13 +82,17 @@
 
                 <div class="row">
                     <table class="table table-bordered align-middle table-row-dashed fs-6 gy-5"
-                        id="kt_table_{{ ProgramPage::ui['s_lcf'] }}">
+                        id="kt_table_{{ ProgramPageQuestion::ui['s_lcf'] }}">
                         <!--begin::Table head-->
                         <thead>
                             <!--begin::Table row-->
                             <tr class="text-start text-muted fw-bold fs-7 text-uppercase gs-0">
-                                <th class="min-w-125px">{{ t('Title EN') }}</th>
-                                <th class="min-w-125px">{{ t('Title AR') }}</th>
+                                <th class="min-w-125px">{{ t('Question EN') }}</th>
+                                <th class="min-w-125px">{{ t('Question AR') }}</th>
+                                <th class="min-w-125px">{{ t('Page') }}</th>
+                                <th class="min-w-125px">{{ t('Type') }}</th>
+                                <th class="min-w-125px">{{ t('Required') }}</th>
+                                <th class="min-w-125px">{{ t('Score') }}</th>
                                 <th class="min-w-125px">{{ t('Order') }}</th>
                                 <th class="min-w-125px">{{ t('Created At') }}</th>
                                 <th class="min-w-200px bold all">{{ t('Actions') }}</th>
@@ -110,8 +114,9 @@
 @push('scripts')
 
     @if ($_model->exists())
-        @include($_model::ui['view'] . 'tabs.' . ProgramPage::ui['view'] . 'scripts.datatableJS')
-        @include($_model::ui['view'] . 'tabs.' . ProgramPage::ui['view'] . 'scripts.btnsJS')
+        {{-- @include($_model::ui['view'] . 'tabs.' . ProgramPageQuestion::ui['view'] . 'scripts.ProgramQuestionHandlers') --}}
+        @include($_model::ui['view'] . 'tabs.' . ProgramPageQuestion::ui['view'] . 'scripts.datatableJS')
+        @include($_model::ui['view'] . 'tabs.' . ProgramPageQuestion::ui['view'] . 'scripts.btnsJS')
     @endif
 
 @endpush
