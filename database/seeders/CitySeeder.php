@@ -711,25 +711,25 @@ class CitySeeder extends Seeder
             //     "Castletown",
             //     "Ramsey"
             // ],
-            "Palestine" => [
-                "Jerusalem",
-                "Ramallah",
-                "Nablus",
-                "Bethlehem",
-                "Hebron",
-                "Jenin",
-                "Jericho",
-                "Tulkarm",
-                "Qalqilya",
-                "Gaza City",
-                "Beit Jala"
-            ],
-            "Israel" => [
-                "Tel Aviv",
-                "Haifa",
-                "Rishon LeZion",
-                "Petah Tikva"
-            ],
+            // "Palestine" => [
+            //     "Jerusalem",
+            //     "Ramallah",
+            //     "Nablus",
+            //     "Bethlehem",
+            //     "Hebron",
+            //     "Jenin",
+            //     "Jericho",
+            //     "Tulkarm",
+            //     "Qalqilya",
+            //     "Gaza City",
+            //     "Beit Jala"
+            // ],
+            // "Israel" => [
+            //     "Tel Aviv",
+            //     "Haifa",
+            //     "Rishon LeZion",
+            //     "Petah Tikva"
+            // ],
             // "Italy" => [
             //     "Rome",
             //     "Milan",
@@ -1134,18 +1134,18 @@ class CitySeeder extends Seeder
             //     "Kristiansand",
             //     "Tromsø"
             // ],
-            // "Oman" => [
-            //     "Muscat",
-            //     "Salalah",
-            //     "Sohar",
-            //     "Sur",
-            //     "Nizwa",
-            //     "Ibri",
-            //     "Ibra",
-            //     "Bahla",
-            //     "Rustaq",
-            //     "Al-Khabourah"
-            // ],
+            "Oman" => [
+                "Muscat",
+                "Salalah",
+                "Sohar",
+                "Sur",
+                "Nizwa",
+                "Ibri",
+                "Ibra",
+                "Bahla",
+                "Rustaq",
+                "Al-Khabourah"
+            ],
             // "Pakistan" => [
             //     "Karachi",
             //     "Lahore",
@@ -1432,7 +1432,13 @@ class CitySeeder extends Seeder
         foreach ($CountriesCities as $countryName => $cities) {
             $country = Country::where('name', trim($countryName))->first();
             foreach ($cities as $cityName) {
-                City::updateOrCreate(['name' => $cityName, 'country_id' => $country->id]);
+                City::updateOrCreate([
+                    'name' => [
+                        'en' => $cityName,
+                        'ar' => $cityName,
+                    ],
+                    'country_id' => $country->id
+                ]);
             }
         }
         $this->command->info('Cities added successfully!');

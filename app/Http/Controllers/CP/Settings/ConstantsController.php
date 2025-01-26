@@ -25,7 +25,7 @@ class ConstantsController extends Controller
     {
         if ($request->isMethod('GET')) {
             Log::info('Received a GET request to load the constants index page.');
-            return view('settings.constants.index');
+            return view('CP.settings.constants.index');
         }
 
         if ($request->isMethod('POST')) {
@@ -74,7 +74,7 @@ class ConstantsController extends Controller
             $constants = $constants->where('module', $module);
 
         $constants = $constants->get();
-        $editView = view('settings.constants.addedit_modal', [
+        $editView = view('CP.settings.constants.addedit_modal', [
             'constants' => $constants,
         ])->render();
 

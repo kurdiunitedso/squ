@@ -4,6 +4,9 @@ namespace App;
 
 use App\Models\Attachment;
 use App\Models\MenuWebSite;
+use App\Models\Program;
+use App\Models\ProgramPage;
+use App\Models\ProgramPageQuestion;
 use App\Models\Slider;
 use App\Models\WebsiteSection;
 use Exception;
@@ -43,6 +46,25 @@ class AppPermissionsHelper
                 "add" => Attachment::ui['s_lcf'] . '_add',
                 "edit" => Attachment::ui['s_lcf'] . '_edit',
                 "delete" => Attachment::ui['s_lcf'] . '_delete',
+            ],
+
+            Program::ui['p_ucf'] => [
+                "access" => Program::ui['s_lcf'] . "_access",
+                "add" => Program::ui['s_lcf'] . '_add',
+                "edit" => Program::ui['s_lcf'] . '_edit',
+                "delete" => Program::ui['s_lcf'] . '_delete',
+            ],
+            ProgramPage::ui['p_ucf'] => [
+                "access" => ProgramPage::ui['s_lcf'] . "_access",
+                "add" => ProgramPage::ui['s_lcf'] . '_add',
+                "edit" => ProgramPage::ui['s_lcf'] . '_edit',
+                "delete" => ProgramPage::ui['s_lcf'] . '_delete',
+            ],
+            ProgramPageQuestion::ui['p_ucf'] => [
+                "access" => ProgramPageQuestion::ui['s_lcf'] . "_access",
+                "add" => ProgramPageQuestion::ui['s_lcf'] . '_add',
+                "edit" => ProgramPageQuestion::ui['s_lcf'] . '_edit',
+                "delete" => ProgramPageQuestion::ui['s_lcf'] . '_delete',
             ],
 
 

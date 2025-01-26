@@ -111,8 +111,8 @@ class CountrySeeder extends Seeder
             // ['code' => "IQ", 'icon' => "iraq.svg", 'name' => "Iraq"],
             // ['code' => "IE", 'icon' => "ireland.svg", 'name' => "Ireland"],
             // ['code' => "IM", 'icon' => "isle-of-man.svg", 'name' => "Isle of Man"],
-            ['code' => "PS", 'icon' => "palestine.svg", 'name' => "Palestine"],
-            ['code' => "IL", 'icon' => "israel.svg", 'name' => "Israel"],
+            // ['code' => "PS", 'icon' => "palestine.svg", 'name' => "Palestine"],
+            // ['code' => "IL", 'icon' => "israel.svg", 'name' => "Israel"],
             // ['code' => "IT", 'icon' => "italy.svg", 'name' => "Italy"],
             // ['code' => "JM", 'icon' => "jamaica.svg", 'name' => "Jamaica"],
             // ['code' => "JP", 'icon' => "japan.svg", 'name' => "Japan"],
@@ -166,7 +166,7 @@ class CountrySeeder extends Seeder
             // ['code' => "NF", 'icon' => "norfolk-island.svg", 'name' => "Norfolk Island"],
             // ['code' => "MP", 'icon' => "northern-mariana-islands.svg", 'name' => "Northern Mariana Islands"],
             // ['code' => "NO", 'icon' => "norway.svg", 'name' => "Norway"],
-            // ['code' => "OM", 'icon' => "oman.svg", 'name' => "Oman"],
+            ['code' => "OM", 'icon' => "oman.svg", 'name' => "Oman"],
             // ['code' => "PK", 'icon' => "pakistan.svg", 'name' => "Pakistan"],
             // ['code' => "PW", 'icon' => "palau.svg", 'name' => "Palau"],
             // ['code' => "PA", 'icon' => "panama.svg", 'name' => "Panama"],
@@ -241,7 +241,16 @@ class CountrySeeder extends Seeder
         ];
 
         foreach ($countries as $country) {
-            Country::updateOrCreate(['name' => $country['name'], 'code' => $country['code'], 'icon' => $country['icon']]);
+            Country::updateOrCreate([
+                'code' => $country['code'],
+
+            ], [
+                'name' => [
+                    'en' => $country['name'],
+                    'ar' => $country['name'],
+                ],
+                'icon' => $country['icon']
+            ]);
         }
         $this->command->info('Countries added  successfully!');
     }

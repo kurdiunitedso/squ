@@ -16,12 +16,10 @@ class DatabaseSeeder extends Seeder
         $this->call([
             RolesAndPermissionsSeeder::class,
             AdminSeeder::class,
+            CountryCitySeeder::class,
             MenuSeeder::class,
             ConstantsTableSeederV2::class,
             WebsiteSectionSeeder::class,
-
-            // CountrySeeder::class,
-            // CitySeeder::class,
 
         ]);
     }

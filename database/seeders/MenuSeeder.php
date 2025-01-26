@@ -3,8 +3,9 @@
 namespace Database\Seeders;
 
 use App\Models\Menu;
-
+use App\Models\Program;
 use App\Models\Slider;
+use App\Models\User;
 use App\Models\WebsiteSection;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
@@ -80,7 +81,7 @@ class MenuSeeder extends Seeder
                         "name" => "المستخدمين",
                         "name_en" => "Users",
                         "name_he" => "משתמשים",
-                        "route" => "user-management.users.index",
+                        "route" => User::ui['route'] . ".index|" . User::ui['route'] . ".create",
                         "icon_svg" => NULL,
                         "order" => 1,
                         "permission_name" => "user_management_access",
@@ -95,6 +96,34 @@ class MenuSeeder extends Seeder
                         "permission_name" => "user_management_access",
                     ],
                 ]
+            ],
+            [
+
+                "name" => t(Program::ui['p_ucf']),
+                "name_en" => Program::ui['p_ucf'],
+                "name_he" => Program::ui['p_ucf'],
+                "route" => Program::ui['route'] . ".index|" . Program::ui['route'] . ".create|" . Program::ui['route'] . ".edit",
+
+                "icon_svg" => getSvgIcon('lead_management'),
+                "order" => 4,
+                "permission_name" => Program::ui['s_lcf'] . "_access",
+                "subRoutes" => [
+
+
+                    [
+                        "name" => t(Program::ui['p_ucf']),
+                        "name_en" => Program::ui['p_ucf'],
+                        "name_he" => Program::ui['p_ucf'],
+                        "route" => Program::ui['route'] . ".index|" . Program::ui['route'] . ".create|" . Program::ui['route'] . ".edit",
+
+                        "icon_svg" => '',
+                        "order" => 1,
+                        "permission_name" => Program::ui['s_lcf'] . "_access",
+                    ],
+
+
+                ],
+
             ],
             [
                 "name" => t("Website Management", [], 'ar'),
@@ -114,13 +143,14 @@ class MenuSeeder extends Seeder
                     //     "order" => 1,
                     //     "permission_name" => MenuWebSite::ui['s_lcf'] . "_access",
                     // ],
+
                     [
                         "name" => t(WebsiteSection::ui['p_ucf']),
                         "name_en" => WebsiteSection::ui['p_ucf'],
                         "name_he" => WebsiteSection::ui['p_ucf'],
                         "route" => WebsiteSection::ui['route'] . ".index|" . WebsiteSection::ui['route'] . ".create",
                         "icon_svg" => '',
-                        "order" => 1,
+                        "order" => 3,
                         "permission_name" => WebsiteSection::ui['s_lcf'] . "_access",
                     ],
 
@@ -128,6 +158,8 @@ class MenuSeeder extends Seeder
                 ],
 
             ],
+
+
         ];
 
 

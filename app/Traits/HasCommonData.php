@@ -8,7 +8,9 @@ use App\Models\Building;
 use App\Models\Client;
 use App\Models\Lead;
 use App\Models\PriceOffer;
+use App\Models\Program;
 use App\Models\Sale;
+use App\Services\Constants\GetConstantService;
 
 trait HasCommonData
 {
@@ -17,24 +19,15 @@ trait HasCommonData
      */
     protected const DROPDOWN_TYPES = [
         'city_list' => 'city_list',
-        'building_list' => 'building_list',
-        'apartment_type_list' => 'apartment_type_list',
-        'apartment_status_list' => 'apartment_status_list',
-        'apartment_size_list' => 'apartment_size_list',
-        'orientation_list' => 'orientation_list',
-        'parking_type_list' => 'parking_type_list',
-        'lead_form_type_list' => 'lead_form_type_list',
-        'apartment_list' => 'apartment_list',
-        'lead_status_list' => 'lead_status_list',
-        'lead_source_list' => 'lead_source_list',
-        'price_offer_status_list' => 'price_offer_status_list',
+
         'attachment_type_list' => 'attachment_type_list',
-        'active_add_on_list' => 'active_add_on_list',
+
         'website_section_type_list' => 'website_section_type_list',
         'bank_list' => 'bank_list',
-        'sales_contract_type_list' => 'sales_contract_type_list',
-        'sales_payment_type_list' => 'sales_payment_type_list',
-        'sales_status_list' => 'sales_status_list',
+        'program_target_applicants_list' => 'program_target_applicants_list',
+        'program_category_list' => 'program_category_list',
+        'program_eligibility_type_list' => 'program_eligibility_type_list',
+        'program_facility_list' => 'program_facility_list',
         // Add other dropdown types here
     ];
 
@@ -148,77 +141,6 @@ trait HasCommonData
         return \App\Models\City::all();
     }
 
-    protected function building_list()
-    {
-        return \App\Models\Building::all();
-    }
-
-    protected function apartment_type_list()
-    {
-        return \App\Services\Constants\ConstantService::search([
-            'module' => \App\Enums\Modules::appartment_module,
-            'field' => \App\Enums\DropDownFields::apartment_type,
-        ]);
-    }
-    protected function apartment_status_list()
-    {
-        return \App\Services\Constants\ConstantService::search([
-            'module' => \App\Enums\Modules::appartment_module,
-            'field' => \App\Enums\DropDownFields::apartment_status,
-        ]);
-    }
-
-    protected function apartment_size_list()
-    {
-        return \App\Services\Constants\ConstantService::search([
-            'module' => \App\Enums\Modules::appartment_module,
-            'field' => \App\Enums\DropDownFields::apartment_size,
-        ]);
-    }
-
-    protected function orientation_list()
-    {
-        return \App\Services\Constants\ConstantService::search([
-            'module' => \App\Enums\Modules::appartment_module,
-            'field' => \App\Enums\DropDownFields::apartment_orientation,
-        ]);
-    }
-
-    protected function parking_type_list()
-    {
-        return \App\Services\Constants\ConstantService::search([
-            'module' => \App\Enums\Modules::appartment_module,
-            'field' => \App\Enums\DropDownFields::apartment_parking_type,
-        ]);
-    }
-    protected function lead_form_type_list()
-    {
-        return \App\Services\Constants\ConstantService::search([
-            'module' => \App\Enums\Modules::lead_module,
-            'field' => \App\Enums\DropDownFields::lead_form_type,
-        ]);
-    }
-    protected function lead_status_list()
-    {
-        return \App\Services\Constants\ConstantService::search([
-            'module' => \App\Enums\Modules::lead_module,
-            'field' => \App\Enums\DropDownFields::lead_status,
-        ]);
-    }
-    protected function lead_source_list()
-    {
-        return \App\Services\Constants\ConstantService::search([
-            'module' => \App\Enums\Modules::lead_module,
-            'field' => \App\Enums\DropDownFields::lead_source,
-        ]);
-    }
-    protected function price_offer_status_list()
-    {
-        return \App\Services\Constants\ConstantService::search([
-            'module' => \App\Enums\Modules::price_offer_module,
-            'field' => \App\Enums\DropDownFields::price_offer_status,
-        ]);
-    }
     protected function website_section_type_list()
     {
         return \App\Services\Constants\ConstantService::search([
@@ -228,81 +150,36 @@ trait HasCommonData
     }
     protected function bank_list()
     {
-        return \App\Services\Constants\ConstantService::search([
-            'module' => \App\Enums\Modules::main_module,
-            'field' => \App\Enums\DropDownFields::banks,
-        ]);
+        return GetConstantService::get_bank_list();
     }
-    protected function sales_contract_type_list()
+
+    protected function program_target_applicants_list()
     {
-        return \App\Services\Constants\ConstantService::search([
-            'module' => \App\Enums\Modules::sales_module,
-            'field' => \App\Enums\DropDownFields::sales_contract_type,
-        ]);
+        return GetConstantService::get_program_target_applicants_list();
     }
-    protected function sales_payment_type_list()
+
+    protected function program_category_list()
     {
-        return \App\Services\Constants\ConstantService::search([
-            'module' => \App\Enums\Modules::sales_module,
-            'field' => \App\Enums\DropDownFields::sales_payment_type,
-        ]);
+        return GetConstantService::get_program_category_list();
     }
-    protected function sales_status_list()
+
+    protected function program_eligibility_type_list()
     {
-        return \App\Services\Constants\ConstantService::search([
-            'module' => \App\Enums\Modules::sales_module,
-            'field' => \App\Enums\DropDownFields::sales_status,
-        ]);
+        return GetConstantService::get_program_eligibility_type_list();
     }
-    protected function _view_path()
+
+    protected function program_facility_list()
     {
-        return \App\Services\Constants\ConstantService::search([
-            'module' => \App\Enums\Modules::price_offer_module,
-            'field' => \App\Enums\DropDownFields::price_offer_status,
-        ]);
+        return GetConstantService::get_program_facility_list();
     }
+
     protected function attachment_type_list()
     {
         $model = request()->model;
+        // dd($model, GetConstantService::get_program_attachment_type_list());
         switch ($model) {
-            case Apartment::class:
-                return \App\Services\Constants\ConstantService::search([
-                    'module' => \App\Enums\Modules::attachment_module,
-                    'field' => \App\Enums\DropDownFields::apartment_attachment_type,
-                ]);
-            case Building::class:
-                return \App\Services\Constants\ConstantService::search([
-                    'module' => \App\Enums\Modules::attachment_module,
-                    'field' => \App\Enums\DropDownFields::building_attachment_type,
-                ]);
-            case PriceOffer::class:
-                return \App\Services\Constants\ConstantService::search([
-                    'module' => \App\Enums\Modules::attachment_module,
-                    'field' => \App\Enums\DropDownFields::price_offer_attachment_type,
-                ]);
-            case Lead::class:
-                return \App\Services\Constants\ConstantService::search([
-                    'module' => \App\Enums\Modules::attachment_module,
-                    'field' => \App\Enums\DropDownFields::lead_attachment_type,
-                ]);
-            case Client::class:
-                return \App\Services\Constants\ConstantService::search([
-                    'module' => \App\Enums\Modules::attachment_module,
-                    'field' => \App\Enums\DropDownFields::client_attachment_type,
-                ]);
-            case Sale::class:
-                return \App\Services\Constants\ConstantService::search([
-                    'module' => \App\Enums\Modules::attachment_module,
-                    'field' => \App\Enums\DropDownFields::sale_attachment_type,
-                ]);
+            case Program::class:
+                return GetConstantService::get_program_attachment_type_list();
         }
-    }
-    protected function apartment_list()
-    {
-        return Apartment::get();
-    }
-    protected function active_add_on_list()
-    {
-        return AddOn::where('active', true)->get();
     }
 }

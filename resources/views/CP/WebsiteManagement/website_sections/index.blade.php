@@ -1,4 +1,4 @@
-@extends('metronic.index')
+@extends('CP.metronic.index')
 
 @section('title', $_model::ui['p_ucf'])
 @section('subpageTitle', $_model::ui['p_ucf'])
@@ -31,7 +31,6 @@
                             <input type="text" data-col-index="search" data-kt-table-filter="search"
                                 class="form-control datatable-input form-control-solid w-250px ps-14"
                                 placeholder="{{ t('Search ' . $_model::ui['s_ucf']) }}" />
-                            <input type="hidden" name="selectedCaptin">
                         </div>
                         <!--end::Search-->
                     </div>

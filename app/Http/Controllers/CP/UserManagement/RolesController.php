@@ -15,7 +15,7 @@ class RolesController extends Controller
         if ($request->isMethod('GET')) {
             $roles = Role::with('permissions')->where('name', '!=', 'super-admin')->get();
             $permissions = Permission::all();
-            return view('user-management.roles.index', compact('roles', 'permissions'));
+            return view('CP.user-management.roles.index', compact('roles', 'permissions'));
         }
         if ($request->isMethod('POST')) {
         }
@@ -27,7 +27,7 @@ class RolesController extends Controller
 
         $roleCards = '';
         foreach ($roles as $role) {
-            $roleCards .= view('user-management.roles.card', ['role' => $role])->render();
+            $roleCards .= view('CP.user-management.roles.card', ['role' => $role])->render();
         }
         return response()->json(['role_cards' => $roleCards]);
     }
@@ -72,7 +72,7 @@ class RolesController extends Controller
         $permssions = collect($this->getPermissionList());
         $grouped = $permssions->groupBy('groupName');
 
-        $createView = view('user-management.roles.addedit_modal', [
+        $createView = view('CP.user-management.roles.addedit_modal', [
             'id' => $id,
             'role' => $role,
             'permissions' => $grouped,
@@ -107,7 +107,7 @@ class RolesController extends Controller
         $grouped = $permssions->groupBy('groupName');
         $role->load('permissions');
         $earnedPermissions = $role->permissions->pluck('name')->toArray();
-        $createView = view('user-management.roles.addedit_modal', [
+        $createView = view('CP.user-management.roles.addedit_modal', [
             'role' => $role,
             'permissions' => $grouped,
             'earnedPermissions' => $earnedPermissions

@@ -16,114 +16,50 @@ class ConstantsTableSeederV2 extends Seeder
      * Define the constants configuration
      */
     protected array $constants = [
-
-        [
-            'module' => Modules::sales_module,
-            'items' => [
-
-
-                [
-                    'field' => DropDownFields::sales_contract_type,
-                    'values' => DropDownFields::sales_contract_type_list
-                ],
-                [
-                    'field' => DropDownFields::sales_payment_type,
-                    'values' => DropDownFields::sales_payment_type_list
-                ],
-                [
-                    'field' => DropDownFields::sales_status,
-                    'values' => DropDownFields::sales_status_list
-                ],
-
-            ]
-        ],
-        [
-            'module' => Modules::main_module,
-            'items' => [
-
-                [
-                    'field' => DropDownFields::banks,
-                    'values' => DropDownFields::banks_list,
-                    'children' => [
-                        'field' => DropDownFields::bank_branches,
-                        'values' => DropDownFields::bank_branches_list
-                    ]
-                ]
-            ]
-        ],
-
         [
             'module' => Modules::attachment_module,
             'items' => [
 
                 [
-                    'field' => DropDownFields::client_attachment_type,
-                    'values' => DropDownFields::client_attachment_type_list
-                ],
-                [
-                    'field' => DropDownFields::sale_attachment_type,
-                    'values' => DropDownFields::sale_attachment_type_list
-                ],
-                [
-                    'field' => DropDownFields::lead_attachment_type,
-                    'values' => DropDownFields::lead_attachment_type_list
+                    'field' => DropDownFields::program_attachment_type,
+                    'values' => DropDownFields::program_attachment_type_list
                 ]
             ]
         ],
         [
-            'module' => Modules::payment_module,
+            'module' => Modules::program_module,
             'items' => [
-
                 [
-                    'field' => DropDownFields::payment_plans_payment_frequency,
-                    'values' => DropDownFields::payment_plans_payment_frequency_list
+                    'field' => DropDownFields::program_eligibility_type,
+                    'values' => DropDownFields::program_eligibility_type_list
                 ],
                 [
-                    'field' => DropDownFields::payment_plans_status,
-                    'values' => DropDownFields::payment_plans_status_list
+                    'field' => DropDownFields::program_target_applicants,
+                    'values' => DropDownFields::program_target_applicants_list
                 ],
                 [
-                    'field' => DropDownFields::payment_schedules_payment_type,
-                    'values' => DropDownFields::payment_schedules_payment_type_list
+                    'field' => DropDownFields::program_category,
+                    'values' => DropDownFields::program_category_list
                 ],
                 [
-                    'field' => DropDownFields::payment_schedules_status,
-                    'values' => DropDownFields::payment_schedules_status_list
+                    'field' => DropDownFields::program_facility,
+                    'values' => DropDownFields::program_facility_list
                 ],
                 [
-                    'field' => DropDownFields::payment_transactions_payment_method,
-                    'values' => DropDownFields::payment_transactions_payment_method_list
-                ],
-                [
-                    'field' => DropDownFields::payment_transactions_status,
-                    'values' => DropDownFields::payment_transactions_status_list
-                ],
-                [
-                    'field' => DropDownFields::payment_fees_fee_type,
-                    'values' => DropDownFields::payment_fees_fee_type_list
-                ],
-                [
-                    'field' => DropDownFields::payment_fees_status,
-                    'values' => DropDownFields::payment_fees_status_list
-                ],
-
+                    'field' => DropDownFields::program_attachment_type,
+                    'values' => DropDownFields::program_attachment_type_list
+                ]
             ]
         ],
-
-
         [
-            'module' => Modules::website_sections_module,
+            'module' => Modules::program_page_module,
             'items' => [
                 [
-                    'field' => DropDownFields::website_section_type,
-                    'values' => DropDownFields::website_section_type_list
+                    'field' => DropDownFields::question_type,
+                    'values' => DropDownFields::question_type_list
                 ],
-
-
             ]
-        ],
-
-
+        ]
     ];
 
     public function run(): void
@@ -131,6 +67,16 @@ class ConstantsTableSeederV2 extends Seeder
         $this->logStart();
 
         try {
+            // Add debug logging
+            Log::info('Program attachment type list:', [
+                'values' => DropDownFields::program_attachment_type_list
+            ]);
+
+            Log::info('Constants configuration:', [
+                'module' => $this->constants[0]['module'],
+                'field' => $this->constants[0]['items'][0]['field'],
+                'values' => $this->constants[0]['items'][0]['values']
+            ]);
             // Clear cache
             $this->clearCache();
 
