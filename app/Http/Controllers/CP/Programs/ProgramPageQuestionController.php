@@ -117,7 +117,7 @@ class ProgramPageQuestionController extends Controller
             DB::beginTransaction();
 
             $data = $request->validated();
-            $id = $request->get('program_page_id');
+            $id = $request->get($this->_model::ui['_id']);
 
             // Prepare the data
             $saveData = [
@@ -132,7 +132,7 @@ class ProgramPageQuestionController extends Controller
             if ($request->has('options')) {
                 $saveData['options'] = $data['options'];
             }
-
+            // dd($id, isset($id));
             if (isset($id)) {
                 $item = $this->_model->findOrFail($id);
                 $item->update($saveData);

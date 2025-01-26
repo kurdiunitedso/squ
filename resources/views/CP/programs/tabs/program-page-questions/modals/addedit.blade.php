@@ -25,7 +25,7 @@
         <form id="{{ $_model::ui['s_lcf'] }}_modal_form" class="form"
             action="{{ route($route, ['program' => $program->id]) }}">
             @if (isset($_model))
-                <input type="hidden" name="program_page_id" value="{{ $_model->id }}">
+                <input type="hidden" name="{{ $_model::ui['_id'] }}" value="{{ $_model->id }}">
             @endif
 
             <div class="d-flex flex-column scroll-y me-n7 pe-7">
@@ -73,18 +73,18 @@
                     <div class="col-md-4">
                         <div class="fv-row mb-7">
                             <label class="fw-semibold fs-6 mb-2">{{ t('Program Page') }}</label>
-                            <select name="page_id"
-                                class="form-select form-select-solid validate-required @error('page_id') is-invalid @enderror"
+                            <select name="program_page_id"
+                                class="form-select form-select-solid validate-required @error('program_page_id') is-invalid @enderror"
                                 data-dropdown-parent="#kt_modal_general" data-allow-clear="true">
                                 <option value="">{{ t('Select Type') }}</option>
                                 @foreach ($program_page_list ?? [] as $type)
                                     <option value="{{ $type->id }}"
-                                        {{ $_model->page_id == $type->id ? 'selected' : '' }}>
+                                        {{ $_model->program_page_id == $type->id ? 'selected' : '' }}>
                                         {{ $type->title }}
                                     </option>
                                 @endforeach
                             </select>
-                            @error('page_id')
+                            @error('program_page_id')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>
