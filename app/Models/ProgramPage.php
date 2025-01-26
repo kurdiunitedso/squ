@@ -50,19 +50,24 @@ class ProgramPage extends Model
     {
         return [
             $this->getEditButton(),
-            $this->getFormGeneratorButton(),
+            $this->getAddPageQuestionsButton(),
 
             $this->getRemoveButton(),
         ];
     }
-    protected function getFormGeneratorButton()
+    protected function getAddPageQuestionsButton()
     {
-        $route = route(Program::ui['route'] . '.' . self::ui['route'] . '.form-generator', ['program' => $this->program_id, '_model' => $this->id]);
-        $title = t('Form Generator');
-        $class = 'btn_form_generator_' . self::ui['s_lcf'];
-        $icon = getSvgIcon('price-offer', $title);
+        $route = route(Program::ui['route'] . '.' . ProgramPageQuestion::ui['route'] . '.index', [
+            'program' => $this->program_id,
+            'page_id' => $this->id
+        ]);
+        $title = t('Show ' . ProgramPageQuestion::ui['s_ucf']);
+        $class = 'btn_show_' . ProgramPageQuestion::ui['s_lcf'];
+        $attributes = 'data-id="' . $this->id . '"';
 
-        return generateButton($route, $title, $class, $icon);
+        $icon = getSvgIcon('view', $title);
+
+        return generateButton($route, $title, $class, $icon, $attributes);
     }
 
     protected function getEditButton($route = null)

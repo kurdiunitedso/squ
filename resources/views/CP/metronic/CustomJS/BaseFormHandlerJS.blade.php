@@ -297,13 +297,9 @@
 
                 const $modal = $(modalId);
                 $modal.find('.modal-dialog').html(response.createView);
-
-                // Initialize modal-specific Flatpickr manager
                 let modalFlatpickrManager;
 
-                // Handle modal events
                 $modal.on('shown.bs.modal', function() {
-                    // Initialize UI components
                     KTScroll.createInstances();
                     KTImageInput.createInstances();
 
@@ -311,23 +307,30 @@
                         const form = document.querySelector(formId);
                         try {
                             if (submitButtonName) {
+                                const combinedCallback = async (response, form, modalBootstrap,
+                                    dataTableId) => {
+                                        // Execute default success callback first
+                                        await ModalRenderer.defaultSuccessCallback(response, form,
+                                            modalBootstrap, dataTableId);
+
+                                        // Execute additional callback if provided
+                                        if (onFormSuccessCallBack) {
+                                            await onFormSuccessCallBack(response, form, modalBootstrap,
+                                                dataTableId);
+                                        }
+                                    };
+
                                 ModalFormHandler.initialize({
                                     submitButtonSelector: submitButtonName,
                                     form: form,
                                     modalBootstrap: modalBootstrap,
                                     dataTableId: dataTableId,
-                                    onFormSuccessCallBack: onFormSuccessCallBack
+                                    onFormSuccessCallBack: combinedCallback
                                 });
-                            } else {
-                                console.error('Error submitButtonName not found:', submitButtonName);
+
+                                modalFlatpickrManager = FlatpickrManager.initialize(form);
+                                ModalRenderer.initializeSelect2Elements(modalId);
                             }
-
-                            // Initialize modal-specific Flatpickr
-                            modalFlatpickrManager = FlatpickrManager.initialize(form);
-
-                            // Initialize select2 elements
-                            ModalRenderer.initializeSelect2Elements(modalId);
-
                         } catch (error) {
                             console.error('Error initializing form:', error);
                             handleAjaxErrors(error);
@@ -346,7 +349,6 @@
                     $modal.off('shown.bs.modal hidden.bs.modal');
                 });
 
-                // Show the modal
                 modalBootstrap.show();
 
             } catch (error) {
@@ -355,6 +357,27 @@
                 if (button) {
                     button.removeAttr('data-kt-indicator');
                 }
+            }
+        }
+
+        static defaultSuccessCallback(response, form, modalBootstrap, dataTableId) {
+            if (response.message) {
+                const color = response.color || 'success';
+                toastr[color](response.message);
+            }
+
+            if (response.status) {
+                if (typeof refreshPageFilters === 'function') {
+                    refreshPageFilters();
+                }
+
+                if (form?.reset) form.reset();
+                if (modalBootstrap?.hide) modalBootstrap.hide();
+                if (dataTableId?.ajax?.reload) dataTableId.ajax.reload(null, false);
+            }
+
+            if (response.attachment) {
+                AttachmentHandler.handleResponse(response);
             }
         }
 

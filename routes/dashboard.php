@@ -171,6 +171,10 @@ Route::group(['prefix' => 'dashboard'], function () {
                             ->name('form-generator');
                         Route::post('/' . ProgramPage::ui['s_lcf'] . '/{_model}/update-structure', [ProgramPageController::class, 'updateStructure'])
                             ->name('update-structure');
+
+                        Route::get('/pages', function (Program $program) {
+                            return $program->pages()->orderBy('order')->get(['id', 'title']);
+                        })->name('pages');
                     });
 
                 Route::prefix(ProgramPageQuestion::ui['route'] . '/{program}')

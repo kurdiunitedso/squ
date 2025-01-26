@@ -88,40 +88,32 @@ class ProgramPageQuestion extends Model
             $this->getRemoveButton(),
         ];
     }
-
-    protected function getEditButton()
+    protected function getEditButton($route = null)
     {
-        $route = route(Program::ui['route'] . '.pages.' . self::ui['route'] . '.edit', [
-            'program' => $this->page->program_id,
-            'page' => $this->program_page_id,
-            '_model' => $this->id
-        ]);
+        if (!isset($route)) {
+            $route = route(Program::ui['route'] . '.' . self::ui['route'] . '.edit', ['program' => $this->program_id, '_model' => $this->id]);
+        }
+        $title = t('Edit ' . self::ui['s_ucf']);
+        $class = 'btn_update_' . self::ui['s_lcf'];
+        $icon = getSvgIcon('edit', $title);
 
-        return generateButton(
-            $route,
-            t('Edit ' . self::ui['s_ucf']),
-            'btn_update_' . self::ui['s_lcf'],
-            getSvgIcon('edit', 'Edit')
-        );
+        return generateButton($route, $title, $class, $icon);
     }
 
-    protected function getRemoveButton()
+    protected function getRemoveButton($route = null, $attributes = null)
     {
-        $route = route(Program::ui['route'] . '.pages.' . self::ui['route'] . '.delete', [
-            'program' => $this->page->program_id,
-            'page' => $this->program_page_id,
-            '_model' => $this->id
-        ]);
+        // i do it becuase of the attachemnt (has file name not name directly )
+        if (!isset($attributes)) {
+            $attributes = 'data-' . self::ui['s_lcf'] . '-name="' . ($this->title ?? '') . '"';
+        }
+        if (!isset($route)) {
+            $route = route(Program::ui['route'] . '.' . self::ui['route'] . '.delete', ['program' => $this->program_id, '_model' => $this->id]);
+        }
+        $title = t('Remove ' . self::ui['s_ucf']);
+        $class = 'btn_delete_' . self::ui['s_lcf'];
+        $icon = getSvgIcon('delete', $title);
 
-        $attributes = 'data-' . self::ui['s_lcf'] . '-name="' . ($this->question['en'] ?? '') . '"';
-
-        return generateButton(
-            $route,
-            t('Remove ' . self::ui['s_ucf']),
-            'btn_delete_' . self::ui['s_lcf'],
-            getSvgIcon('delete', 'Delete'),
-            $attributes
-        );
+        return generateButton($route, $title, $class, $icon, $attributes);
     }
 
     public function scopeOrdered($query)

@@ -2,6 +2,8 @@
 
 namespace App\Http\Requests\CP\Program;
 
+use App\Models\Program;
+use App\Models\ProgramPage;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -23,6 +25,8 @@ class ProgramPageRequestQuestion extends FormRequest
             'score' => 'nullable|numeric|min:0',
             'order' => 'required|integer|min:0',
             'required' => 'nullable|boolean',
+            ProgramPage::ui['_id'] => 'required|exists:' . ProgramPage::ui['table'] . ',id',
+
         ];
 
         // Add translation rules for each locale

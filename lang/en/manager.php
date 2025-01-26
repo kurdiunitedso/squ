@@ -272,5 +272,10 @@ return [
   'Enter question in AR' => 'Enter question in AR',  
   'Edit' => 'Edit',  
   'Add Program Page Question' => 'Add Program Page Question',  
-  'Add Program Page Questions' => 'Add Program Page Questions',
+  'Add Program Page Questions' => 'Add Program Page Questions',  
+  'Program Page Question has been added successfully!' => 'Program Page Question has been added successfully!',  
+  'Remove Program Page Question' => 'Remove Program Page Question',  
+  'Program Page Question Deleted Successfully!' => 'Program Page Question Deleted Successfully!',  
+  'Show Program Page Question' => 'Show Program Page Question',  
+  'Program Page Question has been updated successfully!' => 'Program Page Question has been updated successfully!',
 ];

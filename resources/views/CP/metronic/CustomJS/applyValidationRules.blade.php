@@ -3,7 +3,7 @@
     class ValidationLogger {
         static log(message, data = null) {
             const timestamp = new Date().toISOString();
-            console.log(`[${timestamp}] ${message}`, data || '');
+            // console.log(`[${timestamp}] ${message}`, data || '');
         }
 
         static error(message, error) {

@@ -46,8 +46,12 @@ class ProgramPageQuestionController extends Controller
         }
 
         if ($request->isMethod('POST')) {
+            $page_id = $request->get('page_id', null);
             $items = $this->_model->query()
                 ->where('program_id', $program->id)
+                ->when($page_id, function ($q) use ($page_id) {
+                    $q->where('program_page_id', $page_id);
+                })
                 ->orderBy('order', 'asc');
 
             if ($request->input('params')) {
@@ -120,25 +124,25 @@ class ProgramPageQuestionController extends Controller
             $id = $request->get($this->_model::ui['_id']);
 
             // Prepare the data
-            $saveData = [
-                'question' => $data['question'],
-                'type' => $data['type'],
-                'score' => $data['score'] ?? 0,
-                'order' => $data['order'],
-                'required' => $request->boolean('required'),
-            ];
+            // $saveData = [
+            //     'question' => $data['question'],
+            //     'type' => $data['type'],
+            //     'score' => $data['score'] ?? 0,
+            //     'order' => $data['order'],
+            //     'required' => $request->boolean('required'),
+            // ];
 
             // Add options if present
-            if ($request->has('options')) {
-                $saveData['options'] = $data['options'];
-            }
+            // if ($request->has('options')) {
+            //     $saveData['options'] = $data['options'];
+            // }
             // dd($id, isset($id));
             if (isset($id)) {
                 $item = $this->_model->findOrFail($id);
-                $item->update($saveData);
+                $item->update($data);
             } else {
-                $saveData['program_id'] = $program->id;
-                $item = $this->_model->create($saveData);
+                $data['program_id'] = $program->id;
+                $item = $this->_model->create($data);
             }
 
             DB::commit();

@@ -38,32 +38,27 @@
                 <!--begin::Card toolbar-->
                 <div class="card-toolbar">
                     <!--begin::Toolbar-->
-                    <div class="d-flex justify-content-end" data-kt-items-table-toolbar="base">
-                        <!--begin::Filter-->
-                        <!--begin::offers 1-->
-                        <!--end::offers 1-->
-                        <!--end::Filter-->
-                        <!--begin::Add offers-->
+                    <div class="d-flex justify-content-between align-items-center mb-5">
+                        <!-- Filter buttons -->
+                        <div class="d-flex gap-2" id="pageFilters">
+                            @foreach ($_model->pages as $page)
+                                <a class="btn btn-light-primary btn-sm page-filter" data-page-id="{{ $page->id }}"
+                                    onclick="filterByPage({{ $page->id }})">
+                                    {{ $page->title }}
+                                </a>
+                            @endforeach
+                        </div>
+
+                        <!-- Add button -->
                         <a href="{{ route($_model::ui['route'] . '.' . ProgramPageQuestion::ui['route'] . '.create', ['program' => $_model->id]) }}"
                             class="btn btn-primary" id="add_{{ ProgramPageQuestion::ui['s_lcf'] }}_modal">
                             <span class="indicator-label">
                                 <span class="svg-icon svg-icon-2">
-                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
-                                        xmlns="http://www.w3.org/2000/svg">
-                                        <rect opacity="0.5" x="11.364" y="20.364" width="16" height="2"
-                                            rx="1" transform="rotate(-90 11.364 20.364)" fill="currentColor" />
-                                        <rect x="4.36396" y="11.364" width="16" height="2" rx="1"
-                                            fill="currentColor" />
-                                    </svg>
+                                    <svg>...</svg>
                                 </span>
                                 {{ __('Add') }}
                             </span>
-                            <span class="indicator-progress">
-                                {{ t('Please wait...') }} <span
-                                    class="spinner-border spinner-border-sm align-middle ms-2"></span>
-                            </span>
                         </a>
-                        <!--end::Add offers-->
                     </div>
                     <!--end::Toolbar-->
 

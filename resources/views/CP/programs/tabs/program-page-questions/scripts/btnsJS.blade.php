@@ -1,6 +1,10 @@
 @php
     use App\Models\ProgramPageQuestion;
+    use App\Models\Program;
 @endphp
+
+
+
 {{-- add BTN --}}
 <script>
     $(document).on('click', "#add_{{ ProgramPageQuestion::ui['s_lcf'] }}_modal", function(e) {

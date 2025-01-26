@@ -1,6 +1,35 @@
 @php
+    use App\Models\Program;
     use App\Models\ProgramPage;
+    use App\Models\ProgramPageQuestion;
 @endphp
+
+{{-- btn_show_ questions --}}
+<script>
+    $(document).on('click', ".btn_show_{{ ProgramPageQuestion::ui['s_lcf'] }}", function(e) {
+        e.preventDefault();
+        const button = $(this);
+        const URL = $(this).attr('href');
+        const pageId = $(this).attr('data-id');
+        console.log('pageId', pageId);
+
+        // Show tab
+        $('a[data-bs-target="#kt_tab_pane_{{ ProgramPageQuestion::ui['s_lcf'] }}"]').tab('show');
+        filterByPage(pageId)
+    });
+
+    function filterByPage(pageId) {
+        // Update active state
+        $('.page-filter').removeClass('btn-primary').addClass('btn-light-primary');
+        $(`[data-page-id="${pageId}"]`).removeClass('btn-light-primary').addClass('btn-primary');
+
+        // Reload datatable with filter
+        datatableProgramPageQuestion.ajax.url(
+            "{{ route(Program::ui['route'] . '.' . ProgramPageQuestion::ui['route'] . '.index', ['program' => $_model->id]) }}?page_id=" +
+            pageId).load();
+    }
+</script>
+
 {{-- add BTN --}}
 <script>
     $(document).on('click', "#add_{{ ProgramPage::ui['s_lcf'] }}_modal", function(e) {
@@ -16,10 +45,30 @@
             formId: '#{{ ProgramPage::ui['s_lcf'] }}_modal_form',
             dataTableId: datatableProgramPage,
             submitButtonName: "[data-kt-modal-action='submit_{{ ProgramPage::ui['s_lcf'] }}']",
-            // onFormSuccessCallBack: onFormSuccessCallBack,
-            // callBackFunction: function() {}
+            onFormSuccessCallBack: (response) => {
+                refreshPageFilters();
+                console.log('Extra actions completed');
+            }
+            // callBackFunction: function() {
+
+            // }
         });
     });
+
+    // Refresh filter function
+    function refreshPageFilters() {
+        $.get("{{ route(Program::ui['route'] . '.' . ProgramPage::ui['route'] . '.pages', ['program' => $_model->id]) }}",
+            function(pages) {
+                let html = pages.map(page => `
+            <button class="btn btn-light-primary btn-sm page-filter me-2"
+                data-page-id="${page.id}"
+                onclick="filterPageQuestions(${page.id})">
+                ${page.title[currentLocale]}
+            </button>
+        `).join('');
+                $('#pageFilters').html(html);
+            });
+    }
 </script>
 {{-- Update BTN --}}
 <script>
@@ -36,10 +85,12 @@
             formId: '#{{ ProgramPage::ui['s_lcf'] }}_modal_form',
             dataTableId: datatableProgramPage,
             submitButtonName: "[data-kt-modal-action='submit_{{ ProgramPage::ui['s_lcf'] }}']",
-            // onFormSuccessCallBack: onFormSuccessCallBack,
+            onFormSuccessCallBack: (response) => {
+                refreshPageFilters();
+                console.log('Extra actions completed');
+            }
             // callBackFunction: function() {
-            //     totalCostCallBack(); // Your existing callback
-            //     handleAddOnSelectChange(); // New callback for add-on select
+
             // }
         });
     });
@@ -81,7 +132,10 @@
 
 
 
-                    complete: function() {},
+                    complete: function() {
+
+                        refreshPageFilters();
+                    },
                     error: function(response, textStatus,
                         errorThrown) {
                         toastr.error(response
