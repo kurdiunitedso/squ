@@ -13,6 +13,7 @@ use App\Models\Attachment;
 use App\Models\WebsiteSection;
 
 use App\Http\Controllers\Authentication\LoginController;
+use App\Http\Controllers\CP\Programs\FormBuilderController;
 use App\Http\Controllers\CP\Programs\ProgramController;
 use App\Http\Controllers\CP\Programs\ProgramPageController;
 use App\Http\Controllers\CP\Programs\ProgramPageQuestionController;
@@ -171,25 +172,30 @@ Route::group(['prefix' => 'dashboard'], function () {
                             ->name('form-generator');
                         Route::post('/' . ProgramPage::ui['s_lcf'] . '/{_model}/update-structure', [ProgramPageController::class, 'updateStructure'])
                             ->name('update-structure');
-
-                        Route::get('/pages', function (Program $program) {
-                            return $program->pages()->orderBy('order')->get(['id', 'title']);
-                        })->name('pages');
                     });
 
-                Route::prefix(ProgramPageQuestion::ui['route'] . '/{program}')
-                    ->name(ProgramPageQuestion::ui['route'] . '.')
-                    ->controller(ProgramPageQuestionController::class)
+                Route::prefix(ProgramPageQuestion::ui['route'] . '/{program}')->name(ProgramPageQuestion::ui['route'] . '.')->controller(ProgramPageQuestionController::class)->group(function () {
+                    Route::match(['get', 'post'], '/', 'index')->name('index')->middleware('permission:' . ProgramPageQuestion::ui['s_lcf'] . '_access');
+                    Route::get('/create', 'create')->name('create')->middleware('permission:' . ProgramPageQuestion::ui['s_lcf'] . '_access');
+                    Route::get('/{_model}/edit', 'edit')->name('edit')->middleware('permission:' . ProgramPageQuestion::ui['s_lcf'] . '_access');
+                    Route::delete('{_model}/delete', 'delete')->name('delete')->middleware('permission:' . ProgramPageQuestion::ui['s_lcf'] . '_access');
+                    Route::post('/' . ProgramPageQuestion::ui['s_lcf'] . '/{Id?}', 'addedit')->name('addedit')->middleware('permission:' . ProgramPageQuestion::ui['s_lcf'] . '_access');
+                    Route::get('/' . ProgramPageQuestion::ui['s_lcf'] . '/{_model}/form-generator', [ProgramPageQuestionController::class, 'formGenerator'])
+                        ->name('form-generator');
+                    Route::post('/' . ProgramPageQuestion::ui['s_lcf'] . '/{_model}/update-structure', [ProgramPageQuestionController::class, 'updateStructure'])
+                        ->name('update-structure');
+                });
+
+                Route::controller(FormBuilderController::class)
                     ->group(function () {
-                        Route::match(['get', 'post'], '/', 'index')->name('index')->middleware('permission:' . ProgramPageQuestion::ui['s_lcf'] . '_access');
-                        Route::get('/create', 'create')->name('create')->middleware('permission:' . ProgramPageQuestion::ui['s_lcf'] . '_access');
-                        Route::get('/{_model}/edit', 'edit')->name('edit')->middleware('permission:' . ProgramPageQuestion::ui['s_lcf'] . '_access');
-                        Route::delete('{_model}/delete', 'delete')->name('delete')->middleware('permission:' . ProgramPageQuestion::ui['s_lcf'] . '_access');
-                        Route::post('/' . ProgramPageQuestion::ui['s_lcf'] . '/{Id?}', 'addedit')->name('addedit')->middleware('permission:' . ProgramPageQuestion::ui['s_lcf'] . '_access');
-                        Route::get('/' . ProgramPageQuestion::ui['s_lcf'] . '/{_model}/form-generator', [ProgramPageQuestionController::class, 'formGenerator'])
-                            ->name('form-generator');
-                        Route::post('/' . ProgramPageQuestion::ui['s_lcf'] . '/{_model}/update-structure', [ProgramPageQuestionController::class, 'updateStructure'])
-                            ->name('update-structure');
+                        Route::get('/{program}/pages', function (Program $program) {
+                            // dd($program->id);
+                            return $program->pages()->orderBy('order')->get(['id', 'title']);
+                        })->name('pages');
+
+                        Route::get('/{program}/form-builder', 'formBuilder')->name('form-builder');
+                        Route::get('/{program}/pages/{page}/content', 'getPageContent')->name('pages.content');
+                        Route::post('/{program}/pages/{page?}', 'savePage')->name('pages.save');
                     });
             });
     });
