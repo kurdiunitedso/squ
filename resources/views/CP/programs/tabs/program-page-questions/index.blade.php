@@ -9,10 +9,10 @@
             <!--begin::Card header-->
             <div class="card-header border-0 pt-6">
                 <!--begin::Card title-->
-                <div class="card-title">
+                <div class="card-title d-flex align-items-center flex-grow-1">
                     <!--begin::Search-->
-                    <div class="d-flex align-items-center position-relative my-1">
-                        <!--begin::Svg Icon | path: icons/duotune/general/gen021.svg-->
+                    <div class="d-flex align-items-center position-relative my-1 me-5">
+                        <!--begin::Svg Icon-->
                         <span class="svg-icon svg-icon-1 position-absolute ms-6">
                             <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
                                 xmlns="http://www.w3.org/2000/svg">
@@ -24,45 +24,57 @@
                             </svg>
                         </span>
                         <!--end::Svg Icon-->
-
                         <input type="text" data-kt-{{ ProgramPageQuestion::ui['s_lcf'] }}-table-filter="search"
-                            data-col-index="search" {{-- data-kt-teams-table-filter="search" --}}
+                            data-col-index="search"
                             class="form-control form-control-solid w-250px ps-14 datatable-input"
                             placeholder="Search {{ ProgramPageQuestion::ui['p_ucf'] }}" />
-
-
                     </div>
                     <!--end::Search-->
+
+                    <!-- Filter buttons -->
+                    <div class="d-flex gap-2" id="pageFilters">
+                        <a class="btn btn-light-primary btn-sm page-filter" data-page-id="all" onclick="filterByPage()">
+                            {{ t('All Pages') }}
+                        </a>
+                        @foreach ($_model->pages as $page)
+                            <a class="btn btn-light-primary btn-sm page-filter" data-page-id="{{ $page->id }}"
+                                onclick="filterByPage({{ $page->id }})">
+                                {{ $page->title }}
+                            </a>
+                        @endforeach
+                    </div>
                 </div>
                 <!--begin::Card title-->
+
                 <!--begin::Card toolbar-->
                 <div class="card-toolbar">
                     <!--begin::Toolbar-->
-                    <div class="d-flex justify-content-between align-items-center mb-5">
-                        <!-- Filter buttons -->
-                        <div class="d-flex gap-2" id="pageFilters">
-                            <a class="btn btn-light-primary btn-sm page-filter" data-page-id="all"
-                                onclick="filterByPage()">
-                                {{ t('All Pages') }}
-                            </a>
-                            @foreach ($_model->pages as $page)
-                                <a class="btn btn-light-primary btn-sm page-filter" data-page-id="{{ $page->id }}"
-                                    onclick="filterByPage({{ $page->id }})">
-                                    {{ $page->title }}
-                                </a>
-                            @endforeach
-                        </div>
-
-                        <!-- Add button -->
+                    <div class="d-flex justify-content-end" data-kt-items-table-toolbar="base">
+                        <!--begin::Filter-->
+                        <!--begin::offers 1-->
+                        <!--end::offers 1-->
+                        <!--end::Filter-->
+                        <!--begin::Add offers-->
                         <a href="{{ route($_model::ui['route'] . '.' . ProgramPageQuestion::ui['route'] . '.create', ['program' => $_model->id]) }}"
                             class="btn btn-primary" id="add_{{ ProgramPageQuestion::ui['s_lcf'] }}_modal">
                             <span class="indicator-label">
                                 <span class="svg-icon svg-icon-2">
-                                    <svg>...</svg>
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <rect opacity="0.5" x="11.364" y="20.364" width="16" height="2"
+                                            rx="1" transform="rotate(-90 11.364 20.364)" fill="currentColor" />
+                                        <rect x="4.36396" y="11.364" width="16" height="2" rx="1"
+                                            fill="currentColor" />
+                                    </svg>
                                 </span>
                                 {{ __('Add') }}
                             </span>
+                            <span class="indicator-progress">
+                                {{ t('Please wait...') }} <span
+                                    class="spinner-border spinner-border-sm align-middle ms-2"></span>
+                            </span>
                         </a>
+                        <!--end::Add offers-->
                     </div>
                     <!--end::Toolbar-->
 
@@ -74,11 +86,8 @@
             </div>
             <!--end::Card header-->
             <!--begin::Card body-->
-
             <div class="card-body py-4">
                 <!--begin::Table-->
-
-
                 <div class="row">
                     <table class="table table-bordered align-middle table-row-dashed fs-6 gy-5"
                         id="kt_table_{{ ProgramPageQuestion::ui['s_lcf'] }}">

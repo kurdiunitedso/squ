@@ -18,7 +18,7 @@ class ProgramPageQuestionFactory extends Factory
         $options = [];
         if (in_array($fieldType->constant_name, ['dropdown', 'checkbox'])) {
             $options = [
-                'en' => $this->faker->words(rand(3, 6)),
+                'en' => $this->faker->words(rand(1, 3)),
                 'ar' => array_map(function ($i) {
                     return 'خيار ' . $i;
                 }, range(1, rand(3, 6)))

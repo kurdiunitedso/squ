@@ -22,7 +22,7 @@ class ProgramSeeder extends Seeder
         $facilities = GetConstantService::get_program_facility_list();
 
         // Create 10 programs
-        for ($i = 0; $i < 10; $i++) {
+        for ($i = 0; $i < 3; $i++) {
             $program = Program::create([
                 'name' => [
                     'en' => $faker->company(),
