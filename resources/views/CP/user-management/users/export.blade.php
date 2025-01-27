@@ -5,7 +5,6 @@
             <th>Employee Name</th>
             <th>Mobile</th>
             <th>Email</th>
-            <th>Branch</th>
             <th>Role</th>
             <th>Active</th>
         </tr>
@@ -17,7 +16,6 @@
                 <td>{{ $user->name }}</td>
                 <td>{{ $user->mobile }}</td>
                 <td>{{ $user->email }}</td>
-                <td>{{ @$user->branch->name }}</td>
                 <td>{{ @$user->roles->pluck('name')->implode(',') }}</td>
                 <td>{{ $user->status ? 'true' : 'false' }}</td>
             </tr>
