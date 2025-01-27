@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\CP\UserManagement;
 
 use App\Exports\ApartmentsExport;
+use App\Exports\UsersExport;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CP\UserRequest;
 use App\Http\Requests\CP\WebsiteSectionRequest;
@@ -265,6 +266,6 @@ class UsersController extends Controller
         $params = $request->all();
         $filterService = $this->filterService;
 
-        return Excel::download(new ApartmentsExport($params, $filterService), $this->_model::ui['p_lcf'] . '.xlsx');
+        return Excel::download(new UsersExport($params, $filterService), $this->_model::ui['p_lcf'] . '.xlsx');
     }
 }

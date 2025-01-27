@@ -12,7 +12,7 @@ class WebsiteSectionSeeder extends Seeder
     {
         WebsiteSection::query()->delete();
         // Create 50 random website sections
-        WebsiteSection::factory(50)->create();
+        WebsiteSection::factory(3)->create();
 
         $menuType = WebsiteSection::getWebsiteSectionTypeConstant(DropDownFields::website_section_type_list['menu']);
         $sliderType = WebsiteSection::getWebsiteSectionTypeConstant(DropDownFields::website_section_type_list['slider']);
