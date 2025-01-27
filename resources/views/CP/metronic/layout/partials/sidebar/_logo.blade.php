@@ -2,9 +2,7 @@
 <div class="app-sidebar-logo px-6" id="kt_app_sidebar_logo">
     <!--begin::Logo image-->
     <a href="{{ route('home') }}">
-        <img alt="Logo" src="{{ asset('media/logos/metronic-side-bar-logo.svg') }}"
-            class="h-40px app-sidebar-logo-default" style="margin-top: 10px;height: 195px !important" />
-        <img alt="Logo" src="{{ asset('media/logos/logo-opts-mini.svg') }}" class="h-20px app-sidebar-logo-minimize" />
+       <h4 class="text text-white">Innovation Technology Center</h4>
     </a>
     <!--end::Logo image-->
     <div id="kt_app_sidebar_toggle"
