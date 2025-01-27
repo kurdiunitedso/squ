@@ -123,7 +123,7 @@
                         }
                         return '';
                     },
-                    name: 'country.name.' + currentLocale,
+                    name: 'country.name->' + currentLocale,
                 },
 
 

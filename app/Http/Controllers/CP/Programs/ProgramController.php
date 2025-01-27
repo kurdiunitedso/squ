@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\CP\Programs;
 
 use App\Exports\LeadsExport;
+use App\Exports\ProgramExport;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CP\Program\ProgramRequest;
 use App\Models\Attachment;
@@ -288,7 +289,7 @@ class ProgramController extends Controller
         $params = $request->all();
         $filterService = $this->filterService;
 
-        return Excel::download(new LeadsExport($params, $filterService), $this->_model::ui['p_lcf'] . '.xlsx');
+        return Excel::download(new ProgramExport($params, $filterService), $this->_model::ui['p_lcf'] . '.xlsx');
     }
 
     /**

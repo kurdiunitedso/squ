@@ -289,5 +289,7 @@ return [
     'Allow Multiple Selection' => 'السماح بالاختيار المتعدد',
     'Minimum Length' => 'الحد الأدنى للطول',
     'Maximum Length' => 'الحد الأقصى للطول',
-    'Pattern (Regex)' => 'النمط (تعبير منتظم)'
+    'Pattern (Regex)' => 'النمط (تعبير منتظم)'  
+  'ID' => 'ID',  
+  'Eligibilities' => 'Eligibilities',
 ];

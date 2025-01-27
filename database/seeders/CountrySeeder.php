@@ -166,7 +166,7 @@ class CountrySeeder extends Seeder
             // ['code' => "NF", 'icon' => "norfolk-island.svg", 'name' => "Norfolk Island"],
             // ['code' => "MP", 'icon' => "northern-mariana-islands.svg", 'name' => "Northern Mariana Islands"],
             // ['code' => "NO", 'icon' => "norway.svg", 'name' => "Norway"],
-            ['code' => "OM", 'icon' => "oman.svg", 'name' => "Oman"],
+            ['code' => "OM", 'icon' => "media/flags/oman.svg", 'name' => "Oman"],
             // ['code' => "PK", 'icon' => "pakistan.svg", 'name' => "Pakistan"],
             // ['code' => "PW", 'icon' => "palau.svg", 'name' => "Palau"],
             // ['code' => "PA", 'icon' => "panama.svg", 'name' => "Panama"],

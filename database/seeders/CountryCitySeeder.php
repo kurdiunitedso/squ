@@ -12,7 +12,7 @@ class CountryCitySeeder extends Seeder
         [
             'country' => [
                 'code' => 'OM',
-                'icon' => 'flags/oman.svg',
+                'icon' => 'media/flags/oman.svg',
                 'name' => [
                     'en' => 'Oman',
                     'ar' => 'عُمان'

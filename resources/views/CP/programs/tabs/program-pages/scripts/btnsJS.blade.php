@@ -21,7 +21,7 @@
 
     // Refresh filter function
     function refreshPageFilters() {
-        $.get("{{ route(Program::ui['route'] . '.' . ProgramPage::ui['route'] . '.pages', ['program' => $_model->id]) }}",
+        $.get("{{ route(Program::ui['route'] . '.pages', ['program' => $_model->id]) }}",
             function(pages) {
                 let html = `
                   <a class="btn btn-light-primary btn-sm page-filter" data-page-id="all"

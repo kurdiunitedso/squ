@@ -292,5 +292,7 @@ return [
   'Allow Multiple Selection' => 'Allow Multiple Selection',  
   'Minimum Length' => 'Minimum Length',  
   'Maximum Length' => 'Maximum Length',  
-  'Pattern (Regex)' => 'Pattern (Regex)',
+  'Pattern (Regex)' => 'Pattern (Regex)',  
+  'ID' => 'ID',  
+  'Eligibilities' => 'Eligibilities',
 ];
