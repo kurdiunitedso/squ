@@ -114,11 +114,10 @@
                                 </span><span class="menu-title">
                                     @if (app()->getLocale() == 'en')
                                         {{ $menuItem->name_en }}
-                                    @elseif (app()->getLocale() == 'ar')
+                                    @else
                                         {{ $menuItem->name }}
-                                    @elseif (app()->getLocale() == 'he')
-                                        {{ $menuItem->name_he }}
                                     @endif
+
                                     {{-- {{ __('menu.dashboard') }} --}}
                                 </span>
                             </a>
@@ -150,10 +149,8 @@
                                     </span><span class="menu-title">
                                         @if (app()->getLocale() == 'en')
                                             {{ $menuItem->name_en }}
-                                        @elseif (app()->getLocale() == 'ar')
+                                        @else
                                             {{ $menuItem->name }}
-                                        @elseif (app()->getLocale() == 'he')
-                                            {{ $menuItem->name_he }}
                                         @endif
                                         {{-- {{ __('menu.dashboard') }} --}}
                                     </span>
