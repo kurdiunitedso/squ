@@ -29,7 +29,7 @@
                 <div class="col-md-3">
                     <div class="mb-10">
                         <!--begin::Label-->
-                        <label class="form-label fw-semibold">{{ t('Apartment') }}:</label>
+                        <label class="form-label fw-semibold">{{ t('Target Applicant') }}:</label>
                         <!--end::Label-->
                         <!--begin::Input-->
                         <div>
@@ -46,26 +46,7 @@
                         <!--end::Input-->
                     </div>
                 </div>
-                <div class="col-md-3">
-                    <div class="mb-10">
-                        <!--begin::Label-->
-                        <label class="form-label fw-semibold">{{ t('Lead Form Types') }}:</label>
-                        <!--end::Label-->
-                        <!--begin::Input-->
-                        <div>
-                            <select class="form-select form-select-solid datatable-input filter-selectpicker"
-                                data-kt-select2="true" data-col-index="lead_form_type_id" multiple
-                                data-placeholder="Select option" data-dropdown-parent="#kt_menu_64ca1a18f399e"
-                                data-allow-clear="true">
-                                <option></option>
-                                @foreach ($lead_form_type_list ?? [] as $item)
-                                    <option value="{{ $item->id }}">{{ $item->name }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <!--end::Input-->
-                    </div>
-                </div>
+
 
             </div>
             <!--begin::Actions-->

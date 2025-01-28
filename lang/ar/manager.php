@@ -291,5 +291,11 @@ return [
     'Maximum Length' => 'الحد الأقصى للطول',
     'Pattern (Regex)' => 'النمط (تعبير منتظم)'  
   'ID' => 'ID',  
-  'Eligibilities' => 'Eligibilities',
+  'Eligibilities' => 'Eligibilities',  
+  'country has been created successfully!' => 'country has been created successfully!',  
+  'The English name must only contain valid characters.' => 'The English name must only contain valid characters.',  
+  'The Arabic name must only contain valid characters.' => 'The Arabic name must only contain valid characters.',  
+  'Country ID is required.' => 'Country ID is required.',  
+  'The selected Country ID is invalid.' => 'The selected Country ID is invalid.',  
+  'City has been created successfully!' => 'City has been created successfully!',
 ];
